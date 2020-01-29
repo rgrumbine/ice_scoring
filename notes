@@ -1,0 +1,16 @@
+IMS, NCEP analy, NSIDC analy, forecast (CICE5, RTOFS+CICE4, CFSV2, ...)
+
+(For each):
+get file
+open + translate to binary
+find ice edge of file
+
+
+score ice edges -- persistence, vs. IMS
+integral area, extent by hemisphere
+
+
+fcst:
+gross checks
+
+null forecast of extent
