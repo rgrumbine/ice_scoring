@@ -1,0 +1,22 @@
+Comparison between analysis (NCEP operational, 5 arcmin grid) and IMS mask (1/96th bedient binary)
+RMS in km
+40 is NRL/ECCC standard cutoff in concentration
+Required analysis grid > 25 km distance from land
+Ignore IMS pts adjacent to flag value
+May 15, 2018
+
+Robert Grumbine
+ 
+Con AI   IA
+ 15 61.9 71.4
+ 20 56.4 69.6
+ 25 51.9 68.5
+ 30 48.9 69.2
+ 35 49.1 62.7
+ 40 48.7 80.7
+ 45 49.4 80.0
+ 50 50.3 86.7
+ 55 50.6 94.5
+ 60 52.8 99.2
+ 65 60.3 102.9
+ 70 66.9 110.1

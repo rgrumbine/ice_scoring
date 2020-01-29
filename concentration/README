@@ -1,0 +1,37 @@
+Utilities around sea ice model concentration scoring.
+
+The main files (tool) for RTOFS-G scoring is
+makefile
+score_diag.C
+score.sh
+-- which also rely on the mmablib, though it doesn't build it itself.
+mmablib is in production.
+
+
+makeplots.sh -- produce plots of skills through time of all 'scoreout' outputs from preceding
+-- uses gnuplot rather poorly.
+
+summary1 -- produce mean, rms, sdev of input score files
+summarize.sh -- make summary plots of skills
+
+
+16 -r--r--r--  1 rmg3  staff     73 Dec 12  2012 resolutions
+16 -r--r--r--  1 rmg3  staff    912 Dec  2  2013 scorein
+16 -r--r--r--  1 rmg3  staff   3887 Apr  8  2014 gnuplot_in
+16 -r-xr-xr-x  1 rmg3  staff   2197 May  7  2015 plotlong.sh*
+16 -r--r--r--  1 rmg3  staff   1097 Dec 24  2015 scoring_utilities.C
+16 -r-xr-xr-x  1 rmg3  staff   2250 May 19  2016 scoreall.sh*
+16 -r-xr-xr-x  1 rmg3  staff   2341 May 19  2016 persistscore.sh*
+16 -r--r--r--  1 rmg3  staff   3710 Aug 22  2016 skill.h
+16 -r--r--r--  1 rmg3  staff    685 Aug 22  2016 scoring.notes
+ 0 -r--r--r--  1 rmg3  staff      0 Dec 28 12:20 norms.C
+16 -r--r--r--  1 rmg3  staff   2744 Dec 28 12:51 contingency.C
+16 -r--r--r--  1 rmg3  staff   3780 Dec 28 13:20 main.C
+16 -r-xr-xr-x  1 rmg3  staff    298 Dec 29 14:06 ndaypersistence.sh*
+32 -r--r--r--  1 rmg3  staff  11385 Apr 26 07:29 scoring_subs.C
+16 -r--r--r--  1 rmg3  staff   3391 Apr 26 07:29 score2.C
+16 -rw-r--r--  1 rmg3  staff    936 Apr 26 07:29 nulls
+16 -r--r--r--  1 rmg3  staff   1361 Apr 26 07:29 null_fcst.C
+
+Robert Grumbine
+17 May 2018

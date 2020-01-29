@@ -1,0 +1,66 @@
+Score sea ice drift model guidance against IABP data or IFREMER satellite analyzed drift.
+Most is the C++ methods using mmablib.  
+
+The exception is iceDriftskill.py developed by Victor Ogunbamiwo.
+
+The codes are aimed for a context where many months (years) of observations
+have accumulated and all the ice drift model forecasts will be scored.  The
+scores shared to the web follow the recommendation of 5 from Grumbine 201NN.
+
+#-----------------------------------------------------------------
+## Common regardless of source:
+make
+File forecast.points gives the lat-long of the standard 207 'skiles points'.
+concatenate all IABP 'C' files you're interested in scoring model for in to dboydata
+
+  IABP Flow:
+    edit score.sh to point to your IABPDIR and FORECASTDIR, and your matchup 
+        range, time window, years of interest
+  
+  IFREMER Flow:
+    edit range.sh to point to your IFREMER directories otherwise, as IABP
+    afterwards, run iscore on the match files (concatenated how you like) 
+
+
+Common:
+scripts end with splityear.pl to parcel out results by year, will 
+               include size 0 files for any years not scored from years 1998-2018
+
+Will finish with directories kmNN.N (NN.N = the RADIUS you specified) 
+  and kmNN.N.YY (where YY = the years you specified)
+Inside each will be a file called score.XXXXX 
+  each will contain scores for (its year, if a year directory): 
+    * all matchups, for all buoys, all skiles points, all lead times
+    * all matchups by lead  (all months, etc.)
+    * all matchups by month (all lead, etc.)
+    * all matchups by skiles point and lead (all months, etc.)
+
+Updating Web (after having prior scores computed):
+  scoretoweb.sh (will invoke scoretoweb.pl)
+
+
+Unused? -- range.sh
+#-----------------------------------------------------------------------
+
+Notes: 
+* The IABP slow step is 'avg2', which takes about 4 minutes per year of buoy data.
+    iabpcheck and score are a matter of seconds.
+
+* The ifremer process is much quicker
+
+
+#-----------------------------------------------------------------------
+128 -r--r--r-- 1 Robert.Grumbine g01     7038 Jan 27  2010 forecast.points
+128 -r-xr-xr-- 1 Robert.Grumbine marine  1775 Mar  7  2014 splityear.pl*
+
+128 -r--r--r-- 1 Robert.Grumbine marine 14919 Mar  7  2014 avg2.C
+128 -r--r--r-- 1 Robert.Grumbine marine  8769 Mar 20  2014 score.C
+128 -r--r--r-- 1 Robert.Grumbine marine  3075 Apr  2  2014 subs.C
+128 -r--r--r-- 1 Robert.Grumbine marine  2926 Apr  2  2014 iscore.C
+128 -r--r--r-- 1 Robert.Grumbine marine  8597 Feb 16  2017 ifremercheck.C
+128 -r--r--r-- 1 Robert.Grumbine marine  6150 Feb 16  2017 iabpcheck.C
+
+128 -r-xr--r-- 1 Robert.Grumbine marine   549 Apr  2  2014 range.sh*
+128 -r-xr-xr-- 1 Robert.Grumbine marine  1765 Nov 18  2016 score.sh*
+
+  0 -r--r--r-- 1 Robert.Grumbine marine   362 Feb 16  2017 makefile

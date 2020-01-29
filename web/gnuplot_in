@@ -1,0 +1,54 @@
+set term png
+set grid
+set pointsize 2
+set xlabel "8 day forecasts (most recent on right)"
+#
+set out "bias8.png"
+set ylabel "bias"
+set yrange [0.0:0.05]
+plot "kiss_v0.0.0.8" using 14 with lp title "kiss v0 - limited area",\
+"gfs_v1.0.0.8" using 14 with lp title "gfs v1 - limited area",\
+"cfs_v2.0.0.8" using 14 with lp title "cfs v2 - limited area",\
+"kiss_v0.0.0.8" using 5 with lp title "kiss v0 - global",\
+"gfs_v1.0.0.8" using 5 with lp title "gfs v1 - global",\
+"cfs_v2.0.0.8" using 5 with lp title "cfs v2 - global"
+#
+set out "correct8.png"
+set ylabel "correct"
+set yrange [0.85:1.05]
+plot "kiss_v0.0.0.8" using 22 with lp title "kiss v0 - limited area",\
+"gfs_v1.0.0.8" using 22 with lp title "gfs v1 - limited area",\
+"cfs_v2.0.0.8" using 22 with lp title "cfs v2 - limited area",\
+"kiss_v0.0.0.8" using 13 with lp title "kiss v0 - global",\
+"gfs_v1.0.0.8" using 13 with lp title "gfs v1 - global",\
+"cfs_v2.0.0.8" using 13 with lp title "cfs v2 - global"
+#
+set out "far8.png"
+set ylabel "FAR"
+set yrange [0.0:0.25]
+plot "kiss_v0.0.0.8" using 21 with lp title "kiss v0 -- limited area",\
+"gfs_v1.0.0.8" using 21 with lp title "gfs v1 -- limited area",\
+"cfs_v2.0.0.8" using 21 with lp title "cfs v2 -- limited area",\
+"kiss_v0.0.0.8" using 12 with lp title "kiss v0 - global",\
+"gfs_v1.0.0.8" using 12 with lp title "gfs v1 - global",\
+"cfs_v2.0.0.8" using 12 with lp title "cfs v2 - global"
+set out "pod8.png"
+set ylabel "POD"
+set yrange [.00:1.10]
+plot "kiss_v0.0.0.8" using 20 with lp title "kiss v0 -- limited area",\
+"gfs_v1.0.0.8" using 20 with lp title "gfs v1 -- limited area",\
+"cfs_v2.0.0.8" using 20 with lp title "cfs v2 -- limited area",\
+"kiss_v0.0.0.8" using 11 with lp title "kiss v0 - global",\
+"gfs_v1.0.0.8" using 11 with lp title "gfs v1 - global",\
+"cfs_v2.0.0.8" using 11 with lp title "cfs v2 - global"
+#
+set out "rms8.png"
+set ylabel "rms"
+set yrange [0.0:0.25]
+plot "kiss_v0.0.0.8" using 15 with lp title "kiss v0 -- limited area",\
+"gfs_v1.0.0.8" using 15 with lp title "gfs v1 -- limited area",\
+"cfs_v2.0.0.8" using 15 with lp title "cfs v2 -- limited area",\
+"kiss_v0.0.0.8" using 6 with lp title "kiss v0 - global",\
+"gfs_v1.0.0.8" using 6 with lp title "gfs v1 - global",\
+"cfs_v2.0.0.8" using 6 with lp title "cfs v2 - global"
+quit

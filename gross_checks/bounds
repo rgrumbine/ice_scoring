@@ -1,0 +1,6 @@
+sss:        [0..41] (except some coastal points in sw persian gulf, which may reach 58!)
+sst:        [-1.98..~35.0] (might go below for a timestep -- A Mehra)
+ice thick:  [0..5+], max should be > 1.5m arctic, > 1 antarctic
+ice speed:  [0..0.7],  rough -- Nansen rule equates 0.7 m/s ice motion to winds of 35 m/s 
+
+

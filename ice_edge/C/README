@@ -1,0 +1,6 @@
+C++ versions of finding ice edge in a grid (find_edge), 
+    and scoring one edge against another (score_edge)
+
+Robert Grumbine
+23 April 2018
+

@@ -1,0 +1,8 @@
+python and C++ (using mmablib) codes to find the ice edge on an input 
+  grid, and then score one edge against the other.
+
+They are functional duplicates.  Python developed first, but run time was 
+  excessive, so re-implemented in C++.  The C++ is ca. 100x faster.
+
+Robert Grumbine
+24 April 2018

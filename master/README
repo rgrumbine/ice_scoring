@@ -1,0 +1,5 @@
+
+build mmablib (see top level README)
+cd ice_edge; make; mv find_edge_ims cscore_edge find_edge find_edge_cice find_edge_nrl ../../exec/
+
+cd integral; make; mv solo_ncep solo_ims binary ../exec
