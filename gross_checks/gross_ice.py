@@ -1,7 +1,8 @@
 import os
 import sys
-from math import *
 import datetime
+from math import *
+import numpy as np
 
 import urllib
 import csv
@@ -23,19 +24,14 @@ else:
   tlons = model.variables["TLON"][:,:]
   tlats = model.variables["TLAT"][:,:]
   #print("max, min lons lats masks ",tlons.max(), tlons.min(), tlats.max(), tlats.min() )
-  tmask = model.variables["tmask"][:,:]
   #LAND = 0, #Ocean = 1
+  try:
+    tmask = model.variables["tmask"][:,:]
+  except :
+    tmask = np.zeros((ny, nx))
+    tmask = 1.
   tarea = model.variables["tarea"][:,:]
   #print("max min mask area ",tmask.max(), tmask.min(), tarea.max(), tarea.min(), sqrt(tarea.max()), sqrt(tarea.min() )  )
-
-  #Here is where we start on to model parameter checking:
-  #parm1 = "hi_h"
-  #grid1 = model.variables[parm1][0,:,:] #pull out first time level, actually only
-  #min1 = 0.0
-  #max1 = 10.0
-  #maxmin1 = 0.0
-  #minmax1 = 1.5
-  #print("grid1 ",parm1," ",grid1.max(), grid1.min() )
 
   #bootstrapping -- read in dictionary of names, write back out name/max/min in dictionary format
   #  next round -- estimate minmax and maxmin by 1% end points of histogram
@@ -46,7 +42,11 @@ else:
   for line in fdic:
     words = line.split()
     parm = words[0]
-    temporary_grid = model.variables[parm][0,:,:]
+    try: 
+      temporary_grid = model.variables[parm][0,:,:]
+    except:
+      print(parm," not in data file")
+      continue
 
     if (len(words) >= 3):
       pmin = float(words[1])
