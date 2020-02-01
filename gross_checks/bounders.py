@@ -1,6 +1,7 @@
 import os
 import sys
 from math import *
+import numpy as np
 
 #---------------------------------------------------
 #Develop a class for bounds checking
@@ -71,17 +72,32 @@ class bounds:
     #Show where (and which) test failed:
     ny = grid.shape[0]
     nx = grid.shape[1]
+    xslice = np.array(nx)
     #print("nx, ny = ",nx, ny)
     #print("pmin, pmax = ",self.pmin, self.pmax)
-    print("parameter i j longitude latitude model_value test_checked test_value")
     sys.stdout.flush()
-    for j in range (0,ny):
-      for i in range (0,nx):
-        x = grid[j,i]
-        if (x < self.pmin):
-          print(self.param,i,j,lons[j,i], lats[j,i], x, " vs pmin ",self.pmin)
-        if (x > self.pmax):
-          print(self.param,i,j,lons[j,i], lats[j,i], x, " vs pmax ",self.pmax)
+
+    if (grid.min() < self.pmin): 
+      print("parameter i j longitude latitude model_value test_checked test_value")
+      xslice = self.pmin
+      for j in range (0,ny):
+        if ( (grid[j,:] >= xslice).all() ):
+          continue 
+        #print("scanning along j = ",j, "slice test = ", (grid[j,:] >= xslice).all() )
+        for i in range (0,nx):
+          if (grid[j,i] < self.pmin):
+            print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",self.pmin)
+      sys.stdout.flush()
+
+    if (grid.max() > self.pmax):
+      print("parameter i j longitude latitude model_value test_checked test_value")
+      xslice = self.pmax
+      for j in range (0,ny):
+        if ( (grid[j,:] <= xslice).all() ):
+          continue
+        for i in range (0,nx):
+          if (grid[j,i] > self.pmax):
+            print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax)
       sys.stdout.flush()
 
 def strprec(x):

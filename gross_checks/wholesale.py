@@ -95,21 +95,16 @@ else:
     # End reading or bootstrapping bounds -----------------
     gfail = tbound[k].inbounds(temporary_grid)
     #Show where (and which) test failed:
-    #if (gfail):
-      #print("calling where", flush=True)
-      #tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
+    if (gfail):
+      print("calling where", flush=True)
+      tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
 
     k += 1
 
-print(len(tbound), " parameter bounds found ")
+#print(len(tbound), " parameter bounds found ")
 #-------------------------- Finished with bootstrap and/or first pass
 
-#Now carry on for the N forecasts
-#read in fcst
-#fname = base + fdate .01.start_date
-#  apply the gross tests -- per parameter, as just established
-#  model = netCDF4.Dataset(sys.argv[1], 'r')
-#  for k in range(0,len(tbound)):
+#Now carry on for the forecasts
 #  
 from_date = datetime.datetime(int(2012),int(1),int(1), int(0) )
 
@@ -128,8 +123,12 @@ while ( (valid_date - from_date) <= length):
 
   model = netCDF4.Dataset(fname, 'r')
   print("valid date = ",valid_date.strftime("%Y%m%d%H"))
+  sys.stdout.flush()
   for k in range(0,len(tbound)):
     temporary_grid = model.variables[tbound[k].param][0,:,:]
     gfail = tbound[k].inbounds(temporary_grid)
+    if (gfail):
+      #print("calling where", flush=True)
+      tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
     
   valid_date += dt
