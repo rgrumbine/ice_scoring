@@ -69,6 +69,7 @@ for i in range (0,lead):
     fig, ax = plt.subplots()
     ax.set(xlabel = "Cutoff Concentration", ylabel = 'threat score [0:1]')
     ax.set(title = 'Forecast lead '+str(flead)+' NH threat score')
+    plt.ylim(0,1.0)
     ax.plot(critical_level, threat_index)
     ax.grid()
     #fig.show()
