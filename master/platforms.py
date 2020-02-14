@@ -47,7 +47,7 @@ if (machine == 'HERA'):
   dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/ims/'
   dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/ice5min/'
   dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/nsidc.nc/'
-  dirs['fixdir']   = '/home/Robert.Grumbine/save/mmablib/ice_scoring/fix'
+  dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/fix'
 elif (machine == 'WCOSS_C'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
   dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
