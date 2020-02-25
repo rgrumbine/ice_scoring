@@ -4,7 +4,7 @@
 
 BASE=/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/
 
-for f in verf_files.py setup_verf_ice.py contingency_plots.py all.csh
+for f in verf_files.py setup_verf_ice.py contingency_plots.py platforms.py all.csh
 do
   cp ${BASE}/master/$f .
   if [ ! -f $f ] ; then
