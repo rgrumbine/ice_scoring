@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Compute scores for the RTOFS-Global, netcdf outputs
-// Robert Grumbine -- Hycom grid
-// Denise Worthen -- Adding CICE grid
+// Compute scores for NSIDC CDR vs. itself
+// Robert Grumbine -- 25 Feb 2020
 
 #include "netcdf.h"
 /* Handle errors by printing an error message and exiting with a
@@ -22,17 +21,6 @@ void nsidc_get(char *fname, psgrid<float> &obs) ;
 
 #include "contingency_ptwise.C"
 
-#ifdef cice_file
-  #define NX 1500
-  #define NY 1099
-#elif benchmark
-  #define NX 1440
-  #define NY 1080 
-#else
-  #define NX 4500
-  #define NY 3298
-#endif
-
 int main(int argc, char *argv[]) {
   float *x;
   int ncid, varid;
@@ -46,8 +34,7 @@ int main(int argc, char *argv[]) {
 
 ////////////////// Sea ice analysis ///////////////////////////////
 // High res sea ice analysis from nsidc netcdf:
-  nsidcnorth<float> obs[35];
-
+  nsidcnorth<float> obs[2];
 
   // for scoring matchups
   float level;
@@ -58,7 +45,7 @@ int main(int argc, char *argv[]) {
   mvector<unsigned char> skipped(npts), north(npts), south(npts);
 
 ////////////////// skip grid ///////////////////////////////
-  //fin = fopen(argv[3], "r");
+  //fin = fopen(argv[1], "r");
   //skip.binin(fin);
   //fclose(fin);
   skip.set(0);
@@ -66,15 +53,14 @@ int main(int argc, char *argv[]) {
 ///////////////// End of Netcdf portion ////////////////////////////////////////////
 //
 // Now establish the matchup vectors
-  int count = 0, timestep = 0;
-  nsidc_get(argv[1+timestep], obs[timestep]) ;
+  int count = 0, timestep = 1;
+  nsidc_get(argv[1], obs[0]) ;
+  nsidc_get(argv[2], obs[1]) ;
   
-  for (timestep = 1; timestep < 35; timestep++) {
-    count = 0;
-    skipped = 1.0;
-    observed = 0.0;
-    cellarea = 0.0;
-    nsidc_get(argv[1+timestep], obs[timestep]) ;
+  count = 0;
+  skipped = 1.0;
+  observed = 0.0;
+  cellarea = 0.0;
 
   for (loc.j = 0; loc.j < obs[0].ypoints(); loc.j++) {
   for (loc.i = 0; loc.i < obs[0].xpoints(); loc.i++) {
@@ -108,17 +94,10 @@ int main(int argc, char *argv[]) {
   for (level = 0.0; level < 1.; level += 0.05) {
     contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("nhlevel %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f\n",level, timestep,
+    printf("nhlevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level,
                    a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
   }
-  //for (level = 0.0; level < 1.; level += 0.05) {
-  //  contingency(observed, model, south, level, a11, a12, a21, a22);
-  //  contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //  printf("shlevel %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f\n",level, timestep,
-  //                 a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //}
   fflush(stdout);
-  } // timesteps
 
   return 0;
 }
@@ -214,8 +193,6 @@ void nsidc_get(char *fname, psgrid<float> &obs) {
   }
   if (obs.gridmax() > 1.0) obs /= 100.;
 
-  //printf("obs stats %f %f %f %f \n", obs.gridmax(), obs.gridmin(), obs.average(), obs.rms());
-  //printf("tmp stats %f %f %f %f \n", tmp.gridmax(), tmp.gridmin(), tmp.average(), tmp.rms());
   fflush(stdout);
   return;
 }

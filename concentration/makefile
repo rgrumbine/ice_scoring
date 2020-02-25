@@ -17,7 +17,7 @@ settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Rober
 #settings=-I $(BASE)/include -L $(BASE) 
 #NETCDF=/Users/rmg3/usrlocal/
 
-all : score_diag score_nsidc score_cfsv2
+all : score_diag score_nsidc score_cfsv2 persistence
 
 score_cfsv2 : score_v_cfsv2.C 
 	g++ $(opt) -Dbenchmark -DLINUX -Wall -O2 score_v_cfsv2.C -I$(NETCDF)/include -L $(NETCDF)/lib \
@@ -31,6 +31,11 @@ score_nsidc : score_v_nsidc.C
 
 score_diag : score_diag.C 
 	g++ $(opt) -Dbenchmark -DLINUX -Wall -O2 $(@).C -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
+
+persistence : persistence.C 
+	g++ $(opt) -DLINUX -Wall -O2 $(@).C -I$(NETCDF)/include -L $(NETCDF)/lib \
         $(settings) \
         -lombf_4 -lnetcdf -o $(@)
 
