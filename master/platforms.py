@@ -3,6 +3,11 @@ import sys
 import datetime
 
 #------------------------------------------------------------------
+exbase=os.environ['EXDIR']
+exdir = exbase+"/exec/"
+fixdir = exbase+"/fix/"
+#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
   tmp = int(tag)
@@ -11,7 +16,6 @@ def parse_8digits(tag):
   return tag_out
 
 #----------------- High level declarations -----------------------------
-exdir = "./exec/"
 # Directories w. verification data
 dirs = {
   'imsdir' : '',
@@ -81,5 +85,6 @@ if (not nsidcverf and not ncepverf and not imsverf):
 #Variables established by this script:
 # machines (a dictionary of machine identifiers)
 # dirs (a dictionary of directory paths)
-# execdir (location of executables)
+# execdir (location of executables, needs EXDIR environment variable)
+# fixdir (location of executables, needs EXDIR environment variable)
 # imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 

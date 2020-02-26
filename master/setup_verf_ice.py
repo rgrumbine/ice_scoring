@@ -9,8 +9,15 @@ import datetime
 
 from verf_files import *
 
-exdir = "./exec/"
-fixdir = "fix/"
+##################### ------------- 
+#--------------- Utility Functions --------------------------------
+
+from platforms import *
+exbase=os.environ['EXDIR']
+exdir = exbase+"/exec/"
+fixdir = exbase+"/fix/"
+#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+
 #fixed files:
 #  seaice_alldist.bin
 #  seaice_gland5min
@@ -21,7 +28,6 @@ fixdir = "fix/"
 # find_edge_ims
 # solo_ncep
 
-##################### ------------- 
 #------------------------------------------------------------------
 def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
              imsdir, ncepdir, nsidcdir):
@@ -91,14 +97,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
 #    pole="south/"
 #    ptag="s"
-#    obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
-#                        obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
-#    cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " fix/skip_hr" + " > score."+
-#                ptag+"."+obsdate.strftime("%Y%m%d")+"f")
-#    x = os.system(cmd)
-#    if (x != 0):
-#      print("command ",cmd," returned error code ",x)
-#      retcode += x
+
   else:
     print("No score_nsidc executable")
     sys.stdout.flush()
@@ -106,9 +105,6 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
   return retcode
 
-#--------------- Utility Functions --------------------------------
-
-from platforms import *
 #---------------------------- Begin program ---------------------
 
 
