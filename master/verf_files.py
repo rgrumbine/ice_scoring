@@ -93,11 +93,10 @@ def get_ims(initial_date, imsdir):
   retcode = int(0)
   initial    = int(initial_date.strftime("%Y%m%d"))
 
-#more efficient to gunzip binaries
+#more efficient to gunzip binaries than go to grib
   fname = 'ims.'+str(initial)
   if (not os.path.exists(fname)):
     fin = imsdir + "ims."+str(initial) +'.gz'
-    #print("trying to gunzip ",fin)
     if (os.path.exists(fin) ):
       cmd = ('cp ' + fin + ' .')
       x = os.system(cmd)

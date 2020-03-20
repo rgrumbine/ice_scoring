@@ -1,7 +1,7 @@
 #!/bin/csh -f
-#SBATCH -J bm3_v2018
-#SBATCH -e bm3_v2018.err
-#SBATCH -o bm3_v2018.out
+#SBATCH -J p31_11
+#SBATCH -e p31_11.err
+#SBATCH -o p31_11.out
 #SBATCH -t 7:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
@@ -11,32 +11,46 @@
 
 source /etc/profile.d/modules.csh
 setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
-module load hpss
 
-setenv EXDIR /scratch2/NCEPDEV/climate/Robert.Grumbine/bm3.verf
-setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_b3/SeaIce/ 
+setenv expt bm31
+setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_b31/SeaIce/ 
+setenv EXDIR /scratch2/NCEPDEV/climate/Robert.Grumbine/${expt}.verf
+cd /scratch2/NCEPDEV/climate/Robert.Grumbine/${expt}.verf
+setenv base `pwd`
+setenv RUNBASE /scratch2/NCEPDEV/stmp1/Robert.Grumbine/${expt}.verf
 
-#How to connect to x display?
+echo env $FCST_BASE $EXDIR $base $RUNBASE
+
+#For batch python graphics
 setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/Robert.Grumbine/runtime
 if ( ! -d $XDG_RUNTIME_DIR ) then
   mkdir -p -m 700 $XDG_RUNTIME_DIR
 endif
-
-setenv expt bm3
-cd /scratch2/NCEPDEV/climate/Robert.Grumbine/${expt}.verf
-setenv base `pwd`
+echo $XDG_RUNTIME_DIR for python graphic support
 
 setenv x `date`
-echo start of loop at $x
+echo start of loop at dtime $x
 
-foreach yy ( 2018 )
-  foreach mm ( 01 02 03 04 05 06 07 08 09 10 11 12 )
+foreach yy ( 2011 )
+  setenv RUNDIR ${RUNBASE}/$yy
+  if ( ! -d $RUNDIR ) then
+    mkdir -p $RUNDIR
+  endif
+  cd $RUNDIR
+  #if ( $? -ne 0 ) then
+  #  echo could not move to rundir $RUNDIR
+  #  exit 1
+  #endif
+
+  foreach mm ( 04 05 06 07 08 09 10 11 12 )
     foreach dd ( 01 15 )
       setenv tag ${yy}${mm}${dd}
       setenv initial ${yy}${mm}${dd}
       setenv OUT $base/out.$initial
       if ( ! -d $OUT ) then
         mkdir $OUT
+      else
+        continue
       endif
 
       if ( -d ${FCST_BASE}/${initial}/6hrly ) then
