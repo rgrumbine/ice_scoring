@@ -7,13 +7,16 @@ import numpy as np
 import netCDF4
 
 #---------------------------------------------------
-#Gross bound checks on .nc files, developed primarily from the sea ice (CICE5) output
+#Delta bound checks on .nc files, developed primarily from the sea ice (CICE5) output
 #Robert Grumbine
-#30 January 2020
+#1 April 2020
 #
-#data file = argv[1] (input)
-#control dictionary = argv[2] (input)
-#bootstrapped dictionary = argv[3] (optional, may be written to if needed and present)
+#model file 1 = argv[1]
+#model file 2 = argv[2]
+#delta bounds = argv[3]
+#ratio = argv[4] -- the bounds in arg3 are for 1 day changes. As the
+#    forecast lead increases, acceptable differences do as well. This the
+#    argument is for your control of that.
 
 #---------------------------------------------------
 
