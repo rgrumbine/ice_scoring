@@ -1,16 +1,22 @@
 Assemble tools for making automated checks for model output sanity.
 Robert Grumbine 3 February 2020
+20 April 2020
 
 First (functioning) tools:
 gross_ice.py
 gross_ocean.py
-wholesale.py      -- examine all 35 days, 6 hourly, surface fields from a forecast ocean
-wholesale_ice.py  -- examine all 35 days, 6 hourly, surface fields from a forecast ice
+wholesale_ocean.py -- examine all 35 days, 6 hourly, surface fields from a forecast ocean
+wholesale_ice.py   -- examine all 35 days, 6 hourly, surface fields from a forecast ice
+delta_ice.py       -- examine differences between two ice runs
 
 Preface:
-  You need python3 in your path. The hera install is not sufficient, though the wcoss is.
 On WCOSS: module load python/3.6.3
-On Hera: add /home/Robert.Grumbine/clim_data/anaconda3/bin to your PATH
+On Orion: module load python/3.7.5
+  The hera python modules are not sufficient, so you'll need:
+On Hera: prepend /home/Robert.Grumbine/clim_data/anaconda3/bin to your PATH
+On Hera you might also need to add:
+  setenv TERMINFO /usr/share/terminfo
+to your .cshrc
 
 Usage:
 python3 gross_ice.py   NAME_OF_ICE.nc   ice.dictionary   redone.dictionary

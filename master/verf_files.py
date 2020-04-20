@@ -1,8 +1,10 @@
 import os
 import datetime
 
-exdir = "./exec/"
 # logfile for comments out
+exbase=os.environ['EXDIR']
+exdir = exbase+"/exec/"
+fixdir = exbase+"/fix/"
 
 #-------- Skeleton for grid type sources: ---
 # NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)
@@ -78,7 +80,7 @@ def cfsv2_edge(initial, valid, NNN):
   retcode = int(0)
   fname = NNN+'.'+str(valid)
   if (not os.path.exists(NNN+'_edge.' + str(initial))):
-    cmd = exdir + 'find_edge_'+NNN +" "+ fname + ' fix/seaice_alldist.bin 0.40 > '+NNN+'_edge.' + str(valid)
+    cmd = exdir + 'find_edge_'+NNN +" "+ fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > '+NNN+'_edge.' + str(valid)
     print("cmd for cfs edge = ",cmd)
     os.system(cmd)
     x = os.system(cmd)
@@ -91,11 +93,10 @@ def get_ims(initial_date, imsdir):
   retcode = int(0)
   initial    = int(initial_date.strftime("%Y%m%d"))
 
-#more efficient to gunzip binaries
+#more efficient to gunzip binaries than go to grib
   fname = 'ims.'+str(initial)
   if (not os.path.exists(fname)):
     fin = imsdir + "ims."+str(initial) +'.gz'
-    #print("trying to gunzip ",fin)
     if (os.path.exists(fin) ):
       cmd = ('cp ' + fin + ' .')
       x = os.system(cmd)
@@ -132,7 +133,7 @@ def ncep_edge(initial):
   fname = 'ncep.'+str(initial)
   if (not os.path.exists('ncep_edge.' + str(initial))) :
       #note that name does not follow convention
-    cmd = exdir + 'find_edge ' + fname + ' fix/seaice_alldist.bin 0.40 > ncep_edge.' + str(initial)
+    cmd = exdir + 'find_edge ' + fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > ncep_edge.' + str(initial)
     x = os.system(cmd)
     if (x != 0): retcode += x
     return retcode
@@ -234,7 +235,7 @@ def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
   fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
   if (not os.path.exists('fcst_edge.' + str(valid))):
-    cmd = exdir + 'find_edge_cice fix/skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
+    cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
     x = os.system(cmd)
     if (x != 0): retcode += x
   return retcode

@@ -9,8 +9,16 @@ import datetime
 
 from verf_files import *
 
-exdir = "./exec/"
-#data files:
+##################### ------------- 
+#--------------- Utility Functions --------------------------------
+
+from platforms import *
+exbase=os.environ['EXDIR']
+exdir = exbase+"/exec/"
+fixdir = exbase+"/fix/"
+#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+
+#fixed files:
 #  seaice_alldist.bin
 #  seaice_gland5min
 #execs:
@@ -20,7 +28,6 @@ exdir = "./exec/"
 # find_edge_ims
 # solo_ncep
 
-##################### ------------- 
 #------------------------------------------------------------------
 def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
              imsdir, ncepdir, nsidcdir):
@@ -37,7 +44,7 @@ def solo_score(fcst, fdate):
   if (fcst == "nsidc"): return 0
   fname = fcst+"."+fdate.strftime("%Y%m%d")
   if (os.path.exists(fname)):
-    cmd = (exdir + "solo_" +fcst+" fix/seaice_gland5min "+fname)
+    cmd = (exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
     print("integrals for ",fcst)
     sys.stdout.flush()
     x = os.system(cmd)
@@ -57,7 +64,7 @@ def edge_score(fcst, fdate, obs, obsdate):
   #print('edge_score ',fname,' ',obsname,' ',outfile)
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
       os.path.exists(outfile) ):
-    cmd = (exdir + "cscore_edge fix/seaice_alldist.bin "+fname+" "+obsname +
+    cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
            " 50.0 > " + outfile )
     x = os.system(cmd)
     if (x != 0):
@@ -81,7 +88,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
     ptag="n"
     obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
                         obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
-    cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " fix/skip_hr" + " > score."+
+    cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr" + " > score."+
                 ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
     x = os.system(cmd)
     if (x != 0):
@@ -90,86 +97,13 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
 #    pole="south/"
 #    ptag="s"
-#    obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
-#                        obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
-#    cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " fix/skip_hr" + " > score."+
-#                ptag+"."+obsdate.strftime("%Y%m%d")+"f")
-#    x = os.system(cmd)
-#    if (x != 0):
-#      print("command ",cmd," returned error code ",x)
-#      retcode += x
+
   else:
     print("No score_nsidc executable")
     sys.stdout.flush()
     retcode += 1
 
   return retcode
-
-#--------------- Utility Functions --------------------------------
-def parse_8digits(tag):
-  tmp = int(tag)
-  (yy,mm,dd) = (int(int(tmp)/10000),int((int(tmp)%10000)/100),int(tmp)%100)
-  tag_out = datetime.date(int(yy), int(mm), int(dd))
-  return tag_out
-
-#----------------- Data declarations -----------------------------
-# Directories w. verification data
-dirs = {
-  'imsdir' : '',
-  'ncepdir' : '',
-  'nsidcdir' : ''
-}
-
-# Known machines:
-machines = {
-  'RG_Home'       : '/Volumes/ncep',
-  'HERA'          : '/scratch1',
-  'WCOSS_C'       : '/etc/SuSE-release',
-  'WCOSS_DELL_P3' : '/gpfs/dell2'
-}
-#----------------- Data declarations -----------------------------
-
-# Determine which known machine we're on, if any:
-mlist = []
-machine=""
-for x in machines:
-  mlist += [x]
-  if (os.path.exists(machines[x]) ):
-    machine = (x)
-    break
-
-if not machine:
-    print ('ice verification is currently only supported on: %s' % ' '.join(machines))
-    raise NotImplementedError('Cannot auto-detect platform, ABORT!')
-
-# Establish paths to verification data:
-if (machine == 'HERA'):
-  dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/ims/'
-  dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/ice5min/'
-  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/nsidc.nc/'
-elif (machine == 'WCOSS_C'):
-  dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
-elif (machine == 'WCOSS_DELL_P3'):
-  dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
-elif (machine == 'RG_Home'):
-  dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'
-  dirs['ncepdir'] = '/Volumes/ncep/allconc/ice5min/'
-  dirs['nsidcdir'] = '/Volumes/ncep/allconc/nsidc_nc/'
-else:
-  print ('ice verification is currently only supported on: %s' % ' '.join(machines))
-  raise NotImplementedError('Cannot find verification data directory, ABORT!')
-
-#Test on whether we have verf data directories
-nsidcverf = os.path.exists(dirs['nsidcdir'])
-ncepverf = os.path.exists(dirs['ncepdir'])
-imsverf  = os.path.exists(dirs['imsdir'])
-if (not nsidcverf and not ncepverf and not imsverf):
-  print('no ice verification directory is present, aborting')
-  raise NotImplementedError('Cannot find any verification data directories, ABORT!')
 
 #---------------------------- Begin program ---------------------
 
