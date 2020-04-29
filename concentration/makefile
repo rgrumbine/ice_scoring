@@ -7,6 +7,7 @@
 #On theia:
 #opt = -Dcice_file
 #opt = -Dbenchmark 
+opt = 
 settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Robert.Grumbine/rgdev/mmablib/mmablib/
 #On wcoss:
 #opt = 
@@ -25,7 +26,7 @@ score_cfsv2 : score_v_cfsv2.C
         -lombf_4 -lnetcdf -o $(@)
 
 score_nsidc : score_v_nsidc.C 
-	g++ $(opt) -Dbenchmark -DLINUX -Wall -O2 score_v_nsidc.C -I$(NETCDF)/include -L $(NETCDF)/lib \
+	g++ $(opt) -DDEBUG -Dbenchmark -DLINUX -Wall -O2 score_v_nsidc.C -I$(NETCDF)/include -L $(NETCDF)/lib \
         $(settings) \
         -lombf_4 -lnetcdf -o $(@)
 
@@ -39,3 +40,7 @@ persistence : persistence.C
         $(settings) \
         -lombf_4 -lnetcdf -o $(@)
 
+a : a.C 
+	g++ $(opt) -DDEBUG -Dbenchmark -DLINUX -Wall -O2 a.C -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
