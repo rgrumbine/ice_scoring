@@ -44,7 +44,6 @@ def NNN_edge(initial, NNN):
   return retcode
 
 #-------- CFSv2 ----------------------------------------
-# NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)
 def get_cfsv2(initial_date, valid_date, NNNdir, NNN):
   retcode = int(0)
   #for now, look only at memno = 01 -- often the only one archived
@@ -164,32 +163,62 @@ def get_ncep(initial_date, valid_date, ncepdir):
   return retcode
 
 #------------------------------------------------------------------
+def nsidc_name(pole, date, nsidcdir):
+  retcode = int(0)
+  if (not os.path.exists(nsidcdir)):
+    print("no such nsidc path as ",nsidcdir)
+    retcode = 1
+    return retcode
+
+  if (not ((pole == 'north') or (pole == 'south')) ):
+    print("invalid pole passed -- ",pole)
+    retcode = 1
+    return retcode
+
+  ptag=pole[0]
+  valid = int(date.strftime("%Y%m%d"))
+  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+  if (os.path.exists(fname)):
+    return fname
+  else:
+    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+    if (os.path.exists(fname)):
+      return fname
+    else:
+      retcode = 1
+      return retcode
+
+
 def get_nsidc(initial_date, valid_date, nsidcdir):
   retcode = int(0)
+  if (not os.path.exists(nsidcdir)):
+    print("no such nsidc path as ",nsidcdir)
+    retcode = 1
+    return retcode
+
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
   yearinitial = int(initial_date.strftime("%Y"))
   yearvalid   = int(valid_date.strftime("%Y"))
-  #print("in getnsidc, nsidcdir = ",nsidcdir)
 
-  fname=nsidcdir + 'north/'+str(yearinitial)+'/seaice_conc_daily_nh_f17_'+str(initial)+'_v03r01.nc'
+  fname = nsidc_name('north', initial_date, nsidcdir) 
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname,' ',str(initial) )
     return 1
 
-  fname=nsidcdir + 'north/'+str(yearvalid)+'/seaice_conc_daily_nh_f17_'+str(valid)+'_v03r01.nc'
+  fname = nsidc_name('north', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname,' ',str(valid) )
     return 1
 
-  fname=nsidcdir + 'south/'+str(yearinitial)+'/seaice_conc_daily_sh_f17_'+str(initial)+'_v03r01.nc'
+  fname = nsidc_name('south', initial_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname, ' ',str(initial) )
     return 1
 
-  fname=nsidcdir + 'south/'+str(yearvalid)+'/seaice_conc_daily_sh_f17_'+str(valid)+'_v03r01.nc'
+  fname = nsidc_name('south', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname, ' ',str(valid) )
     return 1
 
   return retcode
@@ -221,7 +250,11 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
+
   fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  if (not os.path.exists(fname) ):
+    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+
   #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
   #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
 

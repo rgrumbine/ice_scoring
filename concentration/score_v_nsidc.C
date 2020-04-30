@@ -49,10 +49,10 @@ int main(int argc, char *argv[]) {
   x = (float*) malloc(sizeof(float)*NX*NY);
 
 ////////////////// skip grid ///////////////////////////////
+  skip.set(0);
   fin = fopen(argv[3], "r");
   skip.binin(fin);
   fclose(fin);
-  skip.set(0);
   #ifdef DEBUG
     printf("skip stats %d %d %d %d \n",(int) skip.gridmax(),(int) skip.gridmin(), skip.average(), skip.rms()); 
     verbout = fopen("verboseout","w");

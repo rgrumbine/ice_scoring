@@ -4,14 +4,14 @@
 #Details of the paths are set for theia
 #Denise Worthen, Robert Grumbine 17 May 2018
 
-#On theia:
+#On theia/hera:
 #opt = -Dcice_file
 #opt = -Dbenchmark 
 opt = 
 settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Robert.Grumbine/rgdev/mmablib/mmablib/
 #On wcoss:
-#opt = 
-#settings = -I /u/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /u/Robert.Grumbine/rgdev/mmablib/mmablib/
+opt = 
+settings = -I /u/Robert.Grumbine/para/mmablib/mmablib/include -L /u/Robert.Grumbine/para/mmablib/mmablib/
 #On Mac:
 #opt = 
 #BASE=/Volumes/ncep/mmablib/mmablib/
