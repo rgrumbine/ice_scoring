@@ -4,7 +4,7 @@
 #Robert Grumbine
 # 25 February 2020
 
-BASE=/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/
+BASE=${BASE:-/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/}
 
 for f in contingency_plots.py 
 do

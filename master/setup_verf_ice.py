@@ -78,16 +78,21 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
 
-  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.nc'
   valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
-
+  if (not os.path.exists(valid_fname) ):
+    valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.nc'
+    if (not os.path.exists(valid_fname)):
+      print("cannot find forecast file for "+fdate.strftime("%Y%m%d") )
+  
   if (os.path.exists(exdir + 'score_nsidc')):
     print("Have the fcst vs. nsidc scoring executable")
     sys.stdout.flush()
-    pole="north/"
+    pole="north"
     ptag="n"
-    obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
-                        obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
+    #obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
+    #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
+    obsname = nsidc_name(pole, obsdate, nsidcdir)
+
     cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr" + " > score."+
                 ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
     x = os.system(cmd)
@@ -95,8 +100,9 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
       print("command ",cmd," returned error code ",x)
       retcode += x
 
-#    pole="south/"
+#    pole="south"
 #    ptag="s"
+#    obsname = nsidc_name(pole, obsdate, nsidcdir)
 
   else:
     print("No score_nsidc executable")

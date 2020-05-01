@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 // Compute scores for the RTOFS-Global, netcdf outputs
 // Robert Grumbine -- Hycom grid
 // Denise Worthen -- Adding CICE grid
@@ -50,19 +49,17 @@ int main(int argc, char *argv[]) {
   x = (float*) malloc(sizeof(float)*NX*NY);
 
 ////////////////// skip grid ///////////////////////////////
+  skip.set(0);
   fin = fopen(argv[3], "r");
   skip.binin(fin);
   fclose(fin);
-  skip.set(0);
   #ifdef DEBUG
-  printf("skip stats %d %d %d %d \n", skip.gridmax(), skip.gridmin(), skip.average(), skip.rms()); 
+    FILE *verbout;
+    printf("skip stats %d %d %d %d \n",(int) skip.gridmax(),(int) skip.gridmin(), skip.average(), skip.rms()); 
+    verbout = fopen("verboseout","w");
   #endif
 
 ////////////////// Sea ice analysis ///////////////////////////////
-//  fin = fopen(argv[2], "r");
-//  obs.ftnin(fin);
-//  fclose(fin);
-
 // High res sea ice analysis from netcdf:
   nsidcnorth<float> obs;
   grid2<float> obslat(obs.ypoints(), obs.xpoints()), obslon(obs.ypoints(), obs.xpoints());
@@ -98,7 +95,6 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(tmp, xb);
 
-// close when done:
   retval = nc_close(ncid);
   if (retval != 0) ERR(retval); fflush(stdout);
 
@@ -109,9 +105,11 @@ int main(int argc, char *argv[]) {
     ll.lon = obslon[i];
     floc = obs.locate(ll);
     obs[floc] = tmp[i];
-    //printf("%6d %.3f %.3f  %3.0f  %.3f %.3f  %f %f\n",i,
-    //    obslat[i], obslon[i], tmp[i], floc.i, floc.j, 
-    //        fabs(floc.i - rint(floc.i)) , fabs(floc.j - rint(floc.j) ) );
+    #ifdef DEBUG
+     fprintf(verbout, "nsidc %6d %.3f %.3f  %3.0f  %.3f %.3f  %f %f\n",i,
+         obslat[i], obslon[i], tmp[i], floc.i, floc.j, 
+             fabs(floc.i - rint(floc.i)) , fabs(floc.j - rint(floc.j) ) );
+    #endif
   }
   for (int i = 0; i < tmp.xpoints()*tmp.ypoints(); i++) {
     if (obs[i] == 157.0) {
@@ -120,15 +118,30 @@ int main(int argc, char *argv[]) {
   }
   if (obs.gridmax() > 1.0) obs /= 100.;
 
-//  printf("obs stats %f %f %f %f \n", obs.gridmax(), obs.gridmin(), obs.average(), obs.rms()); 
-//  printf("tmp stats %f %f %f %f \n", tmp.gridmax(), tmp.gridmin(), tmp.average(), tmp.rms()); 
-  fflush(stdout);
+  #ifdef DEBUG
+    fprintf(verbout, "obs stats %f %f %f %f \n", obs.gridmax(), obs.gridmin(), obs.average(), obs.rms()); 
+    fprintf(verbout, "tmp stats %f %f %f %f \n", tmp.gridmax(), tmp.gridmin(), tmp.average(), tmp.rms()); 
+    fflush(verbout);
+  #endif
 
 
 ////////////////// Hycom variables ///////////////////////////////
 
   retval = nc_open(argv[1], NC_NOWRITE, &ncid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) {
+  #ifdef DEBUG
+    fprintf(verbout, "some problem in nc_open of %s\n",argv[1]);
+    fflush(verbout);
+  #endif
+    printf("some problem in nc_open of %s\n",argv[1]);
+    fflush(stdout);
+    ERR(retval);
+    fflush(stdout);
+  }
+  #ifdef DEBUG
+    fprintf(verbout, "passed nc_open of %s\n",argv[1]);
+    fflush(verbout);
+  #endif
 
 // go over all variables:
   #if defined(cice_file) || defined(benchmark)
@@ -170,30 +183,30 @@ int main(int argc, char *argv[]) {
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(ice_coverage, x);
-  #ifdef DEBUG
-    palette<unsigned char> gg(19, 65);
-    ice_coverage *= 100.;
-    ice_coverage.xpm("ice.xpm",7,gg);
-    loc.i = 0; loc.j = 0;
-    printf("00 lat, ice: %f %f\n",ice_coverage[loc], lat[loc]);
-    loc.i = lat.xpoints() - 1; loc.j = lat.ypoints() - 1;
-    printf("NM lat, ice: %f %f\n",ice_coverage[loc], lat[loc]);
-    return 0;
-  #endif
   
   #if defined(cice_file) || defined(benchmark)
-  retval = nc_inq_varid(ncid, "hi_h", &varid);
+    retval = nc_inq_varid(ncid, "hi_h", &varid);
   #else
-   retval = nc_inq_varid(ncid, "ice_thickness", &varid);
+    retval = nc_inq_varid(ncid, "ice_thickness", &varid);
   #endif
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(ice_thickness, x);
 
-// close when done:
+  #ifdef DEBUG
+    printf("ice thickness max %f\n",ice_thickness.gridmax() ); fflush(stdout);
+    fprintf(verbout, "ice thickness max %f\n",ice_thickness.gridmax() ); fflush(verbout);
+  #endif
+
   retval = nc_close(ncid);
   if (retval != 0) ERR(retval); fflush(stdout);
+
+  #ifdef DEBUG
+    fprintf(verbout,"done with reading in netcdf of model\n");
+    printf("done with reading in netcdf of model\n");
+    fflush(verbout);
+  #endif
 
 ///////////////// End of Netcdf portion ////////////////////////////////////////////
 //
@@ -213,13 +226,19 @@ int main(int argc, char *argv[]) {
     floc = obs.locate(ll);
     sloc = skip.locate(ll);
 
+    #ifdef VERBOSE
+      if (floc.i <= -0.5 || floc.j <= -0.5) {
+        printf("floc %f %f\n", floc.i, floc.j);
+      }
+      if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
+        printf("floc %f %f\n", floc.i, floc.j);
+      }
+    #endif
     #ifdef DEBUG
-    if (floc.i <= -0.5 || floc.j <= -0.5) {
-      printf("floc %f %f\n", floc.i, floc.j);
-    }
-    if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
-      printf("floc %f %f\n", floc.i, floc.j);
-    }
+      fprintf(verbout, "model %d %d  %.3f %.3f %f vs. %f w. skip %d\n",
+          loc.i, loc.j, ll.lat, ll.lon,
+          ice_coverage[loc], obs[floc], (int) skip[sloc] );
+      fflush(verbout);
     #endif
     if (obs[floc] > 1.0) continue;
 
@@ -236,13 +255,17 @@ int main(int argc, char *argv[]) {
       south[count] = skipped[count];
     }
 
-    #ifdef VERBOSE
-    printf("%8d %5.3f %5.3f %3d  %7.3f %8.3f  %8.3f %8.3f\n",count,model[count], observed[count], skipped[count], lat[loc], lon[loc], floc.i, floc.j);
+    #ifdef DEBUG
+      fprintf(verbout, "out2 %8d %5.3f %5.3f %3d  %7.3f %8.3f  %8.3f %8.3f\n",count,model[count], observed[count], skipped[count], lat[loc], lon[loc], floc.i, floc.j);
+      fflush(verbout);
     #endif
 
     count++;
   }
   }
+  #ifdef DEBUG
+    fflush(verbout);
+  #endif
 
 
 // At last, start scoring:
@@ -260,11 +283,6 @@ int main(int argc, char *argv[]) {
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
     printf("nhlevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
   }
-//  for (level = 0.0; level < 1.; level += 0.05) {
-//    contingency(observed, model, south, cellarea, level, a11, a12, a21, a22);
-//    contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-//    printf("shlevel %4.2f  %f %f %f %f  %f %f %f %f %f %f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-//  }
 
   return 0;
 }

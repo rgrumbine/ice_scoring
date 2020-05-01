@@ -1,6 +1,8 @@
 import os
 import datetime
 
+from platforms import *
+
 # logfile for comments out
 exbase=os.environ['EXDIR']
 exdir = exbase+"/exec/"
@@ -44,7 +46,6 @@ def NNN_edge(initial, NNN):
   return retcode
 
 #-------- CFSv2 ----------------------------------------
-# NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)
 def get_cfsv2(initial_date, valid_date, NNNdir, NNN):
   retcode = int(0)
   #for now, look only at memno = 01 -- often the only one archived
@@ -164,32 +165,62 @@ def get_ncep(initial_date, valid_date, ncepdir):
   return retcode
 
 #------------------------------------------------------------------
+def nsidc_name(pole, date, nsidcdir):
+  retcode = int(0)
+  if (not os.path.exists(nsidcdir)):
+    print("no such nsidc path as ",nsidcdir)
+    retcode = 1
+    return retcode
+
+  if (not ((pole == 'north') or (pole == 'south')) ):
+    print("invalid pole passed -- ",pole)
+    retcode = 1
+    return retcode
+
+  ptag=pole[0]
+  valid = int(date.strftime("%Y%m%d"))
+  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+  if (os.path.exists(fname)):
+    return fname
+  else:
+    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+    if (os.path.exists(fname)):
+      return fname
+    else:
+      retcode = 1
+      return retcode
+
+
 def get_nsidc(initial_date, valid_date, nsidcdir):
   retcode = int(0)
+  if (not os.path.exists(nsidcdir)):
+    print("no such nsidc path as ",nsidcdir)
+    retcode = 1
+    return retcode
+
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
   yearinitial = int(initial_date.strftime("%Y"))
   yearvalid   = int(valid_date.strftime("%Y"))
-  #print("in getnsidc, nsidcdir = ",nsidcdir)
 
-  fname=nsidcdir + 'north/'+str(yearinitial)+'/seaice_conc_daily_nh_f17_'+str(initial)+'_v03r01.nc'
+  fname = nsidc_name('north', initial_date, nsidcdir) 
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname,' ',str(initial) )
     return 1
 
-  fname=nsidcdir + 'north/'+str(yearvalid)+'/seaice_conc_daily_nh_f17_'+str(valid)+'_v03r01.nc'
+  fname = nsidc_name('north', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname,' ',str(valid) )
     return 1
 
-  fname=nsidcdir + 'south/'+str(yearinitial)+'/seaice_conc_daily_sh_f17_'+str(initial)+'_v03r01.nc'
+  fname = nsidc_name('south', initial_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname, ' ',str(initial) )
     return 1
 
-  fname=nsidcdir + 'south/'+str(yearvalid)+'/seaice_conc_daily_sh_f17_'+str(valid)+'_v03r01.nc'
+  fname = nsidc_name('south', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname)
+    print('do not have ',fname, ' ',str(valid) )
     return 1
 
   return retcode
@@ -197,8 +228,10 @@ def get_nsidc(initial_date, valid_date, nsidcdir):
 def nsidc_edge(initial, toler, nsidcdir):
   retcode = int(0)
   yearinitial = int(int(initial)/10000)
+  initial_date = parse_8digits(initial)
+
   fout = 'nsidc_north_edge.'+str(initial)
-  fin = nsidcdir + 'north/'+str(yearinitial)+'/seaice_conc_daily_nh_f17_'+str(initial)+'_v03r01.nc' 
+  fin = nsidc_name('north',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
     #print('north command: ',cmd  )
@@ -206,7 +239,7 @@ def nsidc_edge(initial, toler, nsidcdir):
     if (x != 0): retcode += x
 
   fout = 'nsidc_south_edge.'+str(initial)
-  fin = nsidcdir + 'south/'+str(yearinitial)+'/seaice_conc_daily_sh_f17_'+str(initial)+'_v03r01.nc' 
+  fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
     #print('south command: ',cmd  )
@@ -217,13 +250,29 @@ def nsidc_edge(initial, toler, nsidcdir):
 
 #-----------------------------------------------------------------===
 #-----------------------------------------------------------------===
+def fcst_name(valid, initial, fcst_dir):
+  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
+
+  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  if (not os.path.exists(fname) ):
+    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+    if (not os.path.exists(fname) ):
+      print("could not find forecast for "+fcst_dir,str(valid),str(initial))
+      return 1
+    else:
+      return fname
+  else:
+    return fname
+
 def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
+
   fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
+  if (not os.path.exists(fname) ):
+    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
 
   if (not os.path.exists(fname)):
     retcode += 1
@@ -233,8 +282,9 @@ def get_fcst(initial_date, valid_date, fcst_dir):
 
 def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
-  fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
   if (not os.path.exists('fcst_edge.' + str(valid))):
+    fname = fcst_name(valid, initial, fcst_dir)
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
     x = os.system(cmd)
     if (x != 0): retcode += x

@@ -56,14 +56,17 @@ elif (machine == 'WCOSS_C'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
   dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
   dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'WCOSS_DELL_P3'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
+  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/ice5min/'
+  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/sidads.colorado.edu/pub/DATASETS/NOAA/G02202_V3/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'RG_Home'):
   dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'
   dirs['ncepdir'] = '/Volumes/ncep/allconc/ice5min/'
   dirs['nsidcdir'] = '/Volumes/ncep/allconc/nsidc_nc/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 else:
   print ('ice verification is currently only supported on: %s' % ' '.join(machines))
   raise NotImplementedError('Cannot find verification data directory, ABORT!')
