@@ -41,12 +41,15 @@ score = np.zeros((lead))
 #For score vs. crit level for each lead
 critical_level = np.zeros((20))
 threat_index = np.zeros((20))
+critical_level[0] = 0
+threat_index[0] = 0
 
 valid_date = start_date
 for i in range (0,lead):
   valid_date = valid_date + dt 
-  fname = ("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
-  #print("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
+  fname = ("score."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
+#score.20110126f20110101.csv
+
   flead = (valid_date - start_date).days
   if (not os.path.exists(fname)):
     print("missing ",valid_date.strftime("%Y%m%d"))
@@ -58,13 +61,14 @@ for i in range (0,lead):
       days[i] = flead
       for line in sreader:
         k += 1
-        #print("k = ",k,line)
-        if (k < 20): continue #first 20 are for global stats
-        critical_level[k-20] = float(line[level])
-        threat_index[k-20] = float(line[threat])
-        #print(critical_level[k-20], threat_index[k-20])
-        if (float(critical_level[k-20]) == level_score):
-          score[i] = threat_index[k-20]
+        #cd print("i,k,flead,level,threat ",i,k,flead,level,threat,line)
+        #cd print(line[level], float(line[level]))
+        #cd print(line[threat], float(line[threat]))
+
+        critical_level[k] = float(line[level])
+        threat_index[k] = float(line[threat])
+        if (float(critical_level[k]) == level_score):
+          score[i] = threat_index[k]
     #Now have this lead in hand, plot the curve:
     fig, ax = plt.subplots()
     ax.set(xlabel = "Cutoff Concentration", ylabel = 'threat score [0:1]')

@@ -1,1 +1,0 @@
-../ice_edge/C/small_nc.C

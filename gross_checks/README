@@ -1,30 +1,74 @@
 Assemble tools for making automated checks for model output sanity.
+Robert Grumbine 3 February 2020
+20 April 2020
+
+First (functioning) tools:
+gross_ice.py
+gross_ocean.py
+wholesale_ocean.py -- examine all 35 days, 6 hourly, surface fields from a forecast ocean
+wholesale_ice.py   -- examine all 35 days, 6 hourly, surface fields from a forecast ice
+delta_ice.py       -- examine differences between two ice runs
+
+Preface:
+On WCOSS: module load python/3.6.3
+On Orion: module load python/3.7.5
+  The hera python modules are not sufficient, so you'll need:
+On Hera: prepend /home/Robert.Grumbine/clim_data/anaconda3/bin to your PATH
+On Hera you might also need to add:
+  setenv TERMINFO /usr/share/terminfo
+to your .cshrc
+
+Usage:
+python3 gross_ice.py   NAME_OF_ICE.nc   ice.dictionary   redone.dictionary
+python3 gross_ocean.py NAME_OF_OCEAN.nc ocean.dictionary redone.dictionary
+
+The first listed dictionaries on the command line contain the names of 
+  netcdf parameters in the file and, optionally, 4 numbers -- global minimum, 
+  global maximum, highest allowed minimum, lowest allowed maximum.
+For any parameter that is name only, the file 'redone.dictionary' will 
+  contain parameter name plus observed min, max and estimated highest 
+  minimum and lowest maximum.
+Any parameter which is listed, but not in the .nc, will give a message to stdout, e.g.:
+  rain_h  not in data file 
+  -- and execution will proceed without it.
+
+*.extremes gives bounds that are seldom exceeded in 6 years of prototype runs, 
+  for the named (*) files
+
+Examining output:
+If any value for a parameter on its grid violates the given limits, you'll get a message like:
+    hi_h        excessively high maximum  6.14912  versus  5.0  allowed
+where the 6.14 is in the grid, and you said 5.0 was the highest allowed 
+  value. Otherwise, it is silent.
+
+For parameters which exceed the global bounds anywhere, a second pass 
+  is made which prints out where and the values:
+parameter i j longitude tlatitude model_value test_checked test_value
+hi_h 1112 901 338.49753 70.645 5.4321904  vs pmax  5.0
+hi_h 1111 907 338.3247 71.2918 6.14912  vs pmax  5.0
+hi_h 1110 909 338.0922 71.51021 5.651512  vs pmax  5.0
+hi_h 1046 1018 312.75015 83.079865 5.1349816  vs pmax  5.0
+
+
+
+
+
+Notes towards the future: --------------
 
 Build on some sort of progression such that the checks make sense in a sequence.
+
+Grid edge effects/checks:
+i = 0, nx; j = 0, ny
 
 Numerical artefact checks:
 Tripolar seam?
 Disk around pole divergent from rest of field?
 
-Global range checks:
-sss:        [0..41] (except some coastal points in sw persian gulf, which may reach 58!)
-sst:        [-1.98..~35.0] C (might go below for a timestep -- A Mehra)
-ice thick:  [0..5+] m, max should be > 1.5m arctic, > 1 antarctic
-ice speed:  [0..0.7] m/s ,  rough -- Nansen rule equates 0.7 m/s ice motion to winds of 35 m/s
 
 Regional/local range checks:
 Arctic ocean
 Southern ocean
 Gulf of Mexico
 Gulf Stream
-ENSO 3.1 et al.
+Nino 3.4, etc.
 
-
-
-
-
-
-
-
-
-Robert Grumbine

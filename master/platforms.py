@@ -3,6 +3,11 @@ import sys
 import datetime
 
 #------------------------------------------------------------------
+exbase=os.environ['EXDIR']
+exdir = exbase+"/exec/"
+fixdir = exbase+"/fix/"
+#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
   tmp = int(tag)
@@ -11,7 +16,6 @@ def parse_8digits(tag):
   return tag_out
 
 #----------------- High level declarations -----------------------------
-exdir = "./exec/"
 # Directories w. verification data
 dirs = {
   'imsdir' : '',
@@ -47,19 +51,22 @@ if (machine == 'HERA'):
   dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/ims/'
   dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/ice5min/'
   dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/nsidc.nc/'
-  dirs['fixdir']   = '/home/Robert.Grumbine/save/mmablib/ice_scoring/fix'
+  dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/fix'
 elif (machine == 'WCOSS_C'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
   dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
   dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'WCOSS_DELL_P3'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
+  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/ice5min/'
+  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/sidads.colorado.edu/pub/DATASETS/NOAA/G02202_V3/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'RG_Home'):
   dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'
   dirs['ncepdir'] = '/Volumes/ncep/allconc/ice5min/'
   dirs['nsidcdir'] = '/Volumes/ncep/allconc/nsidc_nc/'
+  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 else:
   print ('ice verification is currently only supported on: %s' % ' '.join(machines))
   raise NotImplementedError('Cannot find verification data directory, ABORT!')
@@ -81,5 +88,6 @@ if (not nsidcverf and not ncepverf and not imsverf):
 #Variables established by this script:
 # machines (a dictionary of machine identifiers)
 # dirs (a dictionary of directory paths)
-# execdir (location of executables)
+# execdir (location of executables, needs EXDIR environment variable)
+# fixdir (location of executables, needs EXDIR environment variable)
 # imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 

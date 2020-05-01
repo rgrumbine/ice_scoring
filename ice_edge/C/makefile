@@ -6,7 +6,7 @@
 #  module load NetCDF
 
 #opts =  -Wall -O2 -DLINUX -DDEBUG
-opts = -Wall -O2 -DLINUX 
+opts = -Wall -O2 -DLINUX -I ../../formats 
 #for theia:
 NETCDF_INCLUDE=-I $(NETCDF)/include
 

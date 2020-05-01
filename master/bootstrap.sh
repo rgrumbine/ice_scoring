@@ -1,12 +1,22 @@
 #!/bin/sh
 
-#Bootstrap for ice model verification
+#Bootstrap for ice model verification -- retrieve the scripts and fixed files for a basic run of the system
+#Robert Grumbine
+# 25 February 2020
 
-BASE=/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/
+BASE=${BASE:-/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/}
 
-for f in verf_files.py setup_verf_ice.py contingency_plots.py all.csh
+for f in contingency_plots.py 
 do
-  cp ${BASE}/master/$f .
+  cp -p ${BASE}/concentration/$f .
+  if [ ! -f $f ] ; then
+    echo could not find $f in $BASE, exiting
+    exit 1
+  fi
+done
+for f in verf_files.py setup_verf_ice.py platforms.py all.csh
+do
+  cp -p ${BASE}/master/$f .
   if [ ! -f $f ] ; then
     echo could not find $f in $BASE, exiting
     exit 1
@@ -20,6 +30,3 @@ do
     exit 2
   fi
 done
-
-
- 
