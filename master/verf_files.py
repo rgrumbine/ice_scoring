@@ -1,6 +1,8 @@
 import os
 import datetime
 
+from platforms import *
+
 # logfile for comments out
 exbase=os.environ['EXDIR']
 exdir = exbase+"/exec/"
@@ -226,8 +228,10 @@ def get_nsidc(initial_date, valid_date, nsidcdir):
 def nsidc_edge(initial, toler, nsidcdir):
   retcode = int(0)
   yearinitial = int(int(initial)/10000)
+  initial_date = parse_8digits(initial)
+
   fout = 'nsidc_north_edge.'+str(initial)
-  fin = nsidcdir + 'north/'+str(yearinitial)+'/seaice_conc_daily_nh_f17_'+str(initial)+'_v03r01.nc' 
+  fin = nsidc_name('north',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
     #print('north command: ',cmd  )
@@ -235,7 +239,7 @@ def nsidc_edge(initial, toler, nsidcdir):
     if (x != 0): retcode += x
 
   fout = 'nsidc_south_edge.'+str(initial)
-  fin = nsidcdir + 'south/'+str(yearinitial)+'/seaice_conc_daily_sh_f17_'+str(initial)+'_v03r01.nc' 
+  fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
     #print('south command: ',cmd  )
@@ -246,6 +250,21 @@ def nsidc_edge(initial, toler, nsidcdir):
 
 #-----------------------------------------------------------------===
 #-----------------------------------------------------------------===
+def fcst_name(valid, initial, fcst_dir):
+  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
+
+  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  if (not os.path.exists(fname) ):
+    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+    if (not os.path.exists(fname) ):
+      print("could not find forecast for "+fcst_dir,str(valid),str(initial))
+      return 1
+    else:
+      return fname
+  else:
+    return fname
+
 def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
@@ -255,9 +274,6 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   if (not os.path.exists(fname) ):
     fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
 
-  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
-
   if (not os.path.exists(fname)):
     retcode += 1
     print("Do not have forecast file ",fname)
@@ -266,8 +282,9 @@ def get_fcst(initial_date, valid_date, fcst_dir):
 
 def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
-  fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
   if (not os.path.exists('fcst_edge.' + str(valid))):
+    fname = fcst_name(valid, initial, fcst_dir)
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
     x = os.system(cmd)
     if (x != 0): retcode += x

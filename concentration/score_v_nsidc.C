@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 
 // File of pts to skip
   global_12th<unsigned char> skip;
-  FILE *fin, *verbout;
+  FILE *fin;
 
 // Hycom diag file variables of interest:
   grid2<float> lat(NX, NY), lon(NX, NY), tarea(NX, NY);
@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
   skip.binin(fin);
   fclose(fin);
   #ifdef DEBUG
+    FILE *verbout;
     printf("skip stats %d %d %d %d \n",(int) skip.gridmax(),(int) skip.gridmin(), skip.average(), skip.rms()); 
     verbout = fopen("verboseout","w");
   #endif
@@ -128,15 +129,19 @@ int main(int argc, char *argv[]) {
 
   retval = nc_open(argv[1], NC_NOWRITE, &ncid);
   if (retval != 0) {
+  #ifdef DEBUG
     fprintf(verbout, "some problem in nc_open of %s\n",argv[1]);
     fflush(verbout);
+  #endif
     printf("some problem in nc_open of %s\n",argv[1]);
     fflush(stdout);
     ERR(retval);
     fflush(stdout);
   }
+  #ifdef DEBUG
     fprintf(verbout, "passed nc_open of %s\n",argv[1]);
     fflush(verbout);
+  #endif
 
 // go over all variables:
   #if defined(cice_file) || defined(benchmark)

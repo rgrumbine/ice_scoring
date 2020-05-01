@@ -59,7 +59,7 @@ elif (machine == 'WCOSS_C'):
   dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'WCOSS_DELL_P3'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
+  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/ice5min/'
   dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/sidads.colorado.edu/pub/DATASETS/NOAA/G02202_V3/'
   dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
 elif (machine == 'RG_Home'):
