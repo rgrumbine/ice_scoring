@@ -17,9 +17,9 @@ import netCDF4
 #data file = argv[1] (input)
 #control dictionary = argv[2] (input)
 #bootstrapped dictionary = argv[3] (optional, may be written to if needed and present)
-
-
 #---------------------------------------------------
+
+errcount = int(0)
 
 if (not os.path.exists(sys.argv[1]) ):
   print("failure to find ",sys.argv[1])
@@ -128,10 +128,15 @@ else:
       for j in range (0,ny):
         for i in range (0,nx):
           if (temporary_grid[j,i] < pmin):
+            errcount += 1
             print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",pmin)
           if (temporary_grid[j,i] > pmax):
+            errcount += 1
             print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",pmax)
 
 
 
     k += 1
+
+print("errcount = ",errcount)
+exit(errcount)
