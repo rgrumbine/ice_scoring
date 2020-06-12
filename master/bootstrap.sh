@@ -4,7 +4,7 @@
 #Robert Grumbine
 # 25 February 2020
 
-BASE=${BASE:-/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/}
+BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
 
 for f in contingency_plots.py 
 do
@@ -22,6 +22,18 @@ do
     exit 1
   fi
 done
+
+#create and populate the exec directory if needed:
+if [ ! -d ${BASE}/exec ] ; then
+  cd ${BASE}
+  ./makeall.sh
+fi
+
+if [ ! -d ${BASE}/fix ] ; then
+  echo You must manually create and populate the fix directory
+  exit 1
+fi
+
 for d in exec fix
 do
   cp -rp ${BASE}/$d .
