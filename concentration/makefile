@@ -7,12 +7,13 @@
 #opt = -DDEBUG -Dbenchmark 
 opt = -Dbenchmark 
 
-#On theia/hera:
+#On theia/hera/orion:
 #opt = -Dcice_file
-settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Robert.Grumbine/rgdev/mmablib/mmablib/
+#settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Robert.Grumbine/rgdev/mmablib/mmablib/
+settings = -I ../../mmablib/include -L ../../mmablib/
 #On wcoss:
 #opt = 
-settings = -I /u/Robert.Grumbine/para/mmablib/mmablib/include -L /u/Robert.Grumbine/para/mmablib/mmablib/
+#settings = -I /u/Robert.Grumbine/para/mmablib/mmablib/include -L /u/Robert.Grumbine/para/mmablib/mmablib/
 #On Mac:
 #opt = 
 #BASE=/Volumes/ncep/mmablib/mmablib/
