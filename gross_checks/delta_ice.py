@@ -45,7 +45,7 @@ tarea = model1.variables["tarea"][:,:]
 fdic = open(sys.argv[3])
 ratio = float(sys.argv[4])
 
-k = 0
+parmno = 0
 for line in fdic:
   words = line.split()
   parm = words[0]
@@ -80,4 +80,4 @@ for line in fdic:
               "{:7.3f}".format(tgrid1[j,i]), 
               "{:7.3f}".format(tgrid2[j,i]) )
 
-  k += 1
+  parmno += 1

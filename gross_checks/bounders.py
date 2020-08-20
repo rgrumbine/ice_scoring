@@ -2,6 +2,7 @@ import os
 import sys
 from math import *
 import numpy as np
+import numpy.ma as ma
 
 #---------------------------------------------------
 #Develop a class for bounds checking
@@ -69,6 +70,29 @@ class bounds:
     return gfail
 
   def where(self, grid, lats, lons, mask, area):
+    #Show where (and which) test failed.  self is the bounds data
+    if (grid.min() < self.pmin): 
+      print("parameter i j longitude latitude model_value test_checked test_value")
+      mask = ma.masked_array(grid < self.pmin)
+      indices = mask.nonzero()
+      
+      for k in range(0,len(indices[0])):
+        i = indices[1][k]
+        j = indices[0][k]
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",self.pmin)
+
+    if (grid.max() > self.pmax):
+      print("parameter i j longitude latitude model_value test_checked test_value")
+      mask = ma.masked_array(grid < self.pmin)
+      indices = mask.nonzero()
+      
+      for k in range(0,len(indices[0])):
+        i = indices[1][k]
+        j = indices[0][k]
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax)
+
+
+  def where_manual(self, grid, lats, lons, mask, area):
     #Show where (and which) test failed:
     ny = grid.shape[0]
     nx = grid.shape[1]
