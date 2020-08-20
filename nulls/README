@@ -1,0 +1,6 @@
+Elementary demonstration of using null forecaster code -- main.C
+Because of the templating, one must include the nulls.C file in main.C, not just nulls.h
+
+Robert Grumbine
+20 August 2020
+

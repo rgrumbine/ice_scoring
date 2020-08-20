@@ -9,10 +9,7 @@
 // level 3 -- forecaster which knows yesterday, history, climatology
 //
 
-#include "grid_math.h"
-
-#define GLACIAL 0
-#define TROPICAL 1
+#include "nulls.h"
 
 // level 0 nulls -- completely ignorant nulls
 template<class T>
@@ -31,11 +28,6 @@ void null(grid2<T> &x, int sort) {
 }
 
 // level 1 nulls -- knows history in general but nothing recent
-#define LAST_YEAR 2
-#define COND_AVG  3
-#define UNCOND_AVG 4
-
-#include "netcdf.h"
 template<class T>
 void null(grid2<T> &x, int sort, FILE *fin, int jday) {
 // the file is a netcdf file, 1 time per day for the previous year
@@ -58,7 +50,6 @@ void null(grid2<T> &x, int sort, FILE *fin, int jday) {
 } 
 
 // level 2 -- forecaster which knows only yesterday
-#define PERSISTENCE 5
 template<class T>
 void null(grid2<T> &x, grid2<T> &observed) {
   x = observed;
@@ -71,8 +62,6 @@ void null(grid2<T> &x, grid2<T> &observed) {
 //       same N to each area + adjacent points
 //   c) Ice obs N days ago as well
 //   d) Cli-Per type
-#define ANALOG 6
-#define CLIPER 7
 template<class T>
 void null(grid2<T> &x, int sort, FILE *fin) {
 
@@ -86,7 +75,6 @@ void null(grid2<T> &x, int sort, FILE *fin) {
 //   the MRF (1997-20NN) applied a filter such that ice concentrations 
 //      below 0.55 were set to 0, and those above were set to 1.0
 
-float gfs(float &x);
 float gfs(float &x) {
   float y;
   if (x < 0.40) {
@@ -98,7 +86,6 @@ float gfs(float &x) {
   return y;
 }
 
-float mrf(float &x);
 float mrf(float &x) {
   float y = 0.0;
 
