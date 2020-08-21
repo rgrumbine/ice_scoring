@@ -1,6 +1,17 @@
-C++ versions of finding ice edge in a grid (find_edge), 
-    and scoring one edge against another (score_edge)
+C++ versions of finding ice edge in a grid (find_edge_*),
+    and scoring one edge against another (cscore_edge)
+
+scoring.sh has example of using the scoring executables
+
+* = 
+ims         : IMS ice mask analysis, 1/96th Bedient
+cfsv2       : CFSv2 
+cice        : UFS tripolar grids
+nrl         : NRL 4.8 minute GOFS 3.1 output
+nsidc_north : Northern hemisphere 25 km NSIDC grid
+nsidc_south : Southern hemsiphere 25 km NSIDC grid
+(none)      : NCEP L4 sea ice concentration analysis
 
 Robert Grumbine
 23 April 2018
-
+20 August 2020
