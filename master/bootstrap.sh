@@ -27,6 +27,12 @@ done
 if [ ! -d ${BASE}/exec ] ; then
   cd ${BASE}
   ./makeall.sh
+  if [ $? -eq 0 ] ; then
+    echo copy exec dir from $BASE
+  else
+    echo failed to find or create execs, exiting now
+    exit 1
+  
 fi
 
 if [ ! -d ${BASE}/fix ] ; then
