@@ -8,17 +8,17 @@
 opt = -Dbenchmark 
 
 #On theia/hera/orion:
-#opt = -Dcice_file
+opt = -Dcice_file
 #settings = -I /home/Robert.Grumbine/rgdev/mmablib/mmablib/include -L /home/Robert.Grumbine/rgdev/mmablib/mmablib/
 settings = -I ../../mmablib/include -L ../../mmablib/
 #On wcoss:
 #opt = 
 #settings = -I /u/Robert.Grumbine/para/mmablib/mmablib/include -L /u/Robert.Grumbine/para/mmablib/mmablib/
 #On Mac:
-opt = 
-BASE=/Volumes/ncep/github.work/mmablib/
-settings=-I $(BASE)/include -L $(BASE) 
-NETCDF=/Users/rmg3/usrlocal/
+#opt = 
+#BASE=/Volumes/ncep/github.work/mmablib/
+#settings=-I $(BASE)/include -L $(BASE) 
+#NETCDF=/Users/rmg3/usrlocal/
 
 all : score_diag score_nsidc score_cfsv2 persistence
 

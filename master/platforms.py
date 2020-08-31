@@ -28,7 +28,8 @@ machines = {
   'RG_Home'       : '/Volumes/ncep',
   'HERA'          : '/scratch1',
   'WCOSS_C'       : '/etc/SuSE-release',
-  'WCOSS_DELL_P3' : '/gpfs/dell2'
+  'WCOSS_DELL_P3' : '/gpfs/dell2',
+  'Orion'         : '/home/rgrumbin'
 }
 #----------------- Identify our machines -----------------------------
 
@@ -52,6 +53,11 @@ if (machine == 'HERA'):
   dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/ice5min/'
   dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/nsidc.nc/'
   dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/fix'
+elif (machine == 'Orion'):
+  dirs['imsdir'] = '/home/rgrumbin/rgdev/verification_data/ims/'
+  dirs['ncepdir'] = '/home/rgrumbin/rgdev/verification_data/ice5min/'
+  dirs['nsidcdir'] = '/home/rgrumbin/rgdev/verification_data/nsidc.nc/'
+  dirs['fixdir']   = '/home/rgrumbin/rgdev/ice_scoring/fix'
 elif (machine == 'WCOSS_C'):
   dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
   dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
