@@ -3,11 +3,9 @@ import sys
 import datetime
 from math import *
 import numpy as np
+import numpy.ma as ma
 
 import netCDF4
-
-#import urllib
-#import csv
 
 #---------------------------------------------------
 #Gross bound checks on .nc files, developed primarily from the sea ice (CICE5) output
@@ -40,9 +38,10 @@ else:
     tmask = np.zeros((ny, nx))
     tmask = 1.
   tarea = model.variables["tarea"][:,:]
-  #print("max min mask area ",tmask.max(), tmask.min(), tarea.max(), tarea.min(), sqrt(tarea.max()), sqrt(tarea.min() )  )
+  #debug print("max min mask area ",tmask.max(), tmask.min(), tarea.max(), tarea.min(), sqrt(tarea.max()), sqrt(tarea.min() )  )
 
-  #bootstrapping -- read in dictionary of names, write back out name/max/min in dictionary format
+  #bootstrapping -- read in dictionary of names, write back out name/max/min 
+  #    in dictionary format
   #  next round -- estimate minmax and maxmin by 1% end points of histogram
   # want to specify T pts vs. U pts
   fdic = open(sys.argv[2])
@@ -53,7 +52,7 @@ else:
     print("cannot write out to bootstrap dictionary file")
     flyout = False
 
-  k = 0
+  parmno = 0
   for line in fdic:
     words = line.split()
     parm = words[0]
@@ -87,7 +86,7 @@ else:
       pmaxmin = pmin + 0.1*(pmax - pmin)
       pminmax = pmax - 0.1*(pmax - pmin)
 
-    #print("k = ",k,parm, pmin, pmax, pmaxmin, pminmax)
+    #print("parmno = ",parmno,parm, pmin, pmax, pmaxmin, pminmax)
     #RG: need to do something different in formatting small numbers (fsalt, for ex)
     if (len(words) < 5 and flyout) :
       print("{:10s}".format(parm), 
@@ -121,22 +120,38 @@ else:
       print("{:10s}".format(parm)," excessively low maximum ",gmax," versus ",pminmax," allowed")
       gfail = True
   
-    #Show where (and which) test failed:
-    #where(tmp, tlons, tlats, pmin, pmaxmin, pmax, pminmax)
+    #Pointwise checks -- Show where (and which) test failed:
+    #  numpy masked arrays are vastly more efficient than manual iteration over indices
+    #  0.5 seconds for masked arrays, 5 minutes for manual
+    #where(tmp, tlons, tlats, pmin, pmax)
     if (gfail):
+      maskhigh = ma.masked_array(temporary_grid > pmax)
+      high = maskhigh.nonzero()
+      #debug print("len(high): ", len(high[0]),len(high) )
+      errcount += len(high[0])
+
+      masklow  = ma.masked_array(temporary_grid < pmin)
+      low  = masklow.nonzero()
+      #debug print("len(low): ", len(low[0]),len(low) )
+      errcount += len(low[0])
+
       print("parameter i j longitude latitude model_value test_checked test_value")
-      for j in range (0,ny):
-        for i in range (0,nx):
-          if (temporary_grid[j,i] < pmin):
-            errcount += 1
-            print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",pmin)
-          if (temporary_grid[j,i] > pmax):
-            errcount += 1
-            print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",pmax)
+      for k in range (0,len(high[0])):
+        i = high[1][k]
+        j = high[0][k]
+        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",pmax)
+
+      for k in range (0,len(low[0])):
+        i = low[1][k]
+        j = low[0][k]
+        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",pmin)
 
 
+    parmno += 1
 
-    k += 1
-
+#exit codes are bounded, while error counts are not
 print("errcount = ",errcount)
-exit(errcount)
+if (errcount == 0):
+  exit(0)
+else:
+  exit(1)

@@ -1,0 +1,48 @@
+This contains the sources for executing scoring on sea ice concentration.
+
+While the executables can be built here, it is better to use the 
+  makeall.sh script in the directory above
+
+Also present are elementary python scripts to plot the results, as used 
+  by the UFS S2S coupled project standard runs.
+
+Robert Grumbine
+20 August 2020
+
+
+Some very old thoughts:
+
+Robert Grumbine October 2008
+
+* Score where either model or obs report non-zero
+* Score where both model and obs report non-zero
+* Score where obs report nonzero
+* Score everywhere ('everywhere')
+* Score as above, but within selected domain(s)
+
+Scores -- obs vs. fcst:
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+POD
+FAR
+(a11, a12, a21, a22) -- threat matrix
+Murphy skill score
+
+
+Scores -- obsd deviation from climo vs. fcst deviation from climo
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+
+Utility ----------------------------------------
+Construct a climatology
+Construct a null forecast
+
+
