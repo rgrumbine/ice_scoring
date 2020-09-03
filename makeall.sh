@@ -18,9 +18,12 @@ fi
 #module load impi/18.0.1
 #module load NetCDF/4.5.0
 #netcdf -- orion
-module load intel/2018.4 #2019.5, 2020
-module load impi/2018.4  #2019.6, 2020
-module load netcdf/4.7.2 #4.7.2-parallel, pnetcdf/1.12.0
+module load intel/2020   #, 2020
+module load impi/2020    #, 2020
+module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
+#module load intel/2018.4 #2019.5, 2020
+#module load impi/2018.4  #2019.6, 2020
+#module load netcdf/4.7.2 #4.7.2-parallel, pnetcdf/1.12.0
 
 #ice_edge : 
 cd ${base}/ice_edge/C

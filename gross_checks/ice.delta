@@ -1,6 +1,6 @@
+aice_h    -0.05 0.05
 hi_h      -0.10 0.1             # per day, linear
 hs_h      -0.10 0.1  
 Tsfc_h    -3.0  3.0 
-aice_h    -0.05 0.05
 uvel_h    -0.25 0.25 
 vvel_h    -0.25 0.25 
