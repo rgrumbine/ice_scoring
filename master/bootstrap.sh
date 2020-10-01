@@ -14,6 +14,7 @@ do
     exit 1
   fi
 done
+
 for f in verf_files.py setup_verf_ice.py platforms.py all.csh
 do
   cp -p ${BASE}/master/$f .
@@ -27,6 +28,12 @@ done
 if [ ! -d ${BASE}/exec ] ; then
   cd ${BASE}
   ./makeall.sh
+  if [ $? -eq 0 ] ; then
+    echo copy exec dir from $BASE
+  else
+    echo failed to find or create execs, exiting now
+    exit 1
+  fi
 fi
 
 if [ ! -d ${BASE}/fix ] ; then
