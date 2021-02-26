@@ -59,7 +59,7 @@ else:
     flying_dictionary = open(sys.argv[3],"w")
     flyout = True
   except:
-    print("cannot write out to bootstrap dictionary file")
+    #debug print("cannot write out to bootstrap dictionary file")
     flyout = False
 
   parmno = 0
@@ -117,15 +117,18 @@ else:
     gmin = temporary_grid.min()
     gmax = temporary_grid.max()
     gfail = False
+    gfail1 = False
     if (gmin < pmin):
       print("{:10s}".format(parm)," excessively low minimum ",gmin," versus ",pmin," allowed")
       gfail = True
+      gfail1 = True
     if (gmin > pmaxmin):
       print("{:10s}".format(parm)," excessively high minimum ",gmin," versus ",pmaxmin," allowed")
       gfail = True
     if (gmax > pmax):
       print("{:10s}".format(parm)," excessively high maximum ",gmax," versus ",pmax," allowed")
       gfail = True
+      gfail1 = True
     if (gmax < pminmax ):
       print("{:10s}".format(parm)," excessively low maximum ",gmax," versus ",pminmax," allowed")
       gfail = True
@@ -134,7 +137,7 @@ else:
     #  numpy masked arrays are vastly more efficient than manual iteration over indices
     #  0.5 seconds for masked arrays, 5 minutes for manual
     #where(tmp, tlons, tlats, pmin, pmax)
-    if (gfail):
+    if (gfail1):
       maskhigh = ma.masked_array(temporary_grid > pmax)
       high = maskhigh.nonzero()
       #debug print("len(high): ", len(high[0]),len(high) )
@@ -159,8 +162,8 @@ else:
     parmno += 1
 
 #exit codes are bounded, while error counts are not
-print("errcount = ",errcount)
+if (errcount > 0):
+  print("errcount = ",errcount)
+  exit(1)
 if (errcount == 0):
   exit(0)
-else:
-  exit(1)
