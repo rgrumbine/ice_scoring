@@ -101,20 +101,25 @@ else:
 #-------------------------- Finished with bootstrap and/or first pass
 
 dt     = datetime.timedelta(seconds=6*3600)
+#length = datetime.timedelta(days=35)
 length = datetime.timedelta(days=35)
   
 #Now carry on for the forecasts
-for yy in (2012, 2013, 2014, 2015, 2016, 2017):
-  for mm in range (1,13):
-    from_date = datetime.datetime(int(yy),int(mm),int(1), int(0) )
+dd=1
+#for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
+for yy in range (2011, 2012 ):
+  #for mm in range (1,13):
+  for mm in range (4,5):
+    from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
     valid_date = from_date + dt
 
     #ocean: base="/scratch2/NCEPDEV/climate/Robert.Grumbine/data/gfs.20120101/00"
     #ice 
-    base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/bm3_subset/"+from_date.strftime("%Y%m%d")+"/6hrly/"
+    base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/ufs_p6/gfs."+from_date.strftime("%Y%m%d")+"/00/"
     while ( (valid_date - from_date) <= length):
       #fname=base+"/ocn"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
-      fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
+      #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
+      fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
       if (not os.path.exists(fname)):
         print("couldn't get ",fname)
         valid_date += dt

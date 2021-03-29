@@ -83,7 +83,7 @@ class bounds:
 
     if (grid.max() > self.pmax):
       print("parameter i j longitude latitude model_value test_checked test_value")
-      mask = ma.masked_array(grid < self.pmin)
+      mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
       
       for k in range(0,len(indices[0])):
