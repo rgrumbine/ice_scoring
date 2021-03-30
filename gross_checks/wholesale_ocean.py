@@ -106,16 +106,19 @@ else:
 
 #Now carry on for the forecasts
 #  
-from_date = datetime.datetime(int(2012),int(1),int(1), int(0) )
+from_date = datetime.datetime(int(2011),int(4),int(1), int(0) )
 
 dt     = datetime.timedelta(seconds=6*3600)
 length = datetime.timedelta(days=35)
 
 valid_date = from_date + dt
+tag=from_date.strftime("%Y%m%d")
 
-base="/scratch2/NCEPDEV/climate/Robert.Grumbine/data/gfs.20120101/00"
+#base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/gfs.20110401/00"
+base="modelout/gfs."+tag+"/00"
+#ocn_2D_2011041700.01.2011040100.nc
 while ( (valid_date - from_date) <= length):
-  fname=base+"/ocn"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+  fname=base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
   if (not os.path.exists(fname)):
     print("couldn't get ",fname)
     valid_date += dt
