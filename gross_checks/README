@@ -32,8 +32,10 @@ Any parameter which is listed, but not in the .nc, will give a message to stdout
   rain_h  not in data file 
   -- and execution will proceed without it.
 
-*.extremes gives bounds that are seldom exceeded in 6 years of prototype runs, 
+*.extremes gives bounds that are seldom exceeded in 7 years of prototype runs, 
   for the named (*) files
+*.vhigh is in vicinity of 1 point per million
+*.high ~10 ppm
 
 Examining output:
 If any value for a parameter on its grid violates the given limits, you'll get a message like:

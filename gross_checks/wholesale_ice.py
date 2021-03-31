@@ -100,34 +100,40 @@ else:
 #print(len(tbound), " parameter bounds found ")
 #-------------------------- Finished with bootstrap and/or first pass
 
-dt     = datetime.timedelta(seconds=6*3600)
+#dt     = datetime.timedelta(seconds=6*3600)
+dt     = datetime.timedelta(seconds=24*3600)
 length = datetime.timedelta(days=35)
   
 #Now carry on for the forecasts
-for yy in (2012, 2013, 2014, 2015, 2016, 2017):
+for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
+#for yy in (2011, 2012, 2013, 2014 ):
   for mm in range (1,13):
-    from_date = datetime.datetime(int(yy),int(mm),int(1), int(0) )
-    valid_date = from_date + dt
+  #for mm in range (4,5):
+    for dd in ( 1, 15):
+      from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
+      valid_date = from_date + dt
 
-    #ocean: base="/scratch2/NCEPDEV/climate/Robert.Grumbine/data/gfs.20120101/00"
-    #ice 
-    base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/bm3_subset/"+from_date.strftime("%Y%m%d")+"/6hrly/"
-    while ( (valid_date - from_date) <= length):
-      #fname=base+"/ocn"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
-      fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
-      if (not os.path.exists(fname)):
-        print("couldn't get ",fname)
-        valid_date += dt
-        continue
-    
-      model = netCDF4.Dataset(fname, 'r')
-      print("valid date = ",valid_date.strftime("%Y%m%d%H"))
-      sys.stdout.flush()
-      for k in range(0,len(tbound)):
-        temporary_grid = model.variables[tbound[k].param][0,:,:]
-        gfail = tbound[k].inbounds(temporary_grid)
-        if (gfail):
-          #print("calling where", flush=True)
-          tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
+      #ocean: base="/scratch2/NCEPDEV/climate/Robert.Grumbine/data/gfs.20120101/00"
+      #ice 
+      base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/ufs_p6/gfs."+from_date.strftime("%Y%m%d")+"/00/"
+      while ( (valid_date - from_date) <= length):
+        #fname=base+"/ocn"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
+        fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        if (not os.path.exists(fname)):
+          print("couldn't get ",fname)
+          valid_date += dt
+          continue
+      
+        model = netCDF4.Dataset(fname, 'r')
+        print("valid date = ",valid_date.strftime("%Y%m%d%H"))
+        sys.stdout.flush()
+        for k in range(0,len(tbound)):
+          temporary_grid = model.variables[tbound[k].param][0,:,:]
+          gfail = tbound[k].inbounds(temporary_grid)
+          if (gfail):
+            #print("calling where", flush=True)
+            #RG: add an optional output file name, and then print to it as well
+            tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
         
-      valid_date += dt
+        valid_date += dt
