@@ -103,35 +103,36 @@ else:
 
 #print(len(tbound), " parameter bounds found ")
 #-------------------------- Finished with bootstrap and/or first pass
-
 #Now carry on for the forecasts
 #  
-from_date = datetime.datetime(int(2011),int(4),int(1), int(0) )
 
 dt     = datetime.timedelta(seconds=6*3600)
 length = datetime.timedelta(days=35)
 
-valid_date = from_date + dt
-tag=from_date.strftime("%Y%m%d")
+for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
+  for mm in range (1,13):
+    for dd in (1,15):
+      from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
+      valid_date = from_date + dt
+      tag = from_date.strftime("%Y%m%d")
+      fout = open("ocn."+tag,"w")
 
-#base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/gfs.20110401/00"
-base="modelout/gfs."+tag+"/00"
-#ocn_2D_2011041700.01.2011040100.nc
-while ( (valid_date - from_date) <= length):
-  fname=base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
-  if (not os.path.exists(fname)):
-    print("couldn't get ",fname)
-    valid_date += dt
-    continue
-
-  model = netCDF4.Dataset(fname, 'r')
-  print("valid date = ",valid_date.strftime("%Y%m%d%H"))
-  sys.stdout.flush()
-  for k in range(0,len(tbound)):
-    temporary_grid = model.variables[tbound[k].param][0,:,:]
-    gfail = tbound[k].inbounds(temporary_grid)
-    if (gfail):
-      #print("calling where", flush=True)
-      tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
-    
-  valid_date += dt
+      base = "modelout/gfs."+tag+"/00"
+      while ( (valid_date - from_date) <= length):
+        fname=base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        if (not os.path.exists(fname)):
+          print("couldn't get ",fname)
+          valid_date += dt
+          continue
+      
+        model = netCDF4.Dataset(fname, 'r')
+        print("valid date = ",valid_date.strftime("%Y%m%d%H"))
+        sys.stdout.flush()
+        for k in range(0,len(tbound)):
+          temporary_grid = model.variables[tbound[k].param][0,:,:]
+          gfail = tbound[k].inbounds(temporary_grid)
+          if (gfail):
+            tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea, fout)
+          
+        valid_date += dt
+      fout.close()

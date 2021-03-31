@@ -69,27 +69,27 @@ class bounds:
       gfail = True    
     return gfail
 
-  def where(self, grid, lats, lons, mask, area):
+  def where(self, grid, lats, lons, mask, area, fname=sys.stdout):
     #Show where (and which) test failed.  self is the bounds data
     if (grid.min() < self.pmin): 
-      print("parameter i j longitude latitude model_value test_checked test_value")
+      print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
       mask = ma.masked_array(grid < self.pmin)
       indices = mask.nonzero()
       
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
-        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",self.pmin)
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",self.pmin,file=fname)
 
     if (grid.max() > self.pmax):
-      print("parameter i j longitude latitude model_value test_checked test_value")
+      print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
       mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
       
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
-        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax)
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax,file=fname)
 
 
   def where_manual(self, grid, lats, lons, mask, area):
