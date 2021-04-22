@@ -66,6 +66,7 @@ else:
   for line in fdic:
     words = line.split()
     parm = words[0]
+    tmp = bounds(param=parm)
     try: 
       temporary_grid = model.variables[parm][0,:,:]
     except:
@@ -74,76 +75,52 @@ else:
 
     # Bootstrap the bounds if needed -------------------
     if (len(words) >= 3):
-      pmin = float(words[1])
-      pmax = float(words[2])
+      tmp.pmin = float(words[1])
+      tmp.pmax = float(words[2])
     else:
-      pmin = temporary_grid.min()
-      pmax = temporary_grid.max()
-      #do the multiplier to avoid roundoff issues with printout values
-      if (pmin < 0):
-         pmin *= 1.001
-      else:
-         pmin *= 0.999
-      if (pmax < 0):
-         pmax *= 0.999
-      else:
-         pmax *= 1.001
+      tmp.findbounds(temporary_grid)
   
     if (len(words) >= 5):
-      pmaxmin = float(words[3])
-      pminmax = float(words[4])
+      tmp.pmaxmin = float(words[3])
+      tmp.pminmax = float(words[4])
     else:
-      pmaxmin = pmin + 0.1*(pmax - pmin)
-      pminmax = pmax - 0.1*(pmax - pmin)
+      tmp.findbounds(temporary_grid)
 
-    #debug: print("parmno = ",parmno,parm, pmin, pmax, pmaxmin, pminmax)
-    #RG: need to do something different in formatting small numbers (fsalt, for ex)
+    #debug: tmp.show()
     if (len(words) < 5 and flyout) :
-      print("{:10s}".format(parm), 
-        "{:.5f}".format(pmin),      
-        "{:.5f}".format(pmax),
-        "{:.5f}".format(pmaxmin),
-        "{:.5f}".format(pminmax),
-        file=flying_dictionary)
-    if (len(words) < 5 and not flyout) : #if no flying dictionary file, write to stdout
-      print("bootstrap ","{:10s}".format(parm), 
-        "{:.5f}".format(pmin),      
-        "{:.5f}".format(pmax),
-        "{:.5f}".format(pmaxmin),
-        "{:.5f}".format(pminmax) )
+      tmp.show(flyout)
+    elif (len(words) < 5 and not flyout) : 
+      tmp.show(sys.stdout)
     # End finding or bootstrapping bounds -----------------
 
     #Global tests:
     gmin = temporary_grid.min()
     gmax = temporary_grid.max()
     gfail = False
-    gfail1 = False
-    if (gmin < pmin):
-      print("{:10s}".format(parm)," excessively low minimum ",gmin," versus ",pmin," allowed")
+    if (gmin < tmp.pmin):
+      print("{:10s}".format(parm)," excessively low minimum ",gmin," versus ",tmp.pmin," allowed")
       gfail = True
-      gfail1 = True
-    if (gmin > pmaxmin):
-      print("{:10s}".format(parm)," excessively high minimum ",gmin," versus ",pmaxmin," allowed")
+    if (gmin > tmp.pmaxmin):
+      print("{:10s}".format(parm)," excessively high minimum ",gmin," versus ",tmp.pmaxmin," allowed")
       gfail = True
-    if (gmax > pmax):
-      print("{:10s}".format(parm)," excessively high maximum ",gmax," versus ",pmax," allowed")
+    if (gmax > tmp.pmax):
+      print("{:10s}".format(parm)," excessively high maximum ",gmax," versus ",tmp.pmax," allowed")
       gfail = True
-      gfail1 = True
-    if (gmax < pminmax ):
-      print("{:10s}".format(parm)," excessively low maximum ",gmax," versus ",pminmax," allowed")
+    if (gmax < tmp.pminmax ):
+      print("{:10s}".format(parm)," excessively low maximum ",gmax," versus ",tmp.pminmax," allowed")
       gfail = True
 
     #Pointwise checks -- Show where (and which) test failed:
     #  numpy masked arrays are vastly more efficient than manual iteration over indices
     #  0.5 seconds for masked arrays, 5 minutes for manual
     #where(tmp, tlons, tlats, pmin, pmax)
-    if (gfail1):
-      maskhigh = ma.masked_array(temporary_grid > pmax)
+    if (gfail):
+      maskhigh = ma.masked_array(temporary_grid > tmp.pmax)
       high = maskhigh.nonzero()
       #debug print("len(high): ", len(high[0]),len(high) )
       errcount += len(high[0])
 
-      masklow  = ma.masked_array(temporary_grid < pmin)
+      masklow  = ma.masked_array(temporary_grid < tmp.pmin)
       low  = masklow.nonzero()
       #debug print("len(low): ", len(low[0]),len(low) )
       errcount += len(low[0])
@@ -152,12 +129,12 @@ else:
       for k in range (0,len(high[0])):
         i = high[1][k]
         j = high[0][k]
-        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",pmax)
+        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",tmp.pmax)
 
       for k in range (0,len(low[0])):
         i = low[1][k]
         j = low[0][k]
-        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",pmin)
+        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",tmp.pmin)
 
     parmno += 1
 
