@@ -13,10 +13,10 @@ class bounds:
 
   def __init__(self, param = "", pmin=0., pmax = 0., pmaxmin = 0., pminmax = 0.):
     self.param = param
-    self.pmin = pmin
-    self.pmax = pmax
-    self.pmaxmin = pmaxmin
-    self.pminmax = pminmax
+    self.pmin = float(pmin)
+    self.pmax = float(pmax)
+    self.pmaxmin = float(pmaxmin)
+    self.pminmax = float(pminmax)
 
   def set_bounds(self, temporary_grid, words, flyout, flying_dictionary):
     # Bootstrap the bounds if needed -------------------
@@ -31,8 +31,6 @@ class bounds:
       self.pminmax = float(words[4])
     else:
       self.findbounds(temporary_grid)
-
-
 
   def findbounds(self, grid):
     self.pmin = grid.min()
@@ -58,6 +56,9 @@ class bounds:
     print("{:10s}".format(self.param), 
       strpmin, strpmax, strpmaxmin, strpminmax,
       file=flying_out_file)
+
+  def ptinbounds(self, value):
+    return (value >= self.pmin and value <= self.pmax)
 
   def inbounds(self, grid):
     #apply the tests
