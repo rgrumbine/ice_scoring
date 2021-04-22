@@ -8,7 +8,7 @@ import numpy.ma as ma
 import netCDF4
 
 #---------------------------------------------------
-#Delta bound checks on .nc files, developed primarily from the sea ice (CICE5) output
+#Delta bound checks on .nc files, developed primarily from the sea ice (CICE6) output
 #Robert Grumbine
 #1 April 2020
 #

@@ -6,10 +6,10 @@ import numpy as np
 
 import netCDF4
 #---------------------------------------------------
-from bounders import *
+import bounders
 
 #---------------------------------------------------
-#Gross bound checks on .nc files, developed primarily from the sea ice (CICE5) output
+#Gross bound checks on .nc files, developed primarily from the sea ice (CICE6) output
 #Robert Grumbine
 #30 January 2020
 #
@@ -44,7 +44,12 @@ else:
   #bootstrapping -- read in dictionary of names, write back out name/max/min in dictionary format
   #  next round -- estimate minmax and maxmin by 1% end points of histogram
   # want to specify T pts vs. U pts
-  fdic = open(sys.argv[2])
+  try:
+    fdic = open(sys.argv[2])
+  except:
+    print("could not find a dictionary file ",sys.argv[2])
+    exit(1)
+
   try: 
     flying_dictionary = open(sys.argv[3],"w")
     flyout = True
@@ -56,6 +61,7 @@ else:
   for line in fdic:
     words = line.split()
     parm = words[0]
+    tmp = bounders.bounds(param=parm)
     try: 
       temporary_grid = model.variables[parm][0,:,:]
     except:
@@ -64,29 +70,17 @@ else:
 
     # Bootstrap the bounds if needed -------------------
     if (len(words) >= 3):
-      pmin = float(words[1])
-      pmax = float(words[2])
+      tmp.pmin = float(words[1])
+      tmp.pmax = float(words[2])
     else:
-      pmin = temporary_grid.min()
-      pmax = temporary_grid.max()
-      #do the multiplier to avoid roundoff issues with printout values
-      if (pmin < 0):
-         pmin *= 1.001
-      else:
-         pmin *= 0.999
-      if (pmax < 0):
-         pmax *= 0.999
-      else:
-         pmax *= 1.001
+      tmp.findbounds(temporary_grid)
   
     if (len(words) >= 5):
-      pmaxmin = float(words[3])
-      pminmax = float(words[4])
+      tmp.pmaxmin = float(words[3])
+      tmp.pminmax = float(words[4])
     else:
-      pmaxmin = pmin + 0.1*(pmax - pmin)
-      pminmax = pmax - 0.1*(pmax - pmin)
+      tmp.findbounds(temporary_grid)
 
-    tmp = bounds(parm, pmin, pmax, pmaxmin, pminmax)
     tbound.append(tmp)
     if (flyout):
       tbound[k].show(flying_dictionary)
@@ -97,7 +91,6 @@ else:
 
     k += 1
 
-#print(len(tbound), " parameter bounds found ")
 #-------------------------- Finished with bootstrap and/or first pass
 
 #dt     = datetime.timedelta(seconds=6*3600)

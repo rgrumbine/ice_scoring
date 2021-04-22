@@ -18,8 +18,21 @@ class bounds:
     self.pmaxmin = pmaxmin
     self.pminmax = pminmax
 
-  def scanline(self, dictionary_in):
-    print("scanline")
+  def set_bounds(self, temporary_grid, words, flyout, flying_dictionary):
+    # Bootstrap the bounds if needed -------------------
+    if (len(words) >= 3):
+      self.pmin = float(words[1])
+      self.pmax = float(words[2])
+    else:
+      self.findbounds(temporary_grid)
+
+    if (len(words) >= 5):
+      self.pmaxmin = float(words[3])
+      self.pminmax = float(words[4])
+    else:
+      self.findbounds(temporary_grid)
+
+
 
   def findbounds(self, grid):
     self.pmin = grid.min()
@@ -68,6 +81,27 @@ class bounds:
                gmax," versus ",self.pminmax," allowed")
       gfail = True    
     return gfail
+
+  def whether(self, grid, fname = sys.stdout):
+    #Global tests -- test whether the grid, in its entirity, is in bound
+    gmin = grid.min()
+    gmax = grid.max()
+    gfail = False
+    if (gmin < self.pmin):
+      print("{:10s}".format(self.param)," excessively low minimum ",gmin," versus ",self.pmin," allowed")
+      gfail = True
+    if (gmin > self.pmaxmin):
+      print("{:10s}".format(self.param)," excessively high minimum ",gmin," versus ",self.pmaxmin," allowed")
+      gfail = True
+    if (gmax > self.pmax):
+      print("{:10s}".format(self.param)," excessively high maximum ",gmax," versus ",self.pmax," allowed")
+      gfail = True
+    if (gmax < self.pminmax ):
+      print("{:10s}".format(self.param)," excessively low maximum ",gmax," versus ",self.pminmax," allowed")
+      gfail = True
+    return gfail
+
+
 
   def where(self, grid, lats, lons, mask, area, fname=sys.stdout):
     errcount = 0
