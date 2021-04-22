@@ -70,11 +70,13 @@ class bounds:
     return gfail
 
   def where(self, grid, lats, lons, mask, area, fname=sys.stdout):
+    errcount = 0
     #Show where (and which) test failed.  self is the bounds data
     if (grid.min() < self.pmin): 
       print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
       mask = ma.masked_array(grid < self.pmin)
       indices = mask.nonzero()
+      errcount += len(indices[0])
       
       for k in range(0,len(indices[0])):
         i = indices[1][k]
@@ -85,11 +87,14 @@ class bounds:
       print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
       mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
+      errcount += len(indices[0])
       
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
         print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax,file=fname)
+
+    return errcount
 
 
   def where_manual(self, grid, lats, lons, mask, area):

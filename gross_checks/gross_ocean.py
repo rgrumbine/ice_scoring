@@ -17,6 +17,7 @@ import netCDF4
 #bootstrapped dictionary = argv[3] (optional, may be written to if needed and present)
 
 #---------------------------------------------------
+import bounders
 
 errcount = int(0)
 
@@ -50,11 +51,16 @@ else:
     tarea = np.zeros((ny, nx))
     tarea = 1.
 
-  #bootstrapping -- read in dictionary of names, write back out name/max/min 
+  try:
+    fdic = open(sys.argv[2])
+  except:
+    print("could not find a dictionary file ",sys.argv[2])
+    exit(1)
+
+  #for bootstrapping -- read in dictionary of names, write back out name/max/min 
   #    in dictionary format 
   #  next round -- estimate minmax and maxmin by 1% end points of histogram 
   #  want to specify T pts vs. U pts
-  fdic = open(sys.argv[2])
   try: 
     flying_dictionary = open(sys.argv[3],"w")
     flyout = True
@@ -66,7 +72,7 @@ else:
   for line in fdic:
     words = line.split()
     parm = words[0]
-    tmp = bounds(param=parm)
+    tmp = bounders.bounds(param=parm)
     try: 
       temporary_grid = model.variables[parm][0,:,:]
     except:
@@ -87,10 +93,11 @@ else:
       tmp.findbounds(temporary_grid)
 
     #debug: tmp.show()
-    if (len(words) < 5 and flyout) :
-      tmp.show(flyout)
-    elif (len(words) < 5 and not flyout) : 
-      tmp.show(sys.stdout)
+    if (len(words) < 5):
+      if ( flyout) :
+        tmp.show(flying_dictionary)
+      else:
+        tmp.show(sys.stdout)
     # End finding or bootstrapping bounds -----------------
 
     #Global tests:
@@ -111,30 +118,8 @@ else:
       gfail = True
 
     #Pointwise checks -- Show where (and which) test failed:
-    #  numpy masked arrays are vastly more efficient than manual iteration over indices
-    #  0.5 seconds for masked arrays, 5 minutes for manual
-    #where(tmp, tlons, tlats, pmin, pmax)
     if (gfail):
-      maskhigh = ma.masked_array(temporary_grid > tmp.pmax)
-      high = maskhigh.nonzero()
-      #debug print("len(high): ", len(high[0]),len(high) )
-      errcount += len(high[0])
-
-      masklow  = ma.masked_array(temporary_grid < tmp.pmin)
-      low  = masklow.nonzero()
-      #debug print("len(low): ", len(low[0]),len(low) )
-      errcount += len(low[0])
-
-      print("parameter i j longitude latitude model_value test_checked test_value")
-      for k in range (0,len(high[0])):
-        i = high[1][k]
-        j = high[0][k]
-        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmax ",tmp.pmax)
-
-      for k in range (0,len(low[0])):
-        i = low[1][k]
-        j = low[0][k]
-        print(parm,i,j,tlons[j,i], tlats[j,i], temporary_grid[j,i], " vs pmin ",tmp.pmin)
+      errcount += tmp.where(temporary_grid, tlats, tlons, tmask, tarea)
 
     parmno += 1
 
