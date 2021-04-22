@@ -1,4 +1,12 @@
-Greenland_Sea   hs_h     0.0  2.0 0.2 0.8
-Arctic_Ocean    Tsfc_h  -52.0 0.0 -21.0 -3.5
-Southern_Ocean  Tsfc_h  -52.0 0.0 -21.0 -3.5
-
+Greenland_Sea   hs_h     0.0   2.0   0.2  0.8
+Arctic_Ocean    Tsfc_h  -52.0  0.0 -21.0 -3.5
+Southern_Ocean  Tsfc_h  -52.0  0.0 -21.0 -3.5
+Persian_Gulf    SSS      35.0 45.0  35.0 40.0
+Red_Sea         SSS      35.0 41.0  37.0 38.0
+Gulf_of_Finland  SSS 0.0 15.0 1.0 10.0
+Gulf_of_Riga     SSS 0.0 15.0 1.0 10.0
+Gulf_of_Bothnia  SSS 0.0 15.0 1.0 10.0
+Baltic_Sea       SSS 0.0 15.0 1.0 10.0
+Amazon_Outflow   SSS 0.0  5.0 1.0  4.0
+Congo_Outflow    SSS 0.0  5.0 1.0  4.0
+Rio_de_La_Plata  SSS 0.0  5.0 1.0  4.0

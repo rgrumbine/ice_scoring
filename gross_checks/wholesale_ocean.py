@@ -103,7 +103,7 @@ dt     = datetime.timedelta(seconds=6*3600)
 length = datetime.timedelta(days=35)
 
 for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
-  for mm in (1,12):
+  for mm in range (1,13):
     for dd in (1,15):
       from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
       valid_date = from_date + dt
@@ -123,7 +123,7 @@ for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
         sys.stdout.flush()
         for k in range(0,len(tbound)):
           temporary_grid = model.variables[tbound[k].param][0,:,:]
-          gfail = tbound[k].inbounds(temporary_grid)
+          gfail = tbound[k].inbounds(temporary_grid, fout)
           if (gfail):
             tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea, fout)
           
