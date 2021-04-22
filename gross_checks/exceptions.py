@@ -16,11 +16,14 @@ class exception :
                        pmaxmin = words[4], pminmax = words[5])
     #debug self.bounds.show()
 
+#need also to check that we're looking at the right parameter
   def is_ok(self, pt, value):
     tmp = self.curve.inside(pt) # is the point inside the curve?
     t2  = self.bounds.ptinbounds(value)  #is it out in bounds?
     return(tmp and t2)
 
+
+# Demonstration ----------------------------------------------------
 f = open("exceptions.file")
 exceptions = []
 for line in f:

@@ -114,12 +114,12 @@ for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
       while ( (valid_date - from_date) <= length):
         fname=base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
         if (not os.path.exists(fname)):
-          print("couldn't get ",fname)
+          print("couldn't get ",fname, file=fout)
           valid_date += dt
           continue
       
         model = netCDF4.Dataset(fname, 'r')
-        print("valid date = ",valid_date.strftime("%Y%m%d%H"))
+        print("valid date = ",valid_date.strftime("%Y%m%d%H"), file=fout)
         sys.stdout.flush()
         for k in range(0,len(tbound)):
           temporary_grid = model.variables[tbound[k].param][0,:,:]
