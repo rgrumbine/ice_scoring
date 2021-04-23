@@ -18,6 +18,13 @@ class bounds:
     self.pmaxmin = float(pmaxmin)
     self.pminmax = float(pminmax)
 
+  def set(self, param, pmin, pmax, pmaxmin, pminmax):
+    self.param = param
+    self.pmin = float(pmin)
+    self.pmax = float(pmax)
+    self.pmaxmin = float(pmaxmin)
+    self.pminmax = float(pminmax)
+
   def set_bounds(self, temporary_grid, words, flyout, flying_dictionary):
     # Bootstrap the bounds if needed -------------------
     if (len(words) >= 3):
