@@ -5,14 +5,14 @@ from curves import *
 class region(curve, bounds) :
 
   #the line is a character string with the name of the area, the parameter, and its allowed bounds
-  def __init__(self, line):
+  def __init__(self, line, base="ctl/"):
     words = line.split()
     if (len(words) < 6):
       print("not enough elements in line, can't initialize region class member", line)
       exit(1)
  
     self.name = words[0]
-    fname = self.name +".curve"
+    fname = base + self.name +".curve"
     # RG: put in curves class
     # RG: throw exception if can't open file
     # RG: throw exception if can't read from file (empty or no points)

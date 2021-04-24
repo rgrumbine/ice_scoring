@@ -90,7 +90,7 @@ else:
     gfail = tbound[k].inbounds(temporary_grid)
     #Show where (and which) test failed:
     if (gfail):
-      print("calling where", flush=True)
+      #debug print("calling where", flush=True)
       tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
 
     k += 1

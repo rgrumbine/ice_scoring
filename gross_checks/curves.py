@@ -10,15 +10,13 @@ class curve :
     file = open(fname,"r")
     count = 0
     for line in file:
-      #debug print(line, end="")
+      words = line.split()
       if (count == 0):
-        self.name = line
+        self.name = words[0] #Allow extra comments after name
       else:
-        words = line.split()
         m = (float(words[0]), float(words[1]))
         self.points.append(m)
       count += 1
-    #debug print(self.name, len(self.points))
     #Ensure closure:
     if (self.points[0] != self.points[len(self.points)-1]):
       #debug print("unclosed")
