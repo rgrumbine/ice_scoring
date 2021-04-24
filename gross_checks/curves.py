@@ -24,10 +24,10 @@ class curve :
       #debug print("unclosed")
       m = self.points[0]
       self.points.append(m)
+    self.npts = len(self.points)
 
   def inside(self, pt):
-    x = inside(pt, self.points)
-    #print("self.inside = ",x)
+    x = inside(pt, self.points, self.npts)
     return(x != 0)
 
 
@@ -42,8 +42,8 @@ def isleft(p0, p1, p2):
   else:
     return 0
 
-def inside(x, curve):
-  npts = len(curve)
+def inside(x, curve, npts):
+  #npts = len(curve)
   #debug print("def inside, x, npts: ",x, x[0], x[1], npts)
 
   unclosed = False
@@ -66,15 +66,15 @@ def inside(x, curve):
           wn -= 1
     #debug print(i,wn)
 
-  if (unclosed):
-    i = npts-1
-    if (curve[i][0] <= x[0]):
-      if (last[0] > x[0]):
-        if (isleft(curve[i], last, x) > 0):
-          wn += 1
-    else:
-      if (last[0] <= x[0]):
-        if (isleft(curve[i], last, x) < 0):
-          wn -= 1
+  #if (unclosed):
+  #  i = npts-1
+  #  if (curve[i][0] <= x[0]):
+  #    if (last[0] > x[0]):
+  #      if (isleft(curve[i], last, x) > 0):
+  #        wn += 1
+  #  else:
+  #    if (last[0] <= x[0]):
+  #      if (isleft(curve[i], last, x) < 0):
+  #        wn -= 1
 
   return wn
