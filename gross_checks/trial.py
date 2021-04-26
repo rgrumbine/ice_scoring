@@ -31,6 +31,8 @@ for line in f:
   tlon = float(words[3])
   if (tlon < -180.):
     tlon += 360.
+  if (tlon >  180.):
+    tlon -= 360.
   tlat = float(words[4])
   pt = (tlon, tlat)
   value = float(words[5])
