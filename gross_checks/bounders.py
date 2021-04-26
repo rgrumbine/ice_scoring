@@ -4,6 +4,8 @@ from math import *
 import numpy as np
 import numpy.ma as ma
 
+import netCDF4
+
 #---------------------------------------------------
 #Develop a class for bounds checking
 #Robert Grumbine
@@ -18,6 +20,50 @@ class bounds:
     self.pmaxmin = float(pmaxmin)
     self.pminmax = float(pminmax)
 
+  # RG: improve names, set, set_bounds, bootstrap hard to distinguish
+  #def bootstrap(self, dictionary_file, bootstrap_file, model, tbound):
+  def bootstrap(self, dictionary_file, bootstrap_file, model ):
+    tbound = []
+    print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)
+
+    try:
+      fdic = open(dictionary_file)
+    except:
+      print("could not find a dictionary file ",dictionary_file)
+      exit(1)
+  
+    try:
+      flying_dictionary = open(bootstrap_file, "w")
+      flyout = True
+    except:
+      print("cannot write out to bootstrap dictionary file")
+      flyout = False
+
+    parmno = 0
+    for line in fdic:
+      words = line.split()
+      parm = words[0]
+      tmp = bounds(param=parm)
+      try:
+        temporary_grid = model.variables[parm][0,:,:]
+      except:
+        print(parm," not in data file")
+        continue
+
+      # find or bootstrap bounds -----------------
+      tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
+
+      tbound.append(tmp)
+      if (flyout):
+        tbound[parmno].show(flying_dictionary)
+      else:
+        tbound[parmno].show(sys.stdout)
+
+      parmno += 1
+
+    return tbound
+
+
   def set(self, param, pmin, pmax, pmaxmin, pminmax):
     self.param = param
     self.pmin = float(pmin)
@@ -26,7 +72,6 @@ class bounds:
     self.pminmax = float(pminmax)
 
   def set_bounds(self, temporary_grid, words, flyout, flying_dictionary):
-    # Bootstrap the bounds if needed -------------------
     if (len(words) >= 3):
       self.pmin = float(words[1])
       self.pmax = float(words[2])

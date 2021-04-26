@@ -1,4 +1,12 @@
-#to be a class for dealing with bounding curves
+#class for dealing with bounding curves
+
+#Robert Grumbine
+#26 April 2021
+
+# RG: add lightweight export to kml, import from kml
+# RG: add bounding box to curve initialization
+# RG: learn to deal with crossing dateline / variant longitude ranges 
+#        -- currently expect +- 180.0
 
 #points are defined (lon, lat, ...)
 class curve :
@@ -7,7 +15,12 @@ class curve :
 
   def read_curve(self, fname):
     self.points = []
-    file = open(fname,"r")
+    try:
+      file = open(fname,"r")
+    except:
+      print("Could not open curve file ",fname," exiting")
+      exit(1)
+
     count = 0
     for line in file:
       words = line.split()
@@ -19,7 +32,6 @@ class curve :
       count += 1
     #Ensure closure:
     if (self.points[0] != self.points[len(self.points)-1]):
-      #debug print("unclosed")
       m = self.points[0]
       self.points.append(m)
     self.npts = len(self.points)
@@ -41,15 +53,11 @@ def isleft(p0, p1, p2):
     return 0
 
 def inside(x, curve, npts):
-  #npts = len(curve)
-  #debug print("def inside, x, npts: ",x, x[0], x[1], npts)
 
   unclosed = False
   if (curve[0][0] != curve[npts-1][0]  or
       curve[0][1] != curve[npts-1][1] ):
-    print("did not close, add extra point")
-    unclosed = True
-    last = curve[0]
+    print("did not close, add extra point for ",curve.name)
     exit(1)
 
   wn = 0
@@ -62,17 +70,5 @@ def inside(x, curve, npts):
       if (curve[i+1][0] <= x[0]):
         if (isleft(curve[i], curve[i+1], x) < 0):
           wn -= 1
-    #debug print(i,wn)
-
-  #if (unclosed):
-  #  i = npts-1
-  #  if (curve[i][0] <= x[0]):
-  #    if (last[0] > x[0]):
-  #      if (isleft(curve[i], last, x) > 0):
-  #        wn += 1
-  #  else:
-  #    if (last[0] <= x[0]):
-  #      if (isleft(curve[i], last, x) < 0):
-  #        wn -= 1
 
   return wn

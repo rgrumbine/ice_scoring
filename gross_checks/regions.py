@@ -5,7 +5,7 @@ from curves import *
 class region(curve, bounds) :
 
   #the line is a character string with the name of the area, the parameter, and its allowed bounds
-  def __init__(self, line, base="ctl/"):
+  def __init__(self, line, base="curves/"):
     words = line.split()
     if (len(words) < 6):
       print("not enough elements in line, can't initialize region class member", line)
