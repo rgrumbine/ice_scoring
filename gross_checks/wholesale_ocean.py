@@ -40,9 +40,6 @@ else:
     tarea = np.zeros((ny, nx))
     tarea = 1.
 
-  #bootstrapping -- read in dictionary of names, write back out name/max/min in dictionary format
-  #  next round -- estimate minmax and maxmin by 1% end points of histogram
-  # want to specify T pts vs. U pts
   try:
     fdic = open(sys.argv[2])
   except:
@@ -56,7 +53,7 @@ else:
     print("cannot write out to bootstrap dictionary file")
     flyout = False
 
-  k = 0
+  parmno = 0
   for line in fdic:
     words = line.split()
     parm = words[0]
@@ -67,37 +64,19 @@ else:
       print(parm," not in data file")
       continue
 
-    # Bootstrap the bounds if needed -------------------
-    if (len(words) >= 3):
-      tmp.pmin = float(words[1])
-      tmp.pmax = float(words[2])
-    else:
-      tmp.findbounds(temporary_grid)
-  
-    if (len(words) >= 5):
-      tmp.pmaxmin = float(words[3])
-      tmp.pminmax = float(words[4])
-    else:
-      tmp.findbounds(temporary_grid)
+    # find or bootstrap bounds -----------------
+    tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
 
     tbound.append(tmp)
     if (flyout):
-      tbound[k].show(flying_dictionary)
+      tbound[parmno].show(flying_dictionary)
     else:
-      tbound[k].show(sys.stdout)
+      tbound[parmno].show(sys.stdout)
 
-    # End reading or bootstrapping bounds -----------------
-    gfail = tbound[k].inbounds(temporary_grid)
-    #Show where (and which) test failed:
-    if (gfail):
-      #debug print("calling where", flush=True)
-      tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
-
-    k += 1
+    parmno += 1
 
 #-------------------------- Finished with bootstrap and/or first pass
 #Now carry on for the forecasts
-#  
 
 dt     = datetime.timedelta(seconds=6*3600)
 length = datetime.timedelta(days=35)
@@ -105,14 +84,15 @@ length = datetime.timedelta(days=35)
 for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
   for mm in range (1,13):
     for dd in (1,15):
-      from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
+      from_date  = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
       valid_date = from_date + dt
-      tag = from_date.strftime("%Y%m%d")
-      fout = open("ocn."+tag,"w")
+      tag  = from_date.strftime("%Y%m%d")
 
       base = "modelout/gfs."+tag+"/00"
       while ( (valid_date - from_date) <= length):
-        fname=base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        fout  = open("ocn."+tag,"w")
+        fname = base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+
+                               from_date.strftime("%Y%m%d%H")+".nc"
         if (not os.path.exists(fname)):
           print("couldn't get ",fname, file=fout)
           valid_date += dt

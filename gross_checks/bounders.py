@@ -96,16 +96,20 @@ class bounds:
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:10s}".format(self.param)," excessively low minimum ",gmin," versus ",self.pmin," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively low minimum ",
+                gmin," versus ",self.pmin," allowed", file=fname)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:10s}".format(self.param)," excessively high minimum ",gmin," versus ",self.pmaxmin," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively high minimum ",
+                gmin," versus ",self.pmaxmin," allowed", file=fname)
       gfail = True
     if (gmax > self.pmax):
-      print("{:10s}".format(self.param)," excessively high maximum ",gmax," versus ",self.pmax," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively high maximum ",
+                gmax," versus ",self.pmax," allowed", file=fname)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:10s}".format(self.param)," excessively low maximum ",gmax," versus ",self.pminmax," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively low maximum ",
+                gmax," versus ",self.pminmax," allowed", file=fname)
       gfail = True
     return gfail
 
@@ -115,7 +119,8 @@ class bounds:
     errcount = 0
     #Show where (and which) test failed.  self is the bounds data
     if (grid.min() < self.pmin): 
-      print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
+      print("parameter i j longitude latitude model_value test_checked test_value",
+                file=fname)
       mask = ma.masked_array(grid < self.pmin)
       indices = mask.nonzero()
       errcount += len(indices[0])
@@ -123,10 +128,12 @@ class bounds:
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
-        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",self.pmin,file=fname)
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",
+                self.pmin,file=fname)
 
     if (grid.max() > self.pmax):
-      print("parameter i j longitude latitude model_value test_checked test_value",file=fname)
+      print("parameter i j longitude latitude model_value test_checked test_value",
+                file=fname)
       mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
       errcount += len(indices[0])
@@ -134,7 +141,8 @@ class bounds:
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
-        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",self.pmax,file=fname)
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",
+                self.pmax,file=fname)
 
     return errcount
 
