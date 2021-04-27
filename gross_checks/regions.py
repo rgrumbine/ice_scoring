@@ -13,7 +13,6 @@ class region(curve, bounds) :
  
     self.name = words[0]
     fname = base + self.name +".curve"
-    # RG: put in curves class
     # RG: throw exception if can't open file
     # RG: throw exception if can't read from file (empty or no points)
     self.read_curve(fname)

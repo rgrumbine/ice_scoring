@@ -21,7 +21,6 @@ class bounds:
     self.pminmax = float(pminmax)
 
   # RG: improve names, set, set_bounds, bootstrap hard to distinguish
-  #def bootstrap(self, dictionary_file, bootstrap_file, model, tbound):
   def bootstrap(self, dictionary_file, bootstrap_file, model ):
     tbound = []
     print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)

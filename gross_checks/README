@@ -53,11 +53,20 @@ hi_h 1046 1018 312.75015 83.079865 5.1349816  vs pmax  5.0
 
 
 
-
-
 Notes towards the future: --------------
 
 Build on some sort of progression such that the checks make sense in a sequence.
+  X.extremes
+  X.vvhigh
+  X.vhigh
+  X.high
+  X.moderate
+
+Exceptions to the global bounds done on regional basis, inside curves or bounding boxes
+  ex: Persian_Gulf.curve SSS  35.0 43.0  35.0 40.0
+  Additional comments can be given after these inputs, e.g.:
+    Weddell_Sea      MLD_0125  5.0 5100.0 500.0 1000.0              Known Error
+  (Weddell Sea should not be doing deep convection with such wild abandon as it does)
 
 Grid edge effects/checks:
 i = 0, nx; j = 0, ny
@@ -65,12 +74,4 @@ i = 0, nx; j = 0, ny
 Numerical artefact checks:
 Tripolar seam?
 Disk around pole divergent from rest of field?
-
-
-Regional/local range checks:
-Arctic ocean
-Southern ocean
-Gulf of Mexico
-Gulf Stream
-Nino 3.4, etc.
 

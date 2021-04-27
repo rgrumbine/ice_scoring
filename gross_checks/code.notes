@@ -1,0 +1,12 @@
+curves.py:
+  add lightweight export to kml, import from kml
+  learn to handle crossing dateline / variant longitude ranges
+  add bounding box to curve initialization
+
+regions.py:
+  throw exception if can't open file
+  throw exception if can't read from file (empty or no points)
+
+bounds.py:
+  Improve  names -- set, set_bounds, bootstrap hard to distinguish
+  Add a read_in option, for when we're confident there's a full dictionary

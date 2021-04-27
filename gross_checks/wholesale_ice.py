@@ -16,8 +16,6 @@ import bounders
 #data file = argv[1] (input)
 #control dictionary = argv[2] (input)
 
-tbound = []
-
 #---------------------------------------------------
 
 if (not os.path.exists(sys.argv[1]) ):
@@ -40,56 +38,32 @@ else:
     tarea = np.zeros((ny, nx))
     tarea = 1.
 
-  #RG: Move this to bounders.py:
-  #bootstrapping -- read in dictionary of names, write back out name/max/min in dictionary format
-  #  next round -- estimate minmax and maxmin by 1% end points of histogram
-  # want to specify T pts vs. U pts
-  try:
-    fdic = open(sys.argv[2])
-  except:
-    print("could not find a dictionary file ",sys.argv[2])
-    exit(1)
-
-  try: 
-    flying_dictionary = open(sys.argv[3],"w")
-    flyout = True
-  except:
-    print("cannot write out to bootstrap dictionary file")
-    flyout = False
-
-  k = 0
-  for line in fdic:
-    words = line.split()
-    parm = words[0]
-    tmp = bounders.bounds(param=parm)
-    try: 
-      temporary_grid = model.variables[parm][0,:,:]
-    except:
-      print(parm," not in data file")
-      continue
-
-    # Bootstrap the bounds if needed -------------------
-    if (len(words) >= 3):
-      tmp.pmin = float(words[1])
-      tmp.pmax = float(words[2])
-    else:
-      tmp.findbounds(temporary_grid)
-  
-    if (len(words) >= 5):
-      tmp.pmaxmin = float(words[3])
-      tmp.pminmax = float(words[4])
-    else:
-      tmp.findbounds(temporary_grid)
-
-    tbound.append(tmp)
-    if (flyout):
-      tbound[k].show(flying_dictionary)
-    else:
-      tbound[k].show(sys.stdout)
-
-    # End reading or bootstrapping bounds -----------------
-
-    k += 1
+tmp    = bounders.bounds()
+tbound = tmp.bootstrap(sys.argv[2], sys.argv[3], model)
+parmno = len(tbound)
+#  parmno = 0
+#  for line in fdic:
+#    words = line.split()
+#    parm = words[0]
+#    try: 
+#      temporary_grid = model.variables[parm][0,:,:]
+#    except:
+#      print(parm," not in data file")
+#      continue
+#
+#    # Bootstrap the bounds if needed -------------------
+#    tmp = bounders.bounds(param=parm)
+#    tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
+#
+#    tbound.append(tmp)
+#    if (flyout):
+#      tbound[parmno].show(flying_dictionary)
+#    else:
+#      tbound[parmno].show(sys.stdout)
+#
+#    # End reading or bootstrapping bounds -----------------
+#
+#    parmno += 1
 
 #-------------------------- Finished with bootstrap and/or first pass
 
@@ -99,34 +73,34 @@ length = datetime.timedelta(days=35)
   
 #Now carry on for the forecasts
 for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
-#for yy in (2011, 2012, 2013, 2014 ):
   for mm in range (1,13):
-  #for mm in range (4,5):
     for dd in ( 1, 15):
       from_date = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
       valid_date = from_date + dt
+      tag = from_date.strftime("%Y%m%d")
 
-      #ocean: base="/scratch2/NCEPDEV/climate/Robert.Grumbine/data/gfs.20120101/00"
       #ice 
       base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/ufs_p6/gfs."+from_date.strftime("%Y%m%d")+"/00/"
       while ( (valid_date - from_date) <= length):
-        #fname=base+"/ocn"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        fout  = open("ice."+tag,"w")
+        fout_global  = open("ice.global."+tag,"w")
+
         #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
         fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
         if (not os.path.exists(fname)):
-          print("couldn't get ",fname)
+          print("couldn't get ",fname, file = fout)
           valid_date += dt
           continue
       
         model = netCDF4.Dataset(fname, 'r')
-        print("valid date = ",valid_date.strftime("%Y%m%d%H"))
+        print("valid date = ",valid_date.strftime("%Y%m%d%H"), file = fout)
         sys.stdout.flush()
         for k in range(0,len(tbound)):
           temporary_grid = model.variables[tbound[k].param][0,:,:]
-          gfail = tbound[k].inbounds(temporary_grid)
+          gfail = tbound[k].inbounds(temporary_grid, fout_global)
           if (gfail):
             #print("calling where", flush=True)
-            #RG: add an optional output file name, and then print to it as well
-            tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea)
+            tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea, fout)
         
         valid_date += dt
+      fout.close()
