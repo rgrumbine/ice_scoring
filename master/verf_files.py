@@ -3,10 +3,11 @@ import datetime
 
 from platforms import *
 
-# logfile for comments out
-exbase=os.environ['EXDIR']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
+# RG: logfile for comments out
+#moved to 'platforms': 
+#exbase = os.environ['EXDIR']
+#exdir  = exbase+"/exec/"
+#fixdir = exbase+"/fix/"
 
 #-------- Skeleton for grid type sources: ---
 # NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)

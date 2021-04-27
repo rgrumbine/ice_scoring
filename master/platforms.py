@@ -3,10 +3,10 @@ import sys
 import datetime
 
 #------------------------------------------------------------------
-exbase=os.environ['EXDIR']
-exdir = exbase+"/exec/"
+exbase = os.environ['EXDIR']
+exdir  = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+#debug print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
 
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
@@ -42,6 +42,8 @@ for x in machines:
     machine = (x)
     break
 
+#debug print("machine = ",machine)
+
 if not machine:
     print ('ice verification is currently only supported on: %s' % ' '.join(machines))
     raise NotImplementedError('Cannot auto-detect platform, ABORT!')
@@ -49,10 +51,10 @@ if not machine:
 #------------------------------------------------------------------
 # Establish paths to verification data:
 if (machine == 'HERA'):
-  dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/ims/'
-  dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/ice5min/'
-  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/nsidc.nc/'
-  dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/mmablib/ice_scoring/fix'
+  dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ims/'
+  dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ice5min/'
+  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/nsidc.nc/'
+  dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/fix'
 elif (machine == 'Orion'):
   dirs['imsdir'] = '/home/rgrumbin/rgdev/verification_data/ims/'
   dirs['ncepdir'] = '/home/rgrumbin/rgdev/verification_data/ice5min/'
@@ -77,6 +79,10 @@ else:
   print ('ice verification is currently only supported on: %s' % ' '.join(machines))
   raise NotImplementedError('Cannot find verification data directory, ABORT!')
 
+#debug print("fixdir = ", (dirs['fixdir']) )
+#debug print("os path exists ", os.path.exists(dirs['fixdir']))
+#debug exit(1)
+
 #------------------------------------------------------------------
 #Do we have the fixed file directory:
 if (not os.path.exists(dirs['fixdir'])):
@@ -85,15 +91,17 @@ if (not os.path.exists(dirs['fixdir'])):
 
 #Do we have verification data directories
 nsidcverf = os.path.exists(dirs['nsidcdir'])
-ncepverf = os.path.exists(dirs['ncepdir'])
-imsverf  = os.path.exists(dirs['imsdir'])
+ncepverf  = os.path.exists(dirs['ncepdir'])
+imsverf   = os.path.exists(dirs['imsdir'])
+#debug print(dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] )
+
 if (not nsidcverf and not ncepverf and not imsverf):
   print('no ice verification directory is present, aborting')
   raise NotImplementedError('Cannot find any verification data directories, ABORT!')
 #------------------------------------------------------------------
 #Variables established by this script:
-# machines (a dictionary of machine identifiers)
-# dirs (a dictionary of directory paths)
-# execdir (location of executables, needs EXDIR environment variable)
-# fixdir (location of executables, needs EXDIR environment variable)
-# imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 
+#  machines (a dictionary of machine identifiers)
+#  dirs (a dictionary of directory paths)
+#  execdir (location of executables, needs EXDIR environment variable)
+#  fixdir (location of executables, needs EXDIR environment variable)
+#  imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 
