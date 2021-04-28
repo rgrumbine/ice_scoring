@@ -15,6 +15,7 @@ import bounders
 #
 #data file = argv[1] (input)
 #control dictionary = argv[2] (input)
+#control dictionary -- reprint argv[3] (output)
 
 #---------------------------------------------------
 
@@ -41,29 +42,6 @@ else:
 tmp    = bounders.bounds()
 tbound = tmp.bootstrap(sys.argv[2], sys.argv[3], model)
 parmno = len(tbound)
-#  parmno = 0
-#  for line in fdic:
-#    words = line.split()
-#    parm = words[0]
-#    try: 
-#      temporary_grid = model.variables[parm][0,:,:]
-#    except:
-#      print(parm," not in data file")
-#      continue
-#
-#    # Bootstrap the bounds if needed -------------------
-#    tmp = bounders.bounds(param=parm)
-#    tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
-#
-#    tbound.append(tmp)
-#    if (flyout):
-#      tbound[parmno].show(flying_dictionary)
-#    else:
-#      tbound[parmno].show(sys.stdout)
-#
-#    # End reading or bootstrapping bounds -----------------
-#
-#    parmno += 1
 
 #-------------------------- Finished with bootstrap and/or first pass
 

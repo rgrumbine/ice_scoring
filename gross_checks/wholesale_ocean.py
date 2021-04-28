@@ -16,8 +16,6 @@ import bounders
 #data file = argv[1] (input)
 #control dictionary = argv[2] (input)
 
-tbound = []
-
 #---------------------------------------------------
 
 if (not os.path.exists(sys.argv[1]) ):
@@ -40,40 +38,9 @@ else:
     tarea = np.zeros((ny, nx))
     tarea = 1.
 
-  try:
-    fdic = open(sys.argv[2])
-  except:
-    print("could not find a dictionary file ",sys.argv[2])
-    exit(1)
-
-  try: 
-    flying_dictionary = open(sys.argv[3],"w")
-    flyout = True
-  except:
-    print("cannot write out to bootstrap dictionary file")
-    flyout = False
-
-  parmno = 0
-  for line in fdic:
-    words = line.split()
-    parm = words[0]
-    tmp = bounders.bounds(param=parm)
-    try: 
-      temporary_grid = model.variables[parm][0,:,:]
-    except:
-      print(parm," not in data file")
-      continue
-
-    # find or bootstrap bounds -----------------
-    tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
-
-    tbound.append(tmp)
-    if (flyout):
-      tbound[parmno].show(flying_dictionary)
-    else:
-      tbound[parmno].show(sys.stdout)
-
-    parmno += 1
+tmp    = bounders.bounds()
+tbound = tmp.bootstrap(sys.argv[2], sys.argv[3], model)
+parmno = len(tbound)
 
 #-------------------------- Finished with bootstrap and/or first pass
 #Now carry on for the forecasts

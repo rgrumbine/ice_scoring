@@ -72,7 +72,7 @@ foreach yy ( 2011 )
         mv $expt.$initial.*.out $OUT
 
 # Per-forecast statistics, graphics
-        time python3 $EXDIR/contingency_plots.py 35 $initial 0.15 
+        time python3 $EXDIR/contingency_plots.py 35 $initial 0.15 $expt 
         mv *${initial}.png                $OUT
         mv score*${initial}.csv           $OUT
       else
