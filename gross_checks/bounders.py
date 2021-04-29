@@ -23,7 +23,7 @@ class bounds:
   # RG: improve names, set, set_bounds, bootstrap hard to distinguish
   def bootstrap(self, dictionary_file, bootstrap_file, model ):
     tbound = []
-    print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)
+    #debug print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)
 
     try:
       fdic = open(dictionary_file)
@@ -104,67 +104,63 @@ class bounds:
     strpmax   = strprec(self.pmax)
     strpmaxmin = strprec(self.pmaxmin)
     strpminmax = strprec(self.pminmax)
-    print("{:10s}".format(self.param), 
-      strpmin, strpmax, strpmaxmin, strpminmax,
+    print("{:10s}".format(self.param), strpmin, strpmax, strpmaxmin, strpminmax,
       file=flying_out_file)
 
   def ptinbounds(self, value):
     return (value >= self.pmin and value <= self.pmax)
 
   def inbounds(self, grid, fout=sys.stdout):
+    #debug print("in inbounds ", flush=True)
+    #debug print("in inbounds ", file=fout,flush=True)
     #apply the tests
     gmin = grid.min()
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:10s}".format(self.param)," excessively low minimum ",
-               gmin," versus ",self.pmin," allowed", file=fout)
+      print("{:10s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:10s}".format(self.param)," excessively high minimum ",
-               gmin," versus ",self.pmaxmin," allowed", file=fout)
+      print("{:10s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:10s}".format(self.param)," excessively high maximum ",
-               gmax," versus ",self.pmax," allowed", file=fout)
+      print("{:10s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:10s}".format(self.param)," excessively low maximum ",
-               gmax," versus ",self.pminmax," allowed", file=fout)
+      print("{:10s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
       gfail = True    
     return gfail
 
-  def whether(self, grid, fname = sys.stdout):
+  def whether(self, grid, fout = sys.stdout):
+    #debug print("in whether ", flush=True)
+    #debug print("in whether ", file=fout,flush=True)
     #Global tests -- test whether the grid, in its entirity, is in bound
     gmin = grid.min()
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:10s}".format(self.param)," excessively low minimum ",
-                gmin," versus ",self.pmin," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:10s}".format(self.param)," excessively high minimum ",
-                gmin," versus ",self.pmaxmin," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:10s}".format(self.param)," excessively high maximum ",
-                gmax," versus ",self.pmax," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:10s}".format(self.param)," excessively low maximum ",
-                gmax," versus ",self.pminmax," allowed", file=fname)
+      print("{:10s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
       gfail = True
     return gfail
 
 
 
-  def where(self, grid, lats, lons, mask, area, fname=sys.stdout):
+  def where(self, grid, lats, lons, mask, area, fout=sys.stdout):
+    #debug print("in where ", flush=True)
+    #debug print("in where ", file=fout,flush=True)
     errcount = 0
     #Show where (and which) test failed.  self is the bounds data
     if (grid.min() < self.pmin): 
-      print("parameter i j longitude latitude model_value test_checked test_value",
-                file=fname)
+      print("parameter i j longitude latitude model_value test_checked test_value", file=fout)
       mask = ma.masked_array(grid < self.pmin)
       indices = mask.nonzero()
       errcount += len(indices[0])
@@ -172,12 +168,10 @@ class bounds:
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
-        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ",
-                self.pmin,file=fname)
+        print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ", self.pmin,file=fout)
 
     if (grid.max() > self.pmax):
-      print("parameter i j longitude latitude model_value test_checked test_value",
-                file=fname)
+      print("parameter i j longitude latitude model_value test_checked test_value", file=fout)
       mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
       errcount += len(indices[0])
@@ -186,8 +180,9 @@ class bounds:
         i = indices[1][k]
         j = indices[0][k]
         print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ",
-                self.pmax,file=fname)
+                self.pmax,file=fout)
 
+    fout.flush()
     return errcount
 
 

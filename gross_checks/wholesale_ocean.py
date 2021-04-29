@@ -41,6 +41,7 @@ else:
 tmp    = bounders.bounds()
 tbound = tmp.bootstrap(sys.argv[2], sys.argv[3], model)
 parmno = len(tbound)
+#debug print("parmno = ",parmno)
 
 #-------------------------- Finished with bootstrap and/or first pass
 #Now carry on for the forecasts
@@ -49,24 +50,27 @@ dt     = datetime.timedelta(seconds=6*3600)
 length = datetime.timedelta(days=35)
 
 for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
+#for yy in (2017, 2018 ):
   for mm in range (1,13):
     for dd in (1,15):
       from_date  = datetime.datetime(int(yy),int(mm),int(dd), int(0) )
       valid_date = from_date + dt
-      tag  = from_date.strftime("%Y%m%d")
+      tag   = from_date.strftime("%Y%m%d")
+      if (os.path.exists("ocn."+tag)):
+        continue
+      fout  = open("ocn."+tag,"w")
 
       base = "modelout/gfs."+tag+"/00"
       while ( (valid_date - from_date) <= length):
-        fout  = open("ocn."+tag,"w")
-        fname = base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+
-                               from_date.strftime("%Y%m%d%H")+".nc"
+        fname = base+"/ocn_2D_"+valid_date.strftime("%Y%m%d%H")+".01."+ from_date.strftime("%Y%m%d%H")+".nc"
         if (not os.path.exists(fname)):
           print("couldn't get ",fname, file=fout)
           valid_date += dt
           continue
       
         model = netCDF4.Dataset(fname, 'r')
-        print("valid date = ",valid_date.strftime("%Y%m%d%H"), file=fout)
+        print("valid date = ",valid_date.strftime("%Y%m%d%H"), file=fout, flush=True)
+        #debug print("valid date = ",valid_date.strftime("%Y%m%d%H") )
         sys.stdout.flush()
         for k in range(0,len(tbound)):
           temporary_grid = model.variables[tbound[k].param][0,:,:]
