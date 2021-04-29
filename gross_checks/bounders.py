@@ -20,7 +20,16 @@ class bounds:
     self.pmaxmin = float(pmaxmin)
     self.pminmax = float(pminmax)
 
-  # RG: improve names, set, set_bounds, bootstrap hard to distinguish
+  def scan(self, fname, fout = sys.stdout ):
+    orig  = netCDF4.Dataset(fname, "r")
+
+    #After https://stackoverflow.com/questions/13936563/copy-netcdf-file-using-python
+    for name, var in orig.variables.items():
+      print("{:14s}".format(name), orig.variables[name][:].max(), orig.variables[name][:].min(), file=fout )
+    fout.close()
+    orig.close()
+
+  # RG: improve names: set, set_bounds, bootstrap hard to distinguish
   def bootstrap(self, dictionary_file, bootstrap_file, model ):
     tbound = []
     #debug print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)
@@ -28,14 +37,14 @@ class bounds:
     try:
       fdic = open(dictionary_file)
     except:
-      print("could not find a dictionary file ",dictionary_file)
+      print("could not find a dictionary file ",dictionary_file, file = sys.stderr() )
       exit(1)
   
     try:
       flying_dictionary = open(bootstrap_file, "w")
       flyout = True
     except:
-      print("cannot write out to bootstrap dictionary file")
+      print("cannot write out to bootstrap dictionary file", file = sys.stderr() )
       flyout = False
 
     parmno = 0
@@ -46,7 +55,7 @@ class bounds:
       try:
         temporary_grid = model.variables[parm][0,:,:]
       except:
-        print(parm," not in data file")
+        print(parm," not in data file", file = sys.stderr() )
         continue
 
       # find or bootstrap bounds -----------------
@@ -104,7 +113,7 @@ class bounds:
     strpmax   = strprec(self.pmax)
     strpmaxmin = strprec(self.pmaxmin)
     strpminmax = strprec(self.pminmax)
-    print("{:10s}".format(self.param), strpmin, strpmax, strpmaxmin, strpminmax,
+    print("{:14s}".format(self.param), strpmin, strpmax, strpmaxmin, strpminmax,
       file=flying_out_file)
 
   def ptinbounds(self, value):
@@ -118,16 +127,16 @@ class bounds:
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:10s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:10s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:10s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:10s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
       gfail = True    
     return gfail
 
@@ -139,16 +148,16 @@ class bounds:
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:10s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:10s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:10s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:10s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
       gfail = True
     return gfail
 
