@@ -24,8 +24,13 @@ class bounds:
     orig  = netCDF4.Dataset(fname, "r")
 
     #After https://stackoverflow.com/questions/13936563/copy-netcdf-file-using-python
+    print("Dimensions", file=fout)
+    for name, dim in orig.dimensions.items():
+      print(name, dim, file=fout)
+
+    print("Variables, assumed gridded", file = fout)
     for name, var in orig.variables.items():
-      print("{:14s}".format(name), orig.variables[name][:].max(), orig.variables[name][:].min(), file=fout )
+      print("{:14s}".format(name), orig.variables[name][:].max(), orig.variables[name][:].min(), var.shape, len(var.shape), file=fout )
     fout.close()
     orig.close()
 
@@ -37,14 +42,14 @@ class bounds:
     try:
       fdic = open(dictionary_file)
     except:
-      print("could not find a dictionary file ",dictionary_file, file = sys.stderr() )
+      print("could not find a dictionary file ",dictionary_file, file = sys.stderr )
       exit(1)
   
     try:
       flying_dictionary = open(bootstrap_file, "w")
       flyout = True
     except:
-      print("cannot write out to bootstrap dictionary file", file = sys.stderr() )
+      print("cannot write out to bootstrap dictionary file", file = sys.stderr )
       flyout = False
 
     parmno = 0
@@ -52,10 +57,11 @@ class bounds:
       words = line.split()
       parm = words[0]
       tmp = bounds(param=parm)
+      print("trying parameter ",parm,flush=True, file = sys.stderr )
       try:
         temporary_grid = model.variables[parm][0,:,:]
       except:
-        print(parm," not in data file", file = sys.stderr() )
+        print(parm," not in data file", file = sys.stderr )
         continue
 
       # find or bootstrap bounds -----------------
@@ -70,6 +76,26 @@ class bounds:
       parmno += 1
 
     return tbound
+
+  def readin(self, dictionary_file):
+    try:
+      fdic = open(dictionary_file)
+    except:
+      print("could not find a dictionary file ",dictionary_file, file = sys.stderr )
+      exit(1)
+
+    parmno = 0
+    for line in fdic:
+      words = line.split()
+      parm = words[0]
+      tmp = bounds(param=parm)
+      try:
+        temporary_grid = model.variables[parm][0,:,:]
+      except:
+        print(parm," not in data file", file = sys.stderr )
+        continue
+
+
 
 
   def set(self, param, pmin, pmax, pmaxmin, pminmax):
