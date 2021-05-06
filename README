@@ -35,6 +35,11 @@ Supportive:
 exec    -- executables (not on git)
 
 fix      -- fixed files of use (not on git) 
+-- binary files not on github. Copy or use (ln -s)
+WCOSS: /u/Robert.Grumbine/rgdev/fix
+Hera: /home/Robert.Grumbine/rgdev/fix
+Orion: /home/rgrumbin/rgdev/fix
+ 
 
 gross_checks -- check for structural problems (grid seams) or impossible values ( T < -3)
 

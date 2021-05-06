@@ -7,27 +7,32 @@
 #SBATCH -A marine-cpu
 #SBATCH -N 1
 #SBATCH --mail-type FAIL
-#SBATCH --mail-user robert.grumbine@noaa.gov
+#SBATCH --mail-user USER@system
 
 source /etc/profile.d/modules.csh
-setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
+setenv USER $user
 
 setenv expt p6.0
 setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p6/SeaIce/ 
-setenv EXDIR   /scratch2/NCEPDEV/climate/Robert.Grumbine/prototype_evaluations/${expt}.verf
-setenv RUNBASE /scratch2/NCEPDEV/stmp1/Robert.Grumbine/prototype_evaluations/${expt}.verf
-cd /scratch2/NCEPDEV/climate/Robert.Grumbine/prototype_evaluations/${expt}.verf
+setenv EXDIR   /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
+setenv RUNBASE /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.verf
+cd /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
 setenv base `pwd`
 
 echo env $FCST_BASE $EXDIR $base $RUNBASE
 
+# Fewer changes below here -------------------------------------------------
+
+setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
+
 #For batch python graphics
-setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/Robert.Grumbine/runtime
+setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
 if ( ! -d $XDG_RUNTIME_DIR ) then
   mkdir -p -m 700 $XDG_RUNTIME_DIR
 endif
 echo $XDG_RUNTIME_DIR for python graphic support
-setenv MPLCONFIGDIR /scratch2/NCEPDEV/climate/Robert.Grumbine/runtime
+setenv MPLCONFIGDIR /scratch2/NCEPDEV/climate/${USER}/runtime
+
 
 setenv x `date`
 echo start of loop at dtime $x

@@ -4,7 +4,7 @@
 #Robert Grumbine
 # 25 February 2020
 
-BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
+export BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
 
 for f in contingency_plots.py 
 do
@@ -37,7 +37,10 @@ if [ ! -d ${BASE}/exec ] ; then
 fi
 
 if [ ! -d ${BASE}/fix ] ; then
-  echo You must manually create and populate the fix directory
+    echo You must manually create the fix directory
+    echo WCOSS: ln -s /u/Robert.Grumbine/rgdev/fix .
+    echo Hera:  ln -s /home/Robert.Grumbine/rgdev/fix .
+    echo Orion: ln -s /u/rgrumbin/rgdev/fix .
   exit 1
 fi
 
