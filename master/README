@@ -16,7 +16,10 @@ To run gross checks on ice or ocean (or, in principle, anything else with a .nc 
     select the level of verbosity you want (increasingly verbose going 
         from .extremes, .vvhigh, .vhigh, .high, .moderate) for the 
         diagnostic output (files in subdirectory ctl)
-    If on hera, ensure you have /home/Robert.Grumbine/clim_data/anaconda3/bin in your path
+    #old: If on hera, ensure you have /home/Robert.Grumbine/clim_data/anaconda3/bin in your path
+    If on hera, use a recent anaconda distribution, such as obtained by 
+        module use -a /contrib/anaconda/modulefiles
+        module load anaconda/latest
     Then execute (further instructions in gross_checks/README)
 
 

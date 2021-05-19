@@ -24,8 +24,8 @@ fi
 #module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
 
 #netcdf -- hera
-module load intel/18.0.5.274
-module load impi/2018.4.274
+module load intel/2020.2
+module load impi/2020.2
 module load netcdf/4.7.0 
 
 #ice_edge : 
@@ -41,6 +41,6 @@ mv solo_ncep solo_ims solo_nsidc binary ${EXDIR}
 #Concentration:
 cd ${base}/concentration
 make
-mv score_diag score_nsidc score_cfsv2 persistence ${EXDIR}
+mv score_diag score_nsidc score_cfsv2 persistence nsidc_nsidc ${EXDIR}
 
 
