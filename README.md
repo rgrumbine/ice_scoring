@@ -56,6 +56,8 @@ Tools for model evaluation, primarily of sea ice models
 
 * legacy -- archive of codes used in support of papers 1994-2017.
 
+## Not in public github:
+
 * sidfex  -- Sea Ice Dynamics Forecast Experiment support files/scripts
 
 * web -- towards web display of scores
