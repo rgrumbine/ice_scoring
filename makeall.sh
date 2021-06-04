@@ -44,3 +44,6 @@ make
 mv score_diag score_nsidc score_cfsv2 persistence nsidc_nsidc ${EXDIR}
 
 
+#Check condition of python3 and libraries
+echo python3 is in `which python3`
+python3 checkenv.py

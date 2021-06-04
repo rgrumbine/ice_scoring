@@ -36,11 +36,13 @@ setenv RUNBASE /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.ver
 cd /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
 setenv base `pwd`
 
+setenv mmablib /scratch2/NCEPDEV/climate/Robert.Grumbine/mmablib/
+
 echo env $FCST_BASE $EXDIR $base $RUNBASE
 
 # Fewer changes below here -------------------------------------------------
 
-setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
+#setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
 
 #For batch python graphics
 setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
@@ -81,7 +83,7 @@ foreach yy ( 2011 )
         setenv i 0
         while ( $i < 35 )
           setenv tag `expr $tag + 1`
-          setenv tag `dtgfix3 $tag`
+          setenv tag `$mmablib/ush/dtgfix3 $tag`
           setenv i   `expr $i + 1`
           # -m cProfile -o pystats.$tag.$i to generate profiling 
           #   stats for later analysis. Optional
