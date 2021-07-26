@@ -10,8 +10,7 @@ def check_import(packagename):
 
 assert sys.version_info.major >= 3 and sys.version_info.minor >= 6, 'Please install Python 3.6!'
 
-#packages = [ 'math', 'netCDF4', 'csv', 'datetime', 'matplotlib', 'netCDF4', 'numpy', 'os', 'pstats', 'time' ]
-packages = [ 'math', 'netCDF4', 'csv', 'datetime', 'matplotlib', 'netCDF4', 'numpy', 'os', 'pstats' ]
+packages = [ 'math', 'csv', 'datetime', 'os', 'pstats', 'netCDF4', 'matplotlib', 'numpy' ]
 
 all_passed = True
 for p in packages:
@@ -19,4 +18,4 @@ for p in packages:
     '{0} not present. Please install via pip or conda.'.format(p)
 
 if all_passed:
-    print('All checks passed. Your environment is good to go!')
+    print('All checks passed. Your python environment is good to go!')
