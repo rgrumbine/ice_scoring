@@ -13,10 +13,24 @@ Preface:
 On WCOSS: module load python/3.6.3
 On Orion: module load python/3.7.5
   The hera python modules are not sufficient, so you'll need:
-On Hera: prepend /home/Robert.Grumbine/clim_data/anaconda3/bin to your PATH
 On Hera you might also need to add:
   setenv TERMINFO /usr/share/terminfo
-to your .cshrc
+      to your .cshrc
+
+0. Bootstrapping for new systems or models ...
+atm.py is the general script for learning about what is available in your data files, 
+  and then helping you develop appropriate limits and dictionaries
+first pass: python3 atm.py Full_path_and_file_name_to_data
+  read output file alpha, and:
+    edit atm.py to use the correct names for number of points in x and y
+    edit atm.py to use the correct names for latitude and longitudes of points*
+* note issue of T points vs. U points
+  copy alpha to beta
+  edit beta -- remove paraemters you're not interested in
+            -- trim out things like dimensions
+  re-run command
+second pass: 
+  
 
 1. Gross or Wholesale checks
 Usage:
