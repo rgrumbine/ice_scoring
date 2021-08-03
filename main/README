@@ -26,7 +26,7 @@ To run gross checks on ice or ocean (or, in principle, anything else with a .nc 
 Ice model scoring:
     export BASE=location_of_your_ice_scoring_directory (or setenv)
     Select a directory to save output in, cd to it.
-    execute master/bootstrap.sh
+    execute main/bootstrap.sh
     export EXDIR=`pwd` (or equivalent setenv)
     python3 platforms.py
       -- will be silent if you're on a known platform with at least some verification data

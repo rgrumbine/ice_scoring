@@ -17,7 +17,7 @@ done
 
 for f in verf_files.py setup_verf_ice.py platforms.py all.csh
 do
-  cp -p ${BASE}/master/$f .
+  cp -p ${BASE}/main/$f .
   if [ ! -f $f ] ; then
     echo could not find $f in $BASE, exiting
     exit 1

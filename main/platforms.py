@@ -29,7 +29,8 @@ machines = {
   'HERA'          : '/scratch1',
   'WCOSS_C'       : '/etc/SuSE-release',
   'WCOSS_DELL_P3' : '/gpfs/dell2',
-  'Orion'         : '/home/rgrumbin'
+  'Orion'         : '/home/rgrumbin',
+  'Gaea'          : '/lustre/f2/scratch'
 }
 #----------------- Identify our machines -----------------------------
 
@@ -70,6 +71,11 @@ elif (machine == 'WCOSS_DELL_P3'):
   dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/ice5min/'
   dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/sidads.colorado.edu/pub/DATASETS/NOAA/G02202_V3/'
   dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
+elif (machine == 'Gaea'):
+  dirs['imsdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ims/'
+  dirs['ncepdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ice5min/'
+  dirs['nsidcdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/nsidc_nc/'
+  dirs['fixdir']   = '/lustre/f2/dev/ncep/Robert.Grumbine/fix'
 elif (machine == 'RG_Home'):
   dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'
   dirs['ncepdir'] = '/Volumes/ncep/allconc/ice5min/'
@@ -84,12 +90,12 @@ else:
 #debug exit(1)
 
 #------------------------------------------------------------------
-#Do we have the fixed file directory:
+#Do we have the fixed files directory?
 if (not os.path.exists(dirs['fixdir'])):
-  print('no ice verification fixed directory ')
-  raise NotImplementedError('Cannot find any verification fixed directory.  ABORT!')
+  print('no ice verification fixed (reference) directory ')
+  raise NotImplementedError('Cannot find any verification fixed (reference) directory.  ABORT!')
 
-#Do we have verification data directories
+#Do we have verification data directories?
 nsidcverf = os.path.exists(dirs['nsidcdir'])
 ncepverf  = os.path.exists(dirs['ncepdir'])
 imsverf   = os.path.exists(dirs['imsdir'])
@@ -97,6 +103,7 @@ imsverf   = os.path.exists(dirs['imsdir'])
 
 if (not nsidcverf and not ncepverf and not imsverf):
   print('no ice verification directory is present, aborting')
+  print('tried verification directories ', dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] )
   raise NotImplementedError('Cannot find any verification data directories, ABORT!')
 #------------------------------------------------------------------
 #Variables established by this script:
@@ -105,3 +112,10 @@ if (not nsidcverf and not ncepverf and not imsverf):
 #  execdir (location of executables, needs EXDIR environment variable)
 #  fixdir (location of executables, needs EXDIR environment variable)
 #  imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 
+
+print("Look ok to run on ",machine)
+print("ims dir   = ", dirs['imsdir'])
+print("nsidc dir = ", dirs['nsidcdir'])
+print("ncep dir  = ", dirs['ncepdir'])
+print("reference fixed files directory = ",dirs['fixdir'])
+

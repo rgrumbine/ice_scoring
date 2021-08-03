@@ -9,52 +9,79 @@
 #SBATCH --mail-type FAIL
 #SBATCH --mail-user USER@system
 
+setenv USER $user
+
 #Orion
 #  tbd
 #WCOSS
 #  tbd
 
 #Hera:
-source /etc/profile.d/modules.csh
-module load intel/2020.2
-module load impi/2020.2
-module load netcdf/4.7.0
-module load wgrib2/2.0.8
+#source /etc/profile.d/modules.csh
+#module load intel/2020.2
+#module load impi/2020.2
+#module load netcdf/4.7.0
+#module load wgrib2/2.0.8
+#
+#setenv mmablib /scratch2/NCEPDEV/climate/Robert.Grumbine/mmablib/
+#
+#module use -a /contrib/anaconda/modulefiles
+#module load anaconda/latest 
+#setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
+#setenv MPLCONFIGDIR    /scratch2/NCEPDEV/climate/${USER}/runtime
 
-module use -a /contrib/anaconda/modulefiles
-module load anaconda/latest 
+setenv expt p6.0
+setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p6/SeaIce/ 
+setenv EXDIR     /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
+setenv RUNBASE   /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.verf
+
+#Gaea
+setenv PATH /ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
+setenv XDG_RUNTIME_DIR /ncrc/home1/${USER}/scratch/runtime
+setenv MPLCONFIGDIR    /ncrc/home1/${USER}/scratch/runtime
+
+module load intel
+module load cray-netcdf
+module load wgrib2
+setenv mmablib /ncrc/home1/Robert.Grumbine/rgdev/CICE/mmablib/
+
+setenv expt gaea_intel_smoke_gx1_2x1_gx1_run_std.beta2
+setenv FCST_BASE /ncrc/home1/${USER}/scratch/CICE_RUNS/${expt}/history/
+setenv RUNBASE   /ncrc/home1/${USER}/scratch/${USER}/evaluations/${expt}.verf
+setenv EXDIR     /ncrc/home1/${USER}/rgdev/evaluations/${expt}.verf
 
 #All systems:
 module list
 
-setenv USER $user
-
-setenv expt p6.0
-setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p6/SeaIce/ 
-setenv EXDIR   /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
-setenv RUNBASE /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.verf
-cd /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
+if ( ! -d $FCST_BASE ) then
+  echo No forecast directory to evaluate! -- dir $FCST_BASE not present
+  exit 1
+endif
+if ( ! -d $RUNBASE ) then
+  mkdir -p -m 700 $RUNBASE
+endif
+if ( ! -d $EXDIR ) then
+  mkdir -p -m 700 $EXDIR
+endif
+cd     $EXDIR
 setenv base `pwd`
 
-setenv mmablib /scratch2/NCEPDEV/climate/Robert.Grumbine/mmablib/
 
 echo env $FCST_BASE $EXDIR $base $RUNBASE
 
 # Fewer changes below here -------------------------------------------------
 
-#setenv PATH /scratch2/NCEPDEV/climate/Robert.Grumbine/anaconda3/bin:$PATH
-
 #For batch python graphics
-setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
 if ( ! -d $XDG_RUNTIME_DIR ) then
   mkdir -p -m 700 $XDG_RUNTIME_DIR
 endif
 echo $XDG_RUNTIME_DIR for python graphic support
-setenv MPLCONFIGDIR /scratch2/NCEPDEV/climate/${USER}/runtime
 
 
 setenv x `date`
 echo start of loop at dtime $x
+
+exit
 
 foreach yy ( 2011 )
   setenv RUNDIR ${RUNBASE}/$yy
@@ -62,10 +89,10 @@ foreach yy ( 2011 )
     mkdir -p $RUNDIR
   endif
   cd $RUNDIR
-  #if ( $? -ne 0 ) then
-  #  echo could not move to rundir $RUNDIR
-  #  exit 1
-  #endif
+  if ( $? -ne 0 ) then
+    echo could not move to rundir $RUNDIR
+    exit 1
+  endif
 
   foreach mm ( 04 05 06 07 08 09 10 11 12 )
     foreach dd ( 01 15 )
