@@ -3,6 +3,38 @@
 SH=/bin/bash
 export base=`pwd`
 
+# --------------  System-dependent modules/paths/... here --------
+##netcdf -- WCOSS 3.0
+#module load ips/18.0.5.274
+#module load impi/18.0.1
+#module load NetCDF/4.5.0
+#python
+
+#netcdf -- orion
+#module load intel/2020   #, 2020
+#module load impi/2020    #, 2020
+#module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
+#python
+
+#netcdf -- Hera
+#module load intel/2020.2
+#module load impi/2020.2
+#module load netcdf/4.7.0 
+#module use -a /contrib/anaconda/modulefiles
+#module load anaconda/latest
+
+#netcdf -- Gaea
+module purge
+module load intel
+module load cray-mpich
+module load cray-netcdf
+module load PrgEnv-intel
+export NETCDF=$NETCDF_DIR
+export PATH=/ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
+
+# --------------  Should need no changes below here --------
+module list
+
 if [ ! -d exec ] ; then
   mkdir -p exec
 fi
@@ -18,26 +50,6 @@ if [ ! -f ../mmablib/libombf_4.a ] ; then
   cd ../mmablib
   make
 fi
-
-##netcdf -- WCOSS 3.0
-#module load ips/18.0.5.274
-#module load impi/18.0.1
-#module load NetCDF/4.5.0
-#python
-
-#netcdf -- orion
-#module load intel/2020   #, 2020
-#module load impi/2020    #, 2020
-#module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
-#python
-
-#netcdf -- hera
-module load intel/2020.2
-module load impi/2020.2
-module load netcdf/4.7.0 
-module use -a /contrib/anaconda/modulefiles
-module load anaconda/latest
-
 
 #ice_edge : 
 cd ${base}/ice_edge/C

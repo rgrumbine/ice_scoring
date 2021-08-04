@@ -41,8 +41,9 @@ Ice model scoring:
        EXDIR     -- as above EXDIR reference
        RUNBASE   -- place to execute the scoring
     Edit the foreach loops for yy, mm, dd to accord with your interest.
-       -- approximately 24 forecasts of 35 days can be evaluated in 8 
-              hours, 1 cpu, on hera
+       -- approximately 24 forecasts of 35 days, at quarter degree, 
+              global, resolution can be evaluated in 
+              8 hours, 1 cpu, on hera
     Edit the references to the FCST_BASE in the if test and the python3 
        line to accord with path naming convention. Ex, with $initial 
        being an 8 digit date YYYYMMDD

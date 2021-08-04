@@ -92,7 +92,7 @@ else:
 #------------------------------------------------------------------
 #Do we have the fixed files directory?
 if (not os.path.exists(dirs['fixdir'])):
-  print('no ice verification fixed (reference) directory ')
+  print('no ice verification fixed (reference) directory ',dirs['fixdir'])
   raise NotImplementedError('Cannot find any verification fixed (reference) directory.  ABORT!')
 
 #Do we have verification data directories?
@@ -113,9 +113,9 @@ if (not nsidcverf and not ncepverf and not imsverf):
 #  fixdir (location of executables, needs EXDIR environment variable)
 #  imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 
 
-print("Look ok to run on ",machine)
+print("Evaluation programs and scripts look ok to run on ",machine)
 print("ims dir   = ", dirs['imsdir'])
 print("nsidc dir = ", dirs['nsidcdir'])
 print("ncep dir  = ", dirs['ncepdir'])
 print("reference fixed files directory = ",dirs['fixdir'])
-
+exit(0)
