@@ -74,7 +74,7 @@ elif (machine == 'WCOSS_DELL_P3'):
 elif (machine == 'Gaea'):
   dirs['imsdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ims/'
   dirs['ncepdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ice5min/'
-  dirs['nsidcdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/nsidc_nc/'
+  dirs['nsidcdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/nsidc.nc/'
   dirs['fixdir']   = '/lustre/f2/dev/ncep/Robert.Grumbine/fix'
 elif (machine == 'RG_Home'):
   dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'

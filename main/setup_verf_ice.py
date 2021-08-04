@@ -78,11 +78,17 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
 
+  #UFS style name:
   valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+  #CICE consortium name:
+  valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
+
   if (not os.path.exists(valid_fname) ):
     valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.nc'
     if (not os.path.exists(valid_fname)):
-      print("cannot find forecast file for "+fdate.strftime("%Y%m%d") )
+      print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d") )
+      retcode = int(1)
+      return retcode
   
   if (os.path.exists(exdir + 'score_nsidc')):
     print("Have the fcst vs. nsidc scoring executable")
@@ -119,13 +125,13 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
 #the +1 is for the command name itself, which is sys.argv[0]
 if (len(sys.argv) == 3+1):
-  print("Initial date and verification time")
+  print("Initial date and verification time", flush=True)
   sys.stdout.flush()
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
   fcst_dir     = sys.argv[3]
   single = True
-  print(initial_date, " ", valid_date)
+  print(initial_date, " ", valid_date, flush=True)
   sys.stdout.flush()
 elif (len(sys.argv) == 4+1):
   initial_date = parse_8digits(sys.argv[1])
@@ -135,10 +141,10 @@ elif (len(sys.argv) == 4+1):
   single = False
 #RG Note: a timedelta is days and hh:mm:ss, fix arguments to handle 
 #         hours as a delta
-  print("Date, max lead, delta", initial_date," ",lead," ", dt)
+  print("Date, max lead, delta", initial_date," ",lead," ", dt, flush=True)
   sys.stdout.flush()
 else:
-  print("wrong number of arguments")
+  print("wrong number of arguments", flush=True)
   raise NotImplementedError('need 3 or 4 args, last being forecast directory')
 
 #===============================================================================
@@ -182,7 +188,10 @@ if (single):
     print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
     fcst = False
   else:
+    print("have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
     fcst = True
+
+  print(flush=True)
 
   #now call verification with dirs, fcst, verf logicals
   #print("working with observed data \n")
@@ -218,6 +227,7 @@ if (single):
     sys.stdout.flush()
 
 else:
+  print("in elses branch of setup-verf",flush=True)
   for d in range (1,lead+1):
     valid_date = initial_date + d*dt
     x = get_obs(initial_date, valid_date,

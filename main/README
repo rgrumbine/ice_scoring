@@ -26,10 +26,10 @@ To run gross checks on ice or ocean (or, in principle, anything else with a .nc 
 Ice model scoring:
     export BASE=location_of_your_ice_scoring_directory (or setenv)
     Select a directory to save output in, cd to it.
-    execute main/bootstrap.sh
-    export EXDIR=`pwd` (or equivalent setenv)
-    python3 platforms.py
-      -- will be silent if you're on a known platform with at least some verification data
+    execute $BASE/main/bootstrap.sh
+      * now in bootstrap.sh:
+         python3 platforms.py
+      -- will tell you whether you're on a known platform with necessary directories
       -- otherwise, you'll need to add a machine to machines = { ... }, 
       --    and the corresponding paths for at least one of ims, ncep, or nsidc data 
     You'll need to edit the fname in functions fcst_name, get_fcst in file 
@@ -38,7 +38,7 @@ Ice model scoring:
     Edit all.csh for your paths:
        expt      -- tag for the experiment name
        FCST_BASE -- where the forecast output is
-       EXDIR     -- as above EXDIR reference
+       EXDIR     -- where the scoring executables (compiled programs) are
        RUNBASE   -- place to execute the scoring
     Edit the foreach loops for yy, mm, dd to accord with your interest.
        -- approximately 24 forecasts of 35 days, at quarter degree, 

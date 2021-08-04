@@ -252,10 +252,14 @@ def nsidc_edge(initial, toler, nsidcdir):
 #-----------------------------------------------------------------===
 #-----------------------------------------------------------------===
 def fcst_name(valid, initial, fcst_dir):
+  #Some UFS prototype names:
   #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
   #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
+  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
 
-  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #CICE consortium default
+  fname = fcst_dir+'iceh.'+valid.strftime("%Y")+'-'+valid.strftime("%m")+'-'+valid.strftime("%d")+".nc"
+
   if (not os.path.exists(fname) ):
     fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
     if (not os.path.exists(fname) ):
@@ -271,13 +275,18 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
 
+  #UFS prototype name
   fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+
+  #CICE consortium default
+  fname = fcst_dir+'iceh.'+valid.strftime("%Y")+'-'+valid.strftime("%m")+'-'+valid.strftime("%d")+".nc"
+
   if (not os.path.exists(fname) ):
     fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
 
   if (not os.path.exists(fname)):
     retcode += 1
-    print("Do not have forecast file ",fname)
+    print("Do not have forecast file for ",initial, valid)
   return retcode
 
 
