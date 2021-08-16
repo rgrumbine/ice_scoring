@@ -96,8 +96,6 @@ class bounds:
         continue
 
 
-
-
   def set(self, param, pmin, pmax, pmaxmin, pminmax):
     self.param = param
     self.pmin = float(pmin)
@@ -110,15 +108,15 @@ class bounds:
       self.pmin = float(words[1])
       self.pmax = float(words[2])
     else:
-      self.findbounds(temporary_grid)
+      self.findbounds(temporary_grid, flying_dictionary)
 
     if (len(words) >= 5):
       self.pmaxmin = float(words[3])
       self.pminmax = float(words[4])
     else:
-      self.findbounds(temporary_grid)
+      self.findbounds(temporary_grid, flying_dictionary)
 
-  def findbounds(self, grid):
+  def findbounds(self, grid, flying_dictionary):
     self.pmin = grid.min()
     self.pmax = grid.max()
     #do the multiplier to avoid roundoff issues with printout values
@@ -132,6 +130,7 @@ class bounds:
        self.pmax *= 1.001    
     self.pmaxmin = self.pmin + 0.1*(self.pmax - self.pmin)
     self.pminmax = self.pmax - 0.1*(self.pmax - self.pmin)
+    print("{:14s}".format(self.param), strprec(self.pmin), strprec(self.pmax), strprec(self.pmaxmin), strprec(self.pminmax), file=flying_dictionary )
 
   def show(self, flying_out_file = sys.stdout):
     #RG: need to do something different in formatting small numbers (fsalt, for ex)

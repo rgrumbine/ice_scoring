@@ -18,20 +18,6 @@ void enter(grid2<float> &param, T *x) ;
 
 #include "contingency_ptwise.C"
 
-// RG: Will be better to make this compile arguments, and thence, too,
-//     the lower ifdefs
-// RG: alt, to read nx, ny from the input netcdf, but still need variable names
-#ifdef cice_file
-  #define NX 1500
-  #define NY 1099
-#elif benchmark
-  #define NX 1440
-  #define NY 1080 
-#else
-  #define NX 4500
-  #define NY 3298
-#endif
-
 int main(int argc, char *argv[]) {
   float *x;
   int ncid, varid;
@@ -43,13 +29,6 @@ int main(int argc, char *argv[]) {
 // File of pts to skip
   global_12th<unsigned char> skip;
   FILE *fin;
-
-// Hycom diag file variables of interest:
-  grid2<float> lat(NX, NY), lon(NX, NY), tarea(NX, NY);
-  grid2<float> ice_coverage(NX, NY), ice_thickness(NX, NY);
-  grid2<float> u_barotropic_velocity(NX, NY), v_barotropic_velocity(NX, NY);
-
-  x = (float*) malloc(sizeof(float)*NX*NY);
 
 ////////////////// skip grid ///////////////////////////////
   skip.set(0);
@@ -128,7 +107,33 @@ int main(int argc, char *argv[]) {
   #endif
 
 
-////////////////// Hycom variables ///////////////////////////////
+////////////////// Model variables ///////////////////////////////
+  fin = fopen(argv[4],"r");
+  if (fin == (FILE*) NULL) {
+    printf("failed to open model variable definition file %s\n",argv[4]);
+    exit(1);
+  }
+  int NX, NY;
+  char latname[900], lonname[900], areaname[900], concname[900], thickname[900];
+
+  fscanf(fin, "%d", &NX);
+  fscanf(fin, "%d", &NY);
+  fscanf(fin, "%s", latname);
+  fscanf(fin, "%s", lonname);
+  fscanf(fin, "%s", areaname);
+  fscanf(fin, "%s", concname);
+  fscanf(fin, "%s", thickname);
+  #ifdef DEBUG
+    printf("%d %d %s %s %s %s %s\n",NX, NY, latname, lonname, areaname, concname, thickname);
+    fflush(stdout);
+  #endif
+
+  grid2<float> lat(NX, NY), lon(NX, NY), tarea(NX, NY);
+  grid2<float> ice_coverage(NX, NY), ice_thickness(NX, NY);
+
+
+  x = (float*) malloc(sizeof(float)*NX*NY);
+
 
   retval = nc_open(argv[1], NC_NOWRITE, &ncid);
   if (retval != 0) {
@@ -147,51 +152,31 @@ int main(int argc, char *argv[]) {
   #endif
 
 // go over all variables:
-  #if defined(cice_file) || defined(benchmark)
-   retval = nc_inq_varid(ncid, "TLAT", &varid);
-  #else
-   retval = nc_inq_varid(ncid, "Latitude", &varid);
-  #endif
+   retval = nc_inq_varid(ncid, latname, &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(lat, x);
   
-  #if defined(cice_file) || defined(benchmark)
-   retval = nc_inq_varid(ncid, "TLON", &varid);
-  #else
-   retval = nc_inq_varid(ncid, "Longitude", &varid);
-  #endif
+   retval = nc_inq_varid(ncid, lonname, &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(lon, x);
 
-  #if defined(cice_file) || defined(benchmark)
-   retval = nc_inq_varid(ncid, "tarea", &varid);
-  #else
-   retval = nc_inq_varid(ncid, "tarea", &varid);
-  #endif
+   retval = nc_inq_varid(ncid, areaname, &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(tarea, x);
 
-  #if defined(cice_file) || defined(benchmark)
-   retval = nc_inq_varid(ncid, "aice_h", &varid);
-  #else
-   retval = nc_inq_varid(ncid, "ice_coverage", &varid);
-  #endif
+   retval = nc_inq_varid(ncid, concname, &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(ice_coverage, x);
   
-  #if defined(cice_file) || defined(benchmark)
-    retval = nc_inq_varid(ncid, "hi_h", &varid);
-  #else
-    retval = nc_inq_varid(ncid, "ice_thickness", &varid);
-  #endif
+    retval = nc_inq_varid(ncid, thickname, &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x); 
   if (retval != 0) ERR(retval);fflush(stdout);

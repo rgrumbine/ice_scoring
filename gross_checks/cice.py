@@ -87,6 +87,7 @@ else:
   parmno = 0
   for line in fdic:
     words = line.split()
+    #print(len(words), words)
     parm = words[0]
     tmp = bounders.bounds(param=parm)
     try: 
@@ -108,8 +109,8 @@ else:
     parmno += 1
 
 #exit codes are bounded, while error counts are not
-print("errcount = ",errcount)
 if (errcount == 0):
   exit(0)
 else:
+  print("errcount = ",errcount)
   exit(1)

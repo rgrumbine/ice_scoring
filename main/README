@@ -32,9 +32,7 @@ Ice model scoring:
       -- will tell you whether you're on a known platform with necessary directories
       -- otherwise, you'll need to add a machine to machines = { ... }, 
       --    and the corresponding paths for at least one of ims, ncep, or nsidc data 
-    You'll need to edit the fname in functions fcst_name, get_fcst in file 
-       verf_files.py to accord with your naming convention for ice model output files.
-    Ditto file setup_verf_ice.py, function score_nsidc
+
     Edit all.csh for your paths:
        expt      -- tag for the experiment name
        FCST_BASE -- where the forecast output is
@@ -54,6 +52,10 @@ Ice model scoring:
            ... or whatever is currently the case. The next element should 
        be files named as you edited verf_files.py and setup_verf_ice.py 
        to reference. 
+
+    You'll need to edit the fname in functions fcst_name, get_fcst in file 
+       verf_files.py to accord with your naming convention for ice model output files.
+    Ditto file setup_verf_ice.py, function score_nsidc
 
     ... and, finally, run all.csh
     This will carry out the evaluations and put the results in subdirectories

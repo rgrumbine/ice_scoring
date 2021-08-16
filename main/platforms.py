@@ -2,6 +2,8 @@ import os
 import sys
 import datetime
 
+#run with argument 'trial' to get output for success
+
 #------------------------------------------------------------------
 exbase = os.environ['EXDIR']
 exdir  = exbase+"/exec/"
@@ -113,9 +115,10 @@ if (not nsidcverf and not ncepverf and not imsverf):
 #  fixdir (location of executables, needs EXDIR environment variable)
 #  imsdir, ncepdir, nsidcdir, fixdir (entries to dictionary) 
 
-print("Evaluation programs and scripts look ok to run on ",machine)
-print("ims dir   = ", dirs['imsdir'])
-print("nsidc dir = ", dirs['nsidcdir'])
-print("ncep dir  = ", dirs['ncepdir'])
-print("reference fixed files directory = ",dirs['fixdir'])
-exit(0)
+if (len(sys.argv) >  1) :
+  if (sys.argv[1] == "trial"):
+    print("Evaluation programs and scripts look ok to run on ",machine)
+    print("ims dir   = ", dirs['imsdir'], imsverf)
+    print("nsidc dir = ", dirs['nsidcdir'], nsidcverf)
+    print("ncep dir  = ", dirs['ncepdir'], ncepverf)
+    print("reference fixed files directory = ",dirs['fixdir'])

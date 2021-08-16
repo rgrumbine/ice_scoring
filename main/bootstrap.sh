@@ -18,14 +18,14 @@ fi
 
 #Check the directory / data environment for needed directories
 export EXDIR=`pwd`
-python3 ${BASE}/main/platforms.py
+python3 ${BASE}/main/platforms.py trial
 if [ $? -ne 0 ] ; then
   echo you need to correct the machines list and directory references in platforms.py
   exit 1
 fi
 
 #Start copying elements over to carry out the evaluation
-for f in contingency_plots.py 
+for f in contingency_plots.py runtime.def 
 do
   cp -p ${BASE}/concentration/$f .
   if [ ! -f $f ] ; then
@@ -34,7 +34,7 @@ do
   fi
 done
 
-for f in README verf_files.py setup_verf_ice.py platforms.py all.csh
+for f in README verf_files.py setup_verf_ice.py platforms.py all.csh year.csh
 do
   cp -p ${BASE}/main/$f .
   if [ ! -f $f ] ; then
@@ -82,6 +82,9 @@ do
     exit 4
   fi
 done
+if [ -d exec ] ; then
+  cp -p runtime.def exec
+fi
 
 if [ $? -eq 0 ] ; then
   echo successfully created the evaluation directory and stocked it with control files,

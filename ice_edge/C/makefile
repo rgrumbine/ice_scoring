@@ -10,7 +10,7 @@ opts = -Wall -O2 -DLINUX -I ../../formats
 #for theia:
 NETCDF_INCLUDE=-I $(NETCDF)/include
 
-all: cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
+all: cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
 
 cscore_edge : score_edge.C
 	g++ $(opts) score_edge.C -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o cscore_edge
@@ -23,6 +23,9 @@ find_edge_nsidc_south : find_edge_nsidc.C
 
 find_edge_nrl : find_edge_nrl.C
 	g++ $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+
+find_edge_consortium : find_edge_consortium.C
+	g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
 
 find_edge_cice : find_edge_cice.C
 	g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)

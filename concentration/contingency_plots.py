@@ -47,10 +47,10 @@ valid_date = start_date
 for i in range (0,lead):
   valid_date = valid_date + dt 
   fname = ("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
-  #print("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
+  print(fname,flush=True)
   flead = (valid_date - start_date).days
   if (not os.path.exists(fname)):
-    print("contingency plot missing ",valid_date.strftime("%Y%m%d"))
+    print("contingency plot missing ",valid_date.strftime("%Y%m%d"), fname, flush=True)
   else:    #at each forecast lead, plot the curve of threat vs. cutoff
     #print("can plot forcast lead ",flead," for ",valid_date.strftime("%Y%m%d"))
     with (open(fname)) as csvfile:

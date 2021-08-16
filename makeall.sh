@@ -54,7 +54,7 @@ fi
 #ice_edge : 
 cd ${base}/ice_edge/C
 make
-mv cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south ${EXDIR}
+mv cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south ${EXDIR}
 
 #integrals:
 cd ${base}/integral
@@ -64,10 +64,10 @@ mv solo_ncep solo_ims solo_nsidc binary ${EXDIR}
 #Concentration:
 cd ${base}/concentration
 make
-mv score_diag score_nsidc score_cfsv2 persistence nsidc_nsidc ${EXDIR}
+mv generic score_diag score_nsidc score_cfsv2 persistence nsidc_nsidc ${EXDIR}
 
 
 #Check condition of python3 and libraries
 cd ${base}
 echo python3 is in `which python3`
-python3 checkenv.py
+python3 main/checkenv.py
