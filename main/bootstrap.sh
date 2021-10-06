@@ -5,7 +5,7 @@
 # 25 February 2020
 
 #hera export BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
-export BASE=${BASE:-/ncrc/home1/Robert.Grumbine/rgdev/CICE/ice_scoring/}
+export BASE=${BASE:-$HOME/rgdev/CICE/ice_scoring/}
 echo BASE = $BASE
 
 #Check the python environment -- assumes that path already references an appropriate interpreter 
@@ -13,6 +13,9 @@ python3 ${BASE}/main/checkenv.py
 if [ $? -ne 0 ] ; then
   echo you are missing necessary elements of the python environment.
   echo please install the needed modules and retry
+  echo    If on hera, use a recent anaconda distribution, such as obtained by
+  echo      module use -a /contrib/anaconda/modulefiles
+  echo      module load anaconda/latest
   exit 1
 fi
 
