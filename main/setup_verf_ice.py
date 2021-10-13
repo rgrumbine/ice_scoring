@@ -78,20 +78,22 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
 
-  #UFS style name:
-  valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+  #isolate forecast file name references to fcst_name:
+  valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+  #UFS style:
+  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
   #CICE consortium name:
-  valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
+  #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
-  if (not os.path.exists(valid_fname) ):
-    valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.nc'
-    if (not os.path.exists(valid_fname)):
-      print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d") )
-      retcode = int(1)
-      return retcode
+  if (not os.path.exists(valid_fname)):
+    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d") )
+    retcode = int(1)
+    return retcode
   
-  if (os.path.exists(exdir + 'score_nsidc')):
-    print("Have the fcst vs. nsidc scoring executable")
+  exname = 'generic'
+  exname = 'score_nsidc'
+  if (os.path.exists(exdir + exname)):
+    #print("Have the fcst vs. nsidc scoring executable")
     sys.stdout.flush()
     pole="north"
     ptag="n"
@@ -99,7 +101,8 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
     #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
     obsname = nsidc_name(pole, obsdate, nsidcdir)
 
-    cmd = (exdir+"score_nsidc "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr" + " > score."+
+    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " + 
+                exdir+"runtime.def "+ " > score."+
                 ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
     x = os.system(cmd)
     if (x != 0):
@@ -111,7 +114,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 #    obsname = nsidc_name(pole, obsdate, nsidcdir)
 
   else:
-    print("No score_nsidc executable")
+    print("No executable to score vs. nsidc")
     sys.stdout.flush()
     retcode += 1
 
@@ -125,13 +128,13 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
 #the +1 is for the command name itself, which is sys.argv[0]
 if (len(sys.argv) == 3+1):
-  print("Initial date and verification time", flush=True)
+  #print("Initial date and verification time", flush=True)
   sys.stdout.flush()
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
   fcst_dir     = sys.argv[3]
   single = True
-  print(initial_date, " ", valid_date, flush=True)
+   #rint(initial_date, " ", valid_date, flush=True)
   sys.stdout.flush()
 elif (len(sys.argv) == 4+1):
   initial_date = parse_8digits(sys.argv[1])
@@ -164,13 +167,13 @@ if (single):
   if (ncepverf):
     x = get_ncep(initial_date, valid_date, dirs['ncepdir'])
     if (x != 0):
-      print("could not get file for ncep verification, turning off ncepverf\n")
+      print("could not get file for ncep verification, turning off ncepverf\n",flush=True)
       ncepverf = False
 #NSIDC -- netcdf
   if (nsidcverf):
     x = get_nsidc(initial_date, valid_date, dirs['nsidcdir'])
     if (x != 0):
-      print("could not get file for nsidc verification, turning off nsidcverf\n")
+      print("could not get file for nsidc verification, turning off nsidcverf\n",flush=True)
       nsidcverf = False
 
   x = get_obs(initial_date, valid_date,
@@ -188,7 +191,7 @@ if (single):
     print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
     fcst = False
   else:
-    print("have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
+    #print("have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
     fcst = True
 
   print(flush=True)
@@ -215,12 +218,16 @@ if (single):
     if(ncepverf): edge_score("nsidc_north", valid_date, "ncep", valid_date)
   if (fcst):
     #solo_score("fcst", valid_date) -- to be developed
+
     fcst_edge(initial_date.strftime("%Y%m%d"), valid_date.strftime("%Y%m%d"), fcst_dir)
     if (imsverf):   edge_score("fcst", valid_date, "ims", valid_date)
     if (ncepverf):  edge_score("fcst", valid_date, "ncep", valid_date)
     if (nsidcverf): edge_score("fcst", valid_date, "nsidc_north", valid_date)
+
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
+    else:
+      print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
     
 
     print("\n")

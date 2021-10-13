@@ -32,7 +32,7 @@ def get_NNN(initial_date, NNNdir, NNN):
       if (x != 0): retcode += x
 
   if (not os.path.exists(fname)):
-    print("cannot make "+NNN+" file ",fname)
+    print("cannot make "+NNN+" file ",fname, flush=True)
     retcode += 1
 
   return retcode
@@ -72,7 +72,7 @@ def get_cfsv2(initial_date, valid_date, NNNdir, NNN):
       if (x != 0): retcode += x
 
   if (not os.path.exists(fname)):
-    print("cannot make "+NNN+" file ",fname)
+    print("cannot make "+NNN+" file ",fname, flush=True)
     retcode += 1
 
   return retcode
@@ -83,7 +83,7 @@ def cfsv2_edge(initial, valid, NNN):
   fname = NNN+'.'+str(valid)
   if (not os.path.exists(NNN+'_edge.' + str(initial))):
     cmd = exdir + 'find_edge_'+NNN +" "+ fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > '+NNN+'_edge.' + str(valid)
-    print("cmd for cfs edge = ",cmd)
+    #print("cmd for cfs edge = ",cmd, flush=True)
     os.system(cmd)
     x = os.system(cmd)
     if (x != 0): retcode += x
@@ -114,7 +114,7 @@ def get_ims(initial_date, imsdir):
       if (x != 0): retcode += x
 
   if (not os.path.exists(fname)):
-    print("cannot make ims file ",fname)
+    print("cannot make ims file ",fname, flush=True)
     retcode += 1
 
   return retcode
@@ -159,7 +159,7 @@ def get_ncep(initial_date, valid_date, ncepdir):
         x = os.system(cmd)
         if (x != 0): retcode += x
     else:
-      print("cannot get_ncep file ",ncep_file)
+      print("cannot get_ncep file ",ncep_file, flush=True)
       retcode += 1
     tag += dt
 
@@ -167,27 +167,38 @@ def get_ncep(initial_date, valid_date, ncepdir):
 
 #------------------------------------------------------------------
 def nsidc_name(pole, date, nsidcdir):
+# date begin_f13
+# date begin_f17  -- note that the value here is not accurate. RG
+  if (date < datetime.date(2010,1,1)):
+    instrument = "f13"
+  else:
+    instrument = "f17"
+
   retcode = int(0)
   if (not os.path.exists(nsidcdir)):
-    print("no such nsidc path as ",nsidcdir)
+    print("no such nsidc path as ",nsidcdir, flush=True)
     retcode = 1
     return retcode
 
   if (not ((pole == 'north') or (pole == 'south')) ):
-    print("invalid pole passed -- ",pole)
+    print("invalid pole passed -- ",pole, flush=True)
     retcode = 1
     return retcode
 
   ptag=pole[0]
   valid = int(date.strftime("%Y%m%d"))
-  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+  #n.b.: need to manage f13 vs. f17 vs ...
+  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
+
   if (os.path.exists(fname)):
     return fname
   else:
-    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_f17_'+str(valid)+'_v03r01.nc'
+    fname_old = fname
+    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
     if (os.path.exists(fname)):
       return fname
     else:
+      print("nsidc_name: could not open ",fname_old, fname, flush=True)
       retcode = 1
       return retcode
 
@@ -195,7 +206,7 @@ def nsidc_name(pole, date, nsidcdir):
 def get_nsidc(initial_date, valid_date, nsidcdir):
   retcode = int(0)
   if (not os.path.exists(nsidcdir)):
-    print("no such nsidc path as ",nsidcdir)
+    print("no such nsidc path as ",nsidcdir, flush=True)
     retcode = 1
     return retcode
 
@@ -206,22 +217,22 @@ def get_nsidc(initial_date, valid_date, nsidcdir):
 
   fname = nsidc_name('north', initial_date, nsidcdir) 
   if (not os.path.exists(fname)):
-    print('do not have ',fname,' ',str(initial) )
+    print('do not have ',fname,' ',str(initial), flush=True )
     return 1
 
   fname = nsidc_name('north', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname,' ',str(valid) )
+    print('do not have ',fname,' ',str(valid), flush=True )
     return 1
 
   fname = nsidc_name('south', initial_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname, ' ',str(initial) )
+    print('do not have ',fname, ' ',str(initial), flush=True )
     return 1
 
   fname = nsidc_name('south', valid_date, nsidcdir)
   if (not os.path.exists(fname)):
-    print('do not have ',fname, ' ',str(valid) )
+    print('do not have ',fname, ' ',str(valid), flush=True )
     return 1
 
   return retcode
@@ -231,11 +242,15 @@ def nsidc_edge(initial, toler, nsidcdir):
   yearinitial = int(int(initial)/10000)
   initial_date = parse_8digits(initial)
 
-  fout = 'nsidc_north_edge.'+str(initial)
   fin = nsidc_name('north',initial_date, nsidcdir)
+  #debug print("nsidc edge fin name = ",fin, flush=True)
+
+  fout = 'nsidc_north_edge.'+str(initial)
+  #debug print(fin, toler, fout, flush=True)
+
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
-    #print('north command: ',cmd  )
+    #debug print('north command: ',cmd , flush=True )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
@@ -243,30 +258,42 @@ def nsidc_edge(initial, toler, nsidcdir):
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
-    #print('south command: ',cmd  )
+    #debug print('south command: ',cmd, flush=True  )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
   return retcode
 
 #-----------------------------------------------------------------===
-#-----------------------------------------------------------------===
 def fcst_name(valid, initial, fcst_dir):
+#n.b.: assumes that valid and initial are same type
+  if (type(valid) == int):
+    print("valid is int ")
+    tvalid = str(valid)
+    tinitial = str(initial)
+  elif (type(valid) == str):
+    print("valid is str")
+    tvalid = valid
+    tinitial = initial
+  else:
+    print("assume valid is datetime")
+    tvalid = valid.strftime("%Y%m%d")
+    tinitial = initial.strftime("%Y%m%d")
+
   #Some UFS prototype names:
   #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
   #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #fname = fcst_dir+'/ice'+str(valid)+'.01.'+str(initial)+'00.subset.nc'
+  fname = fcst_dir + '/ice' + tvalid + '.01.' + tinitial + '00.subset.nc'
 
   #CICE consortium default
-  fname = fcst_dir+'iceh.'+valid.strftime("%Y")+'-'+valid.strftime("%m")+'-'+valid.strftime("%d")+".nc"
+  #fdate = parse_8digits(valid)
+  #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
   if (not os.path.exists(fname) ):
-    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
-    if (not os.path.exists(fname) ):
-      print("could not find forecast for "+fcst_dir,str(valid),str(initial))
-      return 1
-    else:
-      return fname
+    print("fcst_name: could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
+    print(fname)
+    return 1
   else:
     return fname
 
@@ -274,28 +301,37 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
-
+  print('get fcst ',initial, valid)
+  fname = fcst_name(valid, initial, fcst_dir)
   #UFS prototype name
-  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.subset.nc'
 
   #CICE consortium default
-  fname = fcst_dir+'iceh.'+valid.strftime("%Y")+'-'+valid.strftime("%m")+'-'+valid.strftime("%d")+".nc"
+  #fname = fcst_dir+'iceh.'+valid_date.strftime("%Y")+'-'+valid_date.strftime("%m")+'-'+valid_date.strftime("%d")+".nc"
 
-  if (not os.path.exists(fname) ):
-    fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+  #if (not os.path.exists(fname) ):
+  #  print("Do not have forecast file ",fname," for ",initial, valid, flush=True)
+  #  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
+  #  print("trying ",fname)
 
   if (not os.path.exists(fname)):
     retcode += 1
-    print("Do not have forecast file for ",initial, valid)
+    print("Do not have forecast file ",fname," for ",initial, valid, flush=True)
   return retcode
 
 
+#pass 8digit dates:
 def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
-  #fname = fcst_dir+'/ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
+  
   if (not os.path.exists('fcst_edge.' + str(valid))):
     fname = fcst_name(valid, initial, fcst_dir)
+    #RG: want something cleaner for selecting model format/version
+    #UFS
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
+    #CICE
+    #cmd = exdir + 'find_edge_consortium '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
     x = os.system(cmd)
     if (x != 0): retcode += x
   return retcode

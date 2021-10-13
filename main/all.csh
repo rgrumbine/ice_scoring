@@ -1,8 +1,8 @@
 #!/bin/csh -f
-#SBATCH -J p6_11
-#SBATCH -e p6_11.err
-#SBATCH -o p6_11.out
-#SBATCH -t 7:55:00
+#SBATCH -J p7_12
+#SBATCH -e p7_12.err
+#SBATCH -o p7_12.out
+#SBATCH -t 2:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
 #SBATCH -N 1
@@ -17,39 +17,40 @@ setenv USER $user
 #  tbd
 
 #Hera:
-#source /etc/profile.d/modules.csh
-#module load intel/2020.2
-#module load impi/2020.2
-#module load netcdf/4.7.0
-#module load wgrib2/2.0.8
-#
-#setenv mmablib /scratch2/NCEPDEV/climate/Robert.Grumbine/mmablib/
-#
-#module use -a /contrib/anaconda/modulefiles
-#module load anaconda/latest 
-#setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
-#setenv MPLCONFIGDIR    /scratch2/NCEPDEV/climate/${USER}/runtime
+source /etc/profile.d/modules.csh
+module load intel/2020.2
+module load impi/2020.2
+module load netcdf/4.7.0
+module load wgrib2/2.0.8
 
-setenv expt p6.0
-setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p6/SeaIce/ 
+setenv mmablib /scratch2/NCEPDEV/climate/rgdev/mmablib/
+#
+module use -a /contrib/anaconda/modulefiles
+module load anaconda/latest 
+setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
+setenv MPLCONFIGDIR    /scratch2/NCEPDEV/climate/${USER}/runtime
+
+setenv expt p7.0
 setenv EXDIR     /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
 setenv RUNBASE   /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.verf
 
-#Gaea
-setenv USER $LOGNAME
-setenv PATH /ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
-setenv XDG_RUNTIME_DIR /ncrc/home1/${USER}/scratch/runtime
-setenv MPLCONFIGDIR    /ncrc/home1/${USER}/scratch/runtime
+setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p7/SeaIce/ 
 
-module load intel
-module load cray-netcdf
-module load wgrib2
-setenv mmablib /ncrc/home1/Robert.Grumbine/rgdev/CICE/mmablib/
-
-setenv expt gaea_intel_smoke_gx1_2x1_gx1_run_std.beta2
-setenv FCST_BASE /ncrc/home1/${USER}/scratch/CICE_RUNS/${expt}/history/
-setenv RUNBASE   /ncrc/home1/${USER}/scratch/${USER}/evaluations/${expt}.verf
-setenv EXDIR     /ncrc/home1/${USER}/rgdev/evaluations/${expt}.verf
+##Gaea
+#setenv USER $LOGNAME
+#setenv PATH /ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
+#setenv XDG_RUNTIME_DIR /ncrc/home1/${USER}/scratch/runtime
+#setenv MPLCONFIGDIR    /ncrc/home1/${USER}/scratch/runtime
+#
+#module load intel
+#module load cray-netcdf
+#module load wgrib2
+#setenv mmablib /ncrc/home1/Robert.Grumbine/rgdev/CICE/mmablib/
+#
+#setenv expt gaea_intel_smoke_gx1_2x1_gx1_run_std.beta2
+#setenv FCST_BASE /ncrc/home1/${USER}/scratch/CICE_RUNS/${expt}/history/
+#setenv RUNBASE   /ncrc/home1/${USER}/scratch/${USER}/evaluations/${expt}.verf
+#setenv EXDIR     /ncrc/home1/${USER}/rgdev/evaluations/${expt}.verf
 
 #All systems:
 module list
@@ -83,7 +84,7 @@ setenv x `date`
 echo start of loop at dtime $x
 setenv fcst_len 35
 
-foreach yy ( 2011 )
+foreach yy ( 2012 )
   setenv RUNDIR ${RUNBASE}/$yy
   if ( ! -d $RUNDIR ) then
     mkdir -p $RUNDIR
