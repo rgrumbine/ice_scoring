@@ -167,9 +167,11 @@ def get_ncep(initial_date, valid_date, ncepdir):
 
 #------------------------------------------------------------------
 def nsidc_name(pole, date, nsidcdir):
-# date begin_f13
-# date begin_f17  -- note that the value here is not accurate. RG
-  if (date < datetime.date(2010,1,1)):
+# https://nsidc.org/ancillary-pages/smmr-ssmi-ssmis-sensors
+# date end_f11: 1995,09,30
+# date end_f13: 2008,12,31
+# date begin_f17: 2006,11,04 
+  if (date <= datetime.date(2008,12,31)):
     instrument = "f13"
   else:
     instrument = "f17"
@@ -268,26 +270,26 @@ def nsidc_edge(initial, toler, nsidcdir):
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
   if (type(valid) == int):
-    print("valid is int ")
+    #debug print("valid is int ")
     tvalid = str(valid)
     tinitial = str(initial)
   elif (type(valid) == str):
-    print("valid is str")
+    #debug print("valid is str")
     tvalid = valid
     tinitial = initial
   else:
-    print("assume valid is datetime")
+    #debug print("assume valid is datetime")
     tvalid = valid.strftime("%Y%m%d")
     tinitial = initial.strftime("%Y%m%d")
 
   #Some UFS prototype names:
-  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.nc'
-  #fname = fcst_dir+'/ice'+str(valid)+'.01.'+str(initial)+'00.subset.nc'
-  fname = fcst_dir + '/ice' + tvalid + '.01.' + tinitial + '00.subset.nc'
+  #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
+  #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.nc'
+  #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
+   fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
 
   #CICE consortium default
-  #fdate = parse_8digits(valid)
+  #fdate = parse_8digits(int(tvalid))
   #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
   if (not os.path.exists(fname) ):
@@ -297,24 +299,14 @@ def fcst_name(valid, initial, fcst_dir):
   else:
     return fname
 
+#-----------------------------------------------------------------===
 def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
-  print('get fcst ',initial, valid)
+  #debug print('get fcst ',initial, valid)
+
   fname = fcst_name(valid, initial, fcst_dir)
-  #UFS prototype name
-  #fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.subset.nc'
-  #fname = fcst_dir+'ice'+str(valid)+'.01.'+str(initial)+'00.subset.nc'
-
-  #CICE consortium default
-  #fname = fcst_dir+'iceh.'+valid_date.strftime("%Y")+'-'+valid_date.strftime("%m")+'-'+valid_date.strftime("%d")+".nc"
-
-  #if (not os.path.exists(fname) ):
-  #  print("Do not have forecast file ",fname," for ",initial, valid, flush=True)
-  #  fname = fcst_dir+'ice'+str(valid)+'00.01.'+str(initial)+'00.nc'
-  #  print("trying ",fname)
-
   if (not os.path.exists(fname)):
     retcode += 1
     print("Do not have forecast file ",fname," for ",initial, valid, flush=True)
@@ -327,7 +319,7 @@ def fcst_edge(initial, valid, fcst_dir):
   
   if (not os.path.exists('fcst_edge.' + str(valid))):
     fname = fcst_name(valid, initial, fcst_dir)
-    #RG: want something cleaner for selecting model format/version
+    #RG: want something cleaner for selecting model format/version!
     #UFS
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
     #CICE

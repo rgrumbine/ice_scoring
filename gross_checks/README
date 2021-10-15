@@ -12,7 +12,11 @@ delta_ice.py       -- examine differences between two ice runs
 Preface:
 On WCOSS: module load python/3.6.3
 On Orion: module load python/3.7.5
-  The hera python modules are not sufficient, so you'll need:
+
+The hera default python modules are not sufficient, so you'll need:
+  module use -a /contrib/anaconda/modulefiles
+  module load anaconda/latest
+
 On Hera you might also need to add:
   setenv TERMINFO /usr/share/terminfo
       to your .cshrc

@@ -10,12 +10,20 @@
 #SBATCH --mail-user robert.grumbine@noaa.gov
 
 # On Hera the python modules are too incomplete, must use personal copy
-setenv PATH ${PATH}:/home/Robert.Grumbine/clim_data/anaconda3/bin
+module use -a /contrib/anaconda/modulefiles
+module load anaconda/latest
 
-# 
 #cd /home/Robert.Grumbine/rgdev/mmablib/ice_scoring/gross_checks
-cd $WORKING_DIRECTORY
+cd /home/Robert.Grumbine/rgdev/ice_scoring/gross_checks
+#cd $WORKING_DIRECTORY
 
-time python3 -m cProfile -o stats.out wholesale_ice.py data/ice2012020200.01.2012010100.subset.nc icesubset.vhigh redone > gross.results
+setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p7/SeaIce/
+
+time python3 -m cProfile -o stats.out wholesale_ice.py $FCST_BASE \
+                          ctl/icesubset.extremes redone > gross.results
+
+#time python3 -m cProfile -o stats.out gross_ice.py  $FCST_BASE/$tag/ice20120202.01.${tag}00.subset.nc \
+#                            ctl/icesubset.vhigh redone > gross.results.$tag 
+
 python3 statview.py stats.out > stats.summary
 

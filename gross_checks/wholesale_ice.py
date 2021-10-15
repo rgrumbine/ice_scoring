@@ -22,22 +22,23 @@ import bounders
 if (not os.path.exists(sys.argv[1]) ):
   print("failure to find ",sys.argv[1])
   exit(1)
-else:
-  model = netCDF4.Dataset(sys.argv[1], 'r')
-  nx = len(model.dimensions['ni'])
-  ny = len(model.dimensions['nj'])
-  tlons = model.variables["TLON"][:,:]
-  tlats = model.variables["TLAT"][:,:]
-  try:
-    tmask = model.variables["tmask"][:,:]
-  except :
-    tmask = np.zeros((ny, nx))
-    tmask = 1.
-  try:
-    tarea = model.variables["tarea"][:,:]
-  except : 
-    tarea = np.zeros((ny, nx))
-    tarea = 1.
+
+model = netCDF4.Dataset(sys.argv[1]+"/20120101/ice20120202.01.2012010100.subset.nc", 'r')
+#                                     "20120101/ice20120202.01.2012010100.subset.nc",'r')
+nx = len(model.dimensions['ni'])
+ny = len(model.dimensions['nj'])
+tlons = model.variables["TLON"][:,:]
+tlats = model.variables["TLAT"][:,:]
+try:
+  tmask = model.variables["tmask"][:,:]
+except :
+  tmask = np.zeros((ny, nx))
+  tmask = 1.
+try:
+  tarea = model.variables["tarea"][:,:]
+except : 
+  tarea = np.zeros((ny, nx))
+  tarea = 1.
 
 tmp    = bounders.bounds()
 tbound = tmp.bootstrap(sys.argv[2], sys.argv[3], model)
@@ -58,13 +59,17 @@ for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
       tag = from_date.strftime("%Y%m%d")
 
       #ice 
-      base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/ufs_p6/gfs."+from_date.strftime("%Y%m%d")+"/00/"
+      #base="/scratch2/NCEPDEV/climate/Robert.Grumbine/modelout/ufs_p6/gfs."+from_date.strftime("%Y%m%d")+"/00/"
+      #base=system(basename sys.argv[1])
+      base = sys.argv[1] + "/" + from_date.strftime("%Y%m%d") + "/"
+
+      print("base = ",base,flush=True)
       while ( (valid_date - from_date) <= length):
         fout  = open("ice."+tag,"w")
         fout_global  = open("ice.global."+tag,"w")
 
-        #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
-        fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
+        fname=base+"/ice"+valid_date.strftime("%Y%m%d")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
+       #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
         if (not os.path.exists(fname)):
           print("couldn't get ",fname, file = fout)
           valid_date += dt
