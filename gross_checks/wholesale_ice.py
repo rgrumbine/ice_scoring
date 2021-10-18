@@ -64,9 +64,9 @@ for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
       base = sys.argv[1] + "/" + from_date.strftime("%Y%m%d") + "/"
 
       print("base = ",base,flush=True)
+      fout  = open("ice."+tag,"w")
+      fout_global  = open("ice.global."+tag,"w")
       while ( (valid_date - from_date) <= length):
-        fout  = open("ice."+tag,"w")
-        fout_global  = open("ice.global."+tag,"w")
 
         fname=base+"/ice"+valid_date.strftime("%Y%m%d")+".01."+from_date.strftime("%Y%m%d%H")+".subset.nc"
        #fname=base+"/ice"+valid_date.strftime("%Y%m%d%H")+".01."+from_date.strftime("%Y%m%d%H")+".nc"
@@ -82,8 +82,12 @@ for yy in (2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018):
           temporary_grid = model.variables[tbound[k].param][0,:,:]
           gfail = tbound[k].inbounds(temporary_grid, fout_global)
           if (gfail):
-            #print("calling where", flush=True)
+            #debug print("calling where", flush=True)
             tbound[k].where(temporary_grid, tlats, tlons, tmask, tarea, fout)
+          #debug else:
+            #debug print("gfail should be false: ",gfail, flush=True)
         
         valid_date += dt
+
       fout.close()
+      fout_global.close()
