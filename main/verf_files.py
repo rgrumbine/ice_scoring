@@ -171,6 +171,8 @@ def nsidc_name(pole, date, nsidcdir):
 # date end_f11: 1995,09,30
 # date end_f13: 2008,12,31
 # date begin_f17: 2006,11,04 
+
+  version = "v04r00"
   if (date <= datetime.date(2008,12,31)):
     instrument = "f13"
   else:
@@ -189,14 +191,16 @@ def nsidc_name(pole, date, nsidcdir):
 
   ptag=pole[0]
   valid = int(date.strftime("%Y%m%d"))
-  #n.b.: need to manage f13 vs. f17 vs ...
-  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
+  
+  #fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
+  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+str(valid)+'_'+instrument+'_'+version+'.nc'
 
   if (os.path.exists(fname)):
     return fname
   else:
     fname_old = fname
-    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
+    #fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
+     fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_'+version+'.nc'
     if (os.path.exists(fname)):
       return fname
     else:

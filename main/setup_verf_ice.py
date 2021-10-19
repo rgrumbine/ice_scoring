@@ -16,7 +16,7 @@ from platforms import *
 exbase=os.environ['EXDIR']
 exdir = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#debug print("exbase, exdir, fixdir = ",exbase, exdir, fixdir, flush=True)
+#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
 
 #fixed files:
 #  seaice_alldist.bin
@@ -80,6 +80,10 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
   #isolate forecast file name references to fcst_name:
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+  #UFS style:
+  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+  #CICE consortium name:
+  #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
   if (not os.path.exists(valid_fname)):
     print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d") )
@@ -89,10 +93,12 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   exname = 'generic'
   exname = 'score_nsidc'
   if (os.path.exists(exdir + exname)):
-    #debug print("Have the fcst vs. nsidc scoring executable", flush=True)
+    #print("Have the fcst vs. nsidc scoring executable")
     sys.stdout.flush()
     pole="north"
     ptag="n"
+    #obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
+    #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
     obsname = nsidc_name(pole, obsdate, nsidcdir)
 
     cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " + 
@@ -103,10 +109,9 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
       print("command ",cmd," returned error code ",x)
       retcode += x
 
-    pole="south"
-    ptag="s"
-    obsname = nsidc_name(pole, obsdate, nsidcdir)
-# not currently scoring southern hemisphere
+#    pole="south"
+#    ptag="s"
+#    obsname = nsidc_name(pole, obsdate, nsidcdir)
 
   else:
     print("No executable to score vs. nsidc")

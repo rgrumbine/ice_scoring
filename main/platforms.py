@@ -56,7 +56,8 @@ if not machine:
 if (machine == 'HERA'):
   dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ims/'
   dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ice5min/'
-  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/nsidc.nc/'
+  #dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/nsidc.nc/'
+  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/G02202_V4/'
   dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/fix'
 elif (machine == 'Orion'):
   dirs['imsdir'] = '/home/rgrumbin/rgdev/verification_data/ims/'

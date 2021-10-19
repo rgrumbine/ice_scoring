@@ -1,10 +1,11 @@
 #!/bin/csh -f
-#SBATCH -J p7_12
-#SBATCH -e p7_12.err
-#SBATCH -o p7_12.out
-#SBATCH -t 2:55:00
+#SBATCH -J p7_all
+#SBATCH -e p7_all.err
+#SBATCH -o p7_all.out
+#SBATCH -t 7:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
+#  #SBATCH -A fv3-cpu
 #SBATCH -N 1
 #SBATCH --mail-type FAIL
 #SBATCH --mail-user USER@system
@@ -84,18 +85,18 @@ setenv x `date`
 echo start of loop at dtime $x
 setenv fcst_len 35
 
-foreach yy ( 2012 )
+foreach yy ( 2011 2012 2013 2014 2015 2016 2017 2018 )
   setenv RUNDIR ${RUNBASE}/$yy
   if ( ! -d $RUNDIR ) then
     mkdir -p $RUNDIR
   endif
   cd $RUNDIR
-  if ( $? -ne 0 ) then
+  if ( $? != 0 ) then
     echo could not move to rundir $RUNDIR
     exit 1
   endif
 
-  foreach mm ( 04 05 06 07 08 09 10 11 12 )
+  foreach mm ( 01 02 03 04 05 06 07 08 09 10 11 12 )
     foreach dd ( 01 15 )
       setenv tag ${yy}${mm}${dd}
       setenv initial ${yy}${mm}${dd}
@@ -108,7 +109,8 @@ foreach yy ( 2012 )
       endif
 
 #dirname
-      if ( -d ${FCST_BASE}/${initial}/6hrly ) then
+      #if ( -d ${FCST_BASE}/${initial}/6hrly ) then
+      if ( -d ${FCST_BASE}/${initial}/ ) then
         echo assessing experiment from $initial
         setenv i 0
         while ( $i < $fcst_len )
@@ -118,7 +120,8 @@ foreach yy ( 2012 )
           # -m cProfile -o pystats.$tag.$i to generate profiling 
           #   stats for later analysis. Optional
 #dirname
-          python3  $EXDIR/setup_verf_ice.py $initial $tag ${FCST_BASE}/${initial}/6hrly/ >>& $expt.$initial.$tag.out
+          #python3  $EXDIR/setup_verf_ice.py $initial $tag ${FCST_BASE}/${initial}/6hrly/ >>& $expt.$initial.$tag.out
+          python3  $EXDIR/setup_verf_ice.py $initial $tag ${FCST_BASE}/${initial}/ >>& $expt.$initial.$tag.out
           if ( -f fcst_edge.$tag ) then
             mv fcst_edge.$tag          $OUT
             mv edge.fcst.*.*.$tag      $OUT
