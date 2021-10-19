@@ -92,7 +92,8 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(obslon, xd);
 
-  retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
+  // v3: retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
+  retval = nc_inq_varid(ncid, "cdr_seaice_conc", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_uchar(ncid, varid, xb); 
   if (retval != 0) ERR(retval);fflush(stdout);
