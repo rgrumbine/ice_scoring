@@ -5,7 +5,15 @@
 # 25 February 2020
 
 #hera export BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
-export BASE=${BASE:-$HOME/rgdev/CICE/ice_scoring/}
+if [ -z $BASE ] ; then
+  echo WCOSS: BASE= /u/Robert.Grumbine/rgdev/
+  echo Hera:  BASE= /home/Robert.Grumbine/rgdev/
+  echo Orion: BASE= /u/rgrumbin/rgdev/
+  echo Gaea:  BASE= /ncrc/home1/Robert.Grumbine/rgdev/
+  echo Select one of these
+  echo "  "
+fi
+export BASE=${BASE:-$HOME/rgdev/ice_scoring/}
 echo BASE = $BASE
 
 #Check the python environment -- assumes that path already references an appropriate interpreter 
@@ -13,9 +21,9 @@ python3 ${BASE}/main/checkenv.py
 if [ $? -ne 0 ] ; then
   echo you are missing necessary elements of the python environment.
   echo please install the needed modules and retry
-  echo    If on hera, use a recent anaconda distribution, such as obtained by
-  echo      module use -a /contrib/anaconda/modulefiles
-  echo      module load anaconda/latest
+  echo "    " If on hera, use a recent anaconda distribution, such as obtained by
+  echo "    "   module use -a /contrib/anaconda/modulefiles
+  echo "    "   module load anaconda/latest
   exit 1
 fi
 
@@ -61,19 +69,8 @@ else
   echo exec directory does exist in ${BASE}/exec
 fi
 
-# tries to create fix directory link, but doesn't try hard
-ln -sf /ncrc/home1/Robert.Grumbine/rgdev/fix ${BASE}/fix
-if [ ! -d ${BASE}/fix ] ; then
-  echo You must manually create the fix directory
-  echo WCOSS: ln -sf /u/Robert.Grumbine/rgdev/fix .
-  echo Hera:  ln -sf /home/Robert.Grumbine/rgdev/fix .
-  echo Orion: ln -sf /u/rgrumbin/rgdev/fix .
-  echo Gaea:  ln -sf /ncrc/home1/Robert.Grumbine/rgdev/fix .
-  exit 3
-fi
-
 cd $EXDIR
-for d in exec fix
+for d in exec 
 do
   cp -rp ${BASE}/$d .
   if [ $? -ne 0 ] ; then
@@ -88,6 +85,19 @@ done
 if [ -d exec ] ; then
   cp -p runtime.def exec
 fi
+
+
+# tries to create fix directory link, but doesn't try hard
+cd $EXDIR
+if [ ! -d ${BASE}/fix ] ; then
+  echo You must manually create the fix directory
+  echo WCOSS: ln -sf /u/Robert.Grumbine/rgdev/fix .
+  echo Hera:  ln -sf /home/Robert.Grumbine/rgdev/fix .
+  echo Orion: ln -sf /u/rgrumbin/rgdev/fix .
+  echo Gaea:  ln -sf /ncrc/home1/Robert.Grumbine/rgdev/fix .
+  exit 3
+fi
+ln -sf $BASE/../fix .
 
 if [ $? -eq 0 ] ; then
   echo successfully created the evaluation directory and stocked it with control files,

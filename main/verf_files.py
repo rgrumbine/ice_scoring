@@ -193,14 +193,14 @@ def nsidc_name(pole, date, nsidcdir):
   valid = int(date.strftime("%Y%m%d"))
   
   #fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
-  fname = nsidcdir + pole + '/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+str(valid)+'_'+instrument+'_'+version+'.nc'
+  fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+str(valid)+'_'+instrument+'_'+version+'.nc'
 
   if (os.path.exists(fname)):
     return fname
   else:
     fname_old = fname
     #fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_v03r01.nc'
-     fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_'+version+'.nc'
+    fname = nsidcdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_'+version+'.nc'
     if (os.path.exists(fname)):
       return fname
     else:
@@ -290,7 +290,7 @@ def fcst_name(valid, initial, fcst_dir):
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
-   fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
+  fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
 
   #CICE consortium default
   #fdate = parse_8digits(int(tvalid))

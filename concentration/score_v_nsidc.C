@@ -80,6 +80,7 @@ int main(int argc, char *argv[]) {
   retval = nc_open(argv[2], NC_NOWRITE, &ncid);
   if (retval != 0) ERR(retval);
 
+  // V4 doesn't save latitude or longitude. It is map projection, polar stereo, Hughes 1980 ellipsoid
   retval = nc_inq_varid(ncid, "latitude", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_double(ncid, varid, xd); 
