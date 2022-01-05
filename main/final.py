@@ -11,13 +11,17 @@ import matplotlib.pyplot as plt
 
 matplotlib.use('Agg') #for batch mode
 
-lead = 35
+lead = 34
 fcsts = 24
 
-d1='p3.1.figs/'
-d2='p5.0.figs/'
-d3='p6.0.figs/'
-d4='persistence.figs/'
+d1='00/'
+l1="0.00"
+d2='15/'
+l2="0.15"
+d3='50/'
+l3="0.50"
+d4='80/'
+l4="0.80"
 
 leads = np.zeros((lead))
 mean1 = np.zeros((lead))
@@ -150,10 +154,10 @@ for mm in range (1,13):
       ax.set(title = "Northern Hemisphere Threat Scores")
       plt.ylim(0.65,0.95)
 
-      ax.plot(leads, mean1, color="red", label = "UFS_p3.1")
-      ax.plot(leads, mean2, color="blue", label = "UFS_p5.0")
-      ax.plot(leads, mean3, color="green", label = "UFS_p6.0")
-      ax.plot(leads, mean4, color="black", label = "Persistence")
+      ax.plot(leads, mean1, color="red", label = l1)
+      ax.plot(leads, mean2, color="blue", label = l2)
+      ax.plot(leads, mean3, color="green", label = l3)
+      ax.plot(leads, mean4, color="black", label = l4)
 
       if (dd == "01"):
         linestyle = "solid"
@@ -161,10 +165,10 @@ for mm in range (1,13):
         linestyle = "dashed"
 
       if (start_date == datetime.date(int(2018), int(1), int(1))):
-        allax.plot(dates, mean1, linestyle=linestyle, color="red", label = "UFS_p3.1")
-        allax.plot(dates, mean2, linestyle=linestyle, color="blue", label = "UFS_p5.0")
-        allax.plot(dates, mean3, linestyle=linestyle, color="green", label = "UFS_p6.0")
-        allax.plot(dates, mean4, linestyle=linestyle, color="black", label = "Persistence")
+        allax.plot(dates, mean1, linestyle=linestyle, color="red", label = l1)
+        allax.plot(dates, mean2, linestyle=linestyle, color="blue", label = l2)
+        allax.plot(dates, mean3, linestyle=linestyle, color="green", label = l3)
+        allax.plot(dates, mean4, linestyle=linestyle, color="black", label = l4)
       else:
         allax.plot(dates, mean1, linestyle=linestyle, color="red")
         allax.plot(dates, mean2, linestyle=linestyle, color="blue")
