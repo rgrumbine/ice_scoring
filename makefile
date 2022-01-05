@@ -1,4 +1,7 @@
-distclean :
-	rm fix
-	rm -r exec
+clean :
 	find . -name '*.o' -exec rm {} \;
+
+distclean :
+	find . -name '*.o' -exec rm {} \;
+	rm -r exec
+	rm fix
