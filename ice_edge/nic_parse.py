@@ -30,7 +30,7 @@ class segment:
 
   def __init__(self):
     self.pts = []
-    #print("segment: ",len(self.pts))
+    #debug print("segment: ",len(self.pts), flush=True)
 
   def add(self, pt):
     self.pts.append(pt)
@@ -39,7 +39,8 @@ class segment:
   def print(self, file="stdout"):
     print("printing, kmax = ",len(self.pts))
     for k in range (0,len(self.pts)):
-      print(k,self.pts[k].lat, self.pts[k].lon)
+      #print(k,self.pts[k].lat, self.pts[k].lon)
+      print(self.pts[k].lon, self.pts[k].lat)
 
 class bundle:
 
@@ -121,4 +122,4 @@ for k in range(0,len(bund1.segments)):
   npts += len(bund1.segments[k].pts)
   
 print("found ",len(bund1.segments)," line segments, totalling ",npts," points")
-#bund1.print()
+bund1.print()

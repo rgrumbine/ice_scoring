@@ -12,39 +12,54 @@ int main(int argc, char *argv[]) {
   int i, j, nf, no;
   float lat, lon;
   global_12th<float> landdist;
+  mvector<latpt> fcst(300000), obsd(300000);
   fijpt floc;
   latpt ll;
+
+  if (argc < 5) {
+    printf("need distance to land, edge1, edge2, and land distance tolerance (km)\n");
+    fflush(stdout);
+    exit(1);
+  }
 
 // Distance to land:
   fin1 = fopen(argv[1], "r");
   landdist.binin(fin1);
   fclose(fin1);
   if (landdist.gridmax() > 1e6) landdist /= 1000.; //convert to km
-  //printf("landdist gridmax = %f\n",landdist.gridmax() ); fflush(stdout);
+  //debug printf("landdist gridmax = %f\n",landdist.gridmax() ); fflush(stdout);
   float landtoler = atof(argv[4]);
-  //printf("land toler = %f km\n",landtoler); fflush(stdout);
+  //debug printf("land toler = %f km\n",landtoler); fflush(stdout);
 
 // Model / forecast to be scoring:
-  mvector<latpt> fcst(300000), obsd(300000);
   fin1 = fopen(argv[2], "r");
+  if (fin1 == (FILE*) NULL) {
+    printf("failed to open %s\n",argv[2]);
+    exit(1);
+  }
   nf = 0;
   while (!feof(fin1) ) {
     fscanf(fin1, "%f %f\n",&lon, &lat);
     ll.lon = lon;
     ll.lat = lat;
     floc = landdist.locate(ll);
+    //debug2 printf("%f %f  %f %f  %f %f  %f\n",lon, lat, ll.lon, ll.lat, floc.i, floc.j, landdist[floc]);
     if (landdist[floc] > landtoler) {
-      //printf("%f %f\n",lon, lat);
+      //debug printf("%f %f\n",lon, lat);
       fcst[nf].lat  = lat;
       fcst[nf].lon  = lon;
       nf += 1;
     }
   }
-  //printf("nf = %d\n", nf);
+  //debug printf("nf1 = %d\n", nf);
   fclose(fin1);
 
 // Observed analysis (reference, 'truth')
   fin2 = fopen(argv[3], "r");
+  if (fin2 == (FILE*) NULL) {
+    printf("failed to open %s\n",argv[3]);
+    exit(2);
+  }
   no = 0;
   while (!feof(fin2) ) {
     fscanf(fin2, "%f %f\n",&lon, &lat);
@@ -57,11 +72,13 @@ int main(int argc, char *argv[]) {
       no += 1;
     }
   }
-  //printf("no = %d\n", no);
+  //debug printf("nobsd = %d\n", no);
   fflush(stdout);
 
   /////////////////////////////////////
   //  Begin scoring loop
+  //debug printf("beginning scoring loop\n"); fflush(stdout);
+
   float tolerance = 150., rmin, tdist;
   double sumsq    = 0.0;
   int count = 0, jmin;
