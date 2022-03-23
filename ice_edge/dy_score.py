@@ -21,16 +21,16 @@ dt    = day*int(sys.argv[2])
 for i in range(0,3*365+31):
   fdate = start + dt
 
-  sname = "s."+start.strftime("%Y%j")+".beta"
-  fname = "s."+fdate.strftime("%Y%j")+".beta"
+  sname = "cleaned/s."+start.strftime("%Y%j")+".beta"
+  fname = "cleaned/s."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
     #debug print("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
     os.system("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
   else:
     print("missing at least one of ",sname, fname)
 
-  sname = "n."+start.strftime("%Y%j")+".beta"
-  fname = "n."+fdate.strftime("%Y%j")+".beta"
+  sname = "cleaned/n."+start.strftime("%Y%j")+".beta"
+  fname = "cleaned/n."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
     #debug print("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
     os.system("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )

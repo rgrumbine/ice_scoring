@@ -26,6 +26,33 @@ class point:
     self.lat = lat
     self.lon = lon
 
+#----------------------- for mapping --------------------------
+class constants:
+  rpd    = pi/180.
+  kmtonm = 1./1.852
+
+def rearth(lat):
+  return (6378.137 - 21.385*sin(lat*constants.rpd) )
+
+#haversine arcdis
+#  http://www.movable-type.co.uk/scripts/gis-faq-5.1.html
+#assumes lat lon in degrees, distance in km
+def harcdis(pt1, pt2):
+
+  dlon = pt2.lon - pt1.lon
+  dlat = pt2.lat - pt1.lat
+  mlat = (pt1.lat + pt2.lat)/2.
+
+  a = sin(dlat*constants.rpd/2)**2 + cos(pt1.lat*constants.rpd)*cos(pt2.lat*constants.rpd)*sin(dlon*constants.rpd/2)**2
+  c = 2.*asin(min(1.,sqrt(a)))
+
+# approximating ellipsoidal flattening RG WGS84
+#  return( c * (6378.137 - 21.385*sin(mlat*constants.rpd) ))
+  return c*rearth(mlat)
+
+
+#--------------------------------------------------------------
+
 class segment:
 
   def __init__(self):
@@ -33,14 +60,31 @@ class segment:
     #debug print("segment: ",len(self.pts), flush=True)
 
   def add(self, pt):
-    self.pts.append(pt)
-    #print("segment: ",len(self.pts))
+    if (len(self.pts) == 0):
+      self.pts.append(pt)
+    else:
+      tmpn = point()
+      x = harcdis(pt, self.pts[-1])
+      #x  = 6.6
+      #divide in to int(x)+1 pieces 
+      n  = int(x)+1
+      #debug print("begin",len(self.pts), " dist = ",x, n, flush=True )
+      dx = (pt.lon - self.pts[-1].lon)/n
+      dy = (pt.lat - self.pts[-1].lat)/n
+      for i in range(1,n):
+        tmpn = point(lon = self.pts[-1].lon + dx*i, lat = self.pts[-1].lat + dy*i)
+        self.pts.append(tmpn)
+      self.pts.append(pt)
+      #debug print("add else ",pt.lat, pt.lon, tmpn.lat, tmpn.lon, flush=True)
+    
+    #debug print("segment: ",len(self.pts), flush=True)
 
-  def print(self, file="stdout"):
+  def print(self, fout=sys.stdout):
     print("printing, kmax = ",len(self.pts))
     for k in range (0,len(self.pts)):
       #print(k,self.pts[k].lat, self.pts[k].lon)
-      print(self.pts[k].lon, self.pts[k].lat)
+      print(self.pts[k].lon, self.pts[k].lat, file = fout)
+
 
 class bundle:
 
