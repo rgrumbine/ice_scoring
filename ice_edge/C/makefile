@@ -28,7 +28,8 @@ find_edge_consortium : find_edge_consortium.C
 	g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
 
 find_edge_cice : find_edge_cice.C
-	g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	#g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	g++ $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
 
 find_edge_ims : find_edge_ims.C
 	g++ $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
