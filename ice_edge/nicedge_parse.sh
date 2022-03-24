@@ -1,16 +1,18 @@
 #!/bin/sh
 
+export DCOM=~/rgdev/edges
+
 yy=2019
 ddd=077
 
 while [ $yy -le 2023 ]
 do
-  if [ -f nedge_${yy}${ddd} ] ; then
-    python3 nic_parse.py nedge_${yy}${ddd} > n.${yy}${ddd}
+  if [ -f ${DCOM}/nedge_${yy}${ddd} ] ; then
+    python3 nic_parse.py ${DCOM}/nedge_${yy}${ddd} > n.${yy}${ddd}
     grep -v '[a-z]' n.${yy}${ddd} > n.${yy}${ddd}.beta
   fi
-  if [ -f sedge_${yy}${ddd} ] ; then
-    python3 nic_parse.py sedge_${yy}${ddd} > s.${yy}${ddd}
+  if [ -f ${DCOM}/sedge_${yy}${ddd} ] ; then
+    python3 nic_parse.py ${DCOM}/sedge_${yy}${ddd} > s.${yy}${ddd}
     grep -v '[a-z]' s.${yy}${ddd} > s.${yy}${ddd}.beta
   fi
 
