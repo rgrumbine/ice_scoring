@@ -26,6 +26,9 @@ class point:
     self.lat = lat
     self.lon = lon
 
+  def show(self, fout=sys.stdout):
+    print("latlon ",self.lat, self.lon, file=fout)
+
 #----------------------- for mapping --------------------------
 class constants:
   rpd    = pi/180.
@@ -63,17 +66,36 @@ class segment:
     if (len(self.pts) == 0):
       self.pts.append(pt)
     else:
-      tmpn = point()
+      #tmpn = point()
       x = harcdis(pt, self.pts[-1])
+      if (x < 1.0):
+        self.pts.append(pt)
+        return
       #x  = 6.6
       #divide in to int(x)+1 pieces 
       n  = int(x)+1
+      oldpt = self.pts[-1]
+      dlon = (pt.lon - self.pts[-1].lon)/n
+      dlat = (pt.lat - self.pts[-1].lat)/n
+      #debug2: print("self pts, len: ",oldpt.lat, oldpt.lon, len(self.pts) , "new pt: ",pt.lat, pt.lon, "harcdis: ",x, dlat, dlon, n)
       #debug print("begin",len(self.pts), " dist = ",x, n, flush=True )
-      dx = (pt.lon - self.pts[-1].lon)/n
-      dy = (pt.lat - self.pts[-1].lat)/n
       for i in range(1,n):
-        tmpn = point(lon = self.pts[-1].lon + dx*i, lat = self.pts[-1].lat + dy*i)
+        tlat = oldpt.lat + dlat*i
+        tlon = oldpt.lon + dlon*i
+        tmpn = point(lat = tlat, lon = tlon)
+        #tmpn.lat = tlat
+        #tmpn.lon = tlon
+        #debug3 print("self pts, len: ",oldpt.lat, oldpt.lon, len(self.pts) , "tmp pt: ",tlat, tlon)
+
+        if (tlat > 90.):
+          print("impossible tlat ",tlat)
+          print("self pts: ",oldpt.lat, oldpt.lon)
+          print("new pt: ",pt.lat, pt.lon)
+          print("harcdis: ",x)
+          exit(1)
+    
         self.pts.append(tmpn)
+
       self.pts.append(pt)
       #debug print("add else ",pt.lat, pt.lon, tmpn.lat, tmpn.lon, flush=True)
     
