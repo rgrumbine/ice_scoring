@@ -1,6 +1,9 @@
 #!/bin/sh
 
 export DCOM=~/rgdev/edges
+module load ips/19.0.5.281 python/3.6.3 lsf/10.1 HPSS/5.0.2.5 
+module load NetCDF/4.5.0 impi/19.0.5
+
 
 yy=2019
 ddd=077
