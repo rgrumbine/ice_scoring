@@ -14,14 +14,14 @@ Tools for model evaluation, primarily of sea ice models
     * similarly for ocean.
   * there are a number of control (ctl) files, in order of least to highest frequency of output:
     * .extremes, .vvhigh, .vhigh, .high, .moderate
-* model scoring ... isn't a quick matter due to the many user and site-specific details. See master/README
+* model scoring ... isn't a quick matter due to the many user and site-specific details. See main/README
 
 
 # Contents:
 
 ## Directly skill-related:
 
-* master -- main .csh and python scripts to carry out model verification
+* main -- main .csh and python scripts to carry out model verification
 
 * drift -- ice drift skill metrics, oriented to the old drift model (sk2) using IABP for verification
   * these are relatively well-developed as metrics, see TN NNN, MMM for discussion
@@ -47,6 +47,7 @@ Tools for model evaluation, primarily of sea ice models
   * WCOSS: /u/Robert.Grumbine/rgdev/fix
   * Hera:  /home/Robert.Grumbine/rgdev/fix
   * Orion: /home/rgrumbin/rgdev/fix
+  * WCOSS2: /u/Robert.Grumbine/rgdev/fix (name will be lower case at some point)
 
 * nulls    -- \t null forecasters
 
