@@ -13,29 +13,29 @@ NETCDF_INCLUDE=-I $(NETCDF)/include
 all: cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
 
 cscore_edge : score_edge.C
-	g++ $(opts) score_edge.C -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o cscore_edge
+	$(CC) $(opts) score_edge.C -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o cscore_edge
 
 find_edge_nsidc_north : find_edge_nsidc.C
-	g++ $(opts) -Dnsidc_north $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	$(CC) $(opts) -Dnsidc_north $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
 
 find_edge_nsidc_south : find_edge_nsidc.C
-	g++ -Dnsidc_south $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	$(CC) -Dnsidc_south $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
 
 find_edge_nrl : find_edge_nrl.C
-	g++ $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	$(CC) $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
 
 find_edge_consortium : find_edge_consortium.C
-	g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	$(CC) $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
 
 find_edge_cice : find_edge_cice.C
-	#g++ $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
-	g++ $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
+	#$(CC) $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
+	$(CC) $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -limf -lirc -o $(@)
 
 find_edge_ims : find_edge_ims.C
-	g++ $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
+	$(CC) $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
 
 find_edge_cfsv2 : find_edge_cfsv2.C
-	g++ $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
+	$(CC) $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
 
 find_edge : find_edge.C
-	g++ $(opts) -DGRIDTYPE=global_12th $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
+	$(CC) $(opts) -DGRIDTYPE=global_12th $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)

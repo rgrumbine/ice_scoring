@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#For hera:
+        module use -a /contrib/anaconda/modulefiles
+        module load anaconda/latest
