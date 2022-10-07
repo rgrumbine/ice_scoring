@@ -24,8 +24,7 @@ for i in range(0,3*365+31):
   sname = "cleaned/s."+start.strftime("%Y%j")+".beta"
   fname = "cleaned/s."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
-    #debug print("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
-    os.system("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
+    os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
   else:
     print("missing at least one of ",sname, fname)
 
@@ -33,7 +32,7 @@ for i in range(0,3*365+31):
   fname = "cleaned/n."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
     #debug print("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
-    os.system("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
+    os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
   else:
     print("missing at least one of ",sname, fname)
 

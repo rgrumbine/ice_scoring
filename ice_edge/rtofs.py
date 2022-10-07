@@ -2,20 +2,23 @@ import os
 import sys
 import datetime
 
-if (not os.path.exists("skip_hr") ):
+fixdir = os.getenv('FIXDIR')
+exdir  = os.getenv('EXDIR')
+if (not os.path.exists(fixdir+"/skip_hr") ):
   print("could not find the required skip file")
+  print("fixdir = ",fixdir)
   exit(1)
 
-start = datetime.datetime(2022,3,20)
-end   = datetime.datetime(2022,3,28)
+start = datetime.datetime(2022,9,20)
+end   = datetime.datetime(2022,10,5)
 dt    = datetime.timedelta(1)
 
 
-dbase="/u/Robert.Grumbine/noscrub/rtofs_cice/prod/rtofs."
+dbase="/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs."
 
 while (start <= end):
   dy  = start.strftime("%03j")
-  print("dy = ",dy)
+  print("dy = ",dy, flush=True)
   valid    = start
 
   valid -= dt
@@ -28,32 +31,28 @@ while (start <= end):
 
     valid_dy = valid.strftime("%03j")
 
-    crit = .01
-    #while (crit <= 0.15+1.e-4): 
     for crit in (0.01, 0.03, 0.05, 0.10, 0.15 ):
       if (os.path.exists(fname)): 
         critstring="{:3.2f}".format(crit)
-        print("critstring = ",critstring,lead, flush=True)
-        outname = "rtofs.edge."+lead+"."+start.strftime("%Y%m%d")+critstring
+        #debug print("critstring = ",critstring,lead, flush=True)
+        outname = "rtofs_edges/rtofs.edge."+lead+"."+start.strftime("%Y%m%d")+critstring
         #debug print("outname=",outname, flush=True)
         if ( not os.path.exists(outname)):
           #find the edge:
-          cmd="./find_edge_cice skip_hr "+ fname +" "+critstring+" > "+outname
+          cmd=exdir+'/find_edge_cice '+fixdir+"/skip_hr "+ fname +" "+critstring+" > "+outname
           #debug print(cmd, flush=True)
           os.system(cmd)
     
         #score it:
-        cmd = "./cscore_edge seaice_alldist.bin " + outname +" cleaned/n.2022"+valid_dy+".beta 50. > n."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
+        cmd =  exdir+'/cscore_edge '+fixdir+"/seaice_alldist.bin " + outname +" cleaned/n.2022"+valid_dy+".beta 50. > n."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
         #debug print(cmd, flush=True)
         os.system(cmd)
-        cmd = "./cscore_edge seaice_alldist.bin " + "cleaned/n.2022"+valid_dy+".beta " + outname + " 50. > nr."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
+        cmd =  exdir+'/cscore_edge '+fixdir+"/seaice_alldist.bin " + "cleaned/n.2022"+valid_dy+".beta " + outname + " 50. > nr."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
         #debug print(cmd, flush=True)
         os.system(cmd)
       else:
         print("could not find model file:",fname, flush=True)
   
-      #crit += 0.01
-
     valid += dt
   
   start += dt

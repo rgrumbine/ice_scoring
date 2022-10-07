@@ -13,7 +13,7 @@ NETCDF_INCLUDE=-I $(NETCDF)/include
 all: cscore_edge find_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
 
 cscore_edge : score_edge.C
-	g++ $(opts) score_edge.C -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o cscore_edge
+	g++ $(opts) score_edge.C -I ../../../mmablib/include ../../../mmablib/libombf_4.a -l imf -o cscore_edge
 
 find_edge_nsidc_north : find_edge_nsidc.C
 	g++ $(opts) -Dnsidc_north $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf -o $(@)
