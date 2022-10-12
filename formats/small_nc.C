@@ -4,6 +4,7 @@
  *  * non-zero status. */
 #define ERRCODE 2
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
+#define ERR2(e,v) {printf("Error: %s on variable %s\n", nc_strerror(e), v); exit(ERRCODE);}
 
 // Bringing in to mmablib from netcdf:
 void enter(grid2<float> &param, float *x) ;

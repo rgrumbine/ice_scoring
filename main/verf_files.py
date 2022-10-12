@@ -249,14 +249,17 @@ def nsidc_edge(initial, toler, nsidcdir):
   initial_date = parse_8digits(initial)
 
   fin = nsidc_name('north',initial_date, nsidcdir)
-  #debug print("nsidc edge fin name = ",fin, flush=True)
+  #debug 
+  print("nsidc edge fin name = ",fin, flush=True)
 
   fout = 'nsidc_north_edge.'+str(initial)
-  #debug print(fin, toler, fout, flush=True)
+  #debug 
+  print(fin, toler, fout, flush=True)
 
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
-    #debug print('north command: ',cmd , flush=True )
+    #debug 
+    print('north command: ',cmd , flush=True )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
@@ -264,7 +267,8 @@ def nsidc_edge(initial, toler, nsidcdir):
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
-    #debug print('south command: ',cmd, flush=True  )
+    #debug 
+    print('south command: ',cmd, flush=True  )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
@@ -274,15 +278,18 @@ def nsidc_edge(initial, toler, nsidcdir):
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
   if (type(valid) == int):
-    #debug print("valid is int ")
+    #debug 
+    print("valid is int ", flush=True)
     tvalid = str(valid)
     tinitial = str(initial)
   elif (type(valid) == str):
-    #debug print("valid is str")
+    #debug 
+    print("valid is str", flush=True)
     tvalid = valid
     tinitial = initial
   else:
-    #debug print("assume valid is datetime")
+    #debug 
+    print("assume valid is datetime", flush=True)
     tvalid = valid.strftime("%Y%m%d")
     tinitial = initial.strftime("%Y%m%d")
 
@@ -308,7 +315,8 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
-  #debug print('get fcst ',initial, valid)
+  #debug 
+  print('get fcst ',initial, valid, flush=True)
 
   fname = fcst_name(valid, initial, fcst_dir)
   if (not os.path.exists(fname)):

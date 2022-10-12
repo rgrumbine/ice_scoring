@@ -8,7 +8,8 @@ import datetime
 exbase = os.environ['EXDIR']
 exdir  = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#debug print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+#debug 
+print("platforms.py exbase, exdir, fixdir = ","\n",exbase,"\n", exdir,"\n", fixdir, flush=True)
 
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
@@ -45,7 +46,8 @@ for x in machines:
     machine = (x)
     break
 
-#debug print("machine = ",machine)
+#debug 
+print("platforms.py machine = ",machine, flush=True)
 
 if not machine:
     print ('ice verification is currently only supported on: %s' % ' '.join(machines))
@@ -88,9 +90,10 @@ else:
   print ('ice verification is currently only supported on: %s' % ' '.join(machines))
   raise NotImplementedError('Cannot find verification data directory, ABORT!')
 
-#debug print("fixdir = ", (dirs['fixdir']) )
-#debug print("os path exists ", os.path.exists(dirs['fixdir']))
-#debug exit(1)
+#debug 
+print("platforms.py fixdir = ", (dirs['fixdir']) , flush=True)
+print("platforms.py os path exists ", os.path.exists(dirs['fixdir']), flush=True)
+#debug0 exit(1)
 
 #------------------------------------------------------------------
 #Do we have the fixed files directory?
@@ -102,7 +105,8 @@ if (not os.path.exists(dirs['fixdir'])):
 nsidcverf = os.path.exists(dirs['nsidcdir'])
 ncepverf  = os.path.exists(dirs['ncepdir'])
 imsverf   = os.path.exists(dirs['imsdir'])
-#debug print(dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] )
+#debug 
+print("platforms.py obsdirs: ",dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] , flush=True)
 
 if (not nsidcverf and not ncepverf and not imsverf):
   print('no ice verification directory is present, aborting')
@@ -122,4 +126,4 @@ if (len(sys.argv) >  1) :
     print("ims dir   = ", dirs['imsdir'], imsverf)
     print("nsidc dir = ", dirs['nsidcdir'], nsidcverf)
     print("ncep dir  = ", dirs['ncepdir'], ncepverf)
-    print("reference fixed files directory = ",dirs['fixdir'])
+    print("reference fixed files directory = ",dirs['fixdir'], flush=True)

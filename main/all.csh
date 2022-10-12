@@ -1,8 +1,9 @@
 #!/bin/csh -f
-#SBATCH -J p7_all
-#SBATCH -e p7_all.err
-#SBATCH -o p7_all.out
-#SBATCH -t 7:55:00
+#SBATCH -J p8_all
+#SBATCH -e p8_all.err
+#SBATCH -o p8_all.out
+#  #SBATCH -t 7:55:00
+#SBATCH -t 0:25:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
 #  #SBATCH -A fv3-cpu
@@ -24,18 +25,18 @@ module load impi/2020.2
 module load netcdf/4.7.0
 module load wgrib2/2.0.8
 
-setenv mmablib /scratch2/NCEPDEV/climate/rgdev/mmablib/
+setenv mmablib /scratch1/NCEPDEV/climate/rgdev/mmablib/
 #
 module use -a /contrib/anaconda/modulefiles
 module load anaconda/latest 
-setenv XDG_RUNTIME_DIR /scratch2/NCEPDEV/climate/${USER}/runtime
-setenv MPLCONFIGDIR    /scratch2/NCEPDEV/climate/${USER}/runtime
+setenv XDG_RUNTIME_DIR /scratch1/NCEPDEV/climate/${USER}/runtime
+setenv MPLCONFIGDIR    /scratch1/NCEPDEV/climate/${USER}/runtime
 
-setenv expt p7.0
-setenv EXDIR     /scratch2/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
-setenv RUNBASE   /scratch2/NCEPDEV/stmp1/${USER}/prototype_evaluations/${expt}.verf
+setenv expt p8.0
+setenv EXDIR     /scratch1/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
+setenv RUNBASE   /scratch1/NCEPDEV/stmp2/${USER}/prototype_evaluations/${expt}.verf
 
-setenv FCST_BASE /scratch2/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p7/SeaIce/ 
+setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
 
 ##Gaea
 #setenv USER $LOGNAME
@@ -83,9 +84,11 @@ echo $XDG_RUNTIME_DIR for python graphic support
 
 setenv x `date`
 echo start of loop at dtime $x
-setenv fcst_len 35
+#setenv fcst_len 35
+setenv fcst_len 1
 
-foreach yy ( 2011 2012 2013 2014 2015 2016 2017 2018 )
+#foreach yy ( 2011 2012 2013 2014 2015 2016 2017 2018 )
+foreach yy ( 2011 )
   setenv RUNDIR ${RUNBASE}/$yy
   if ( ! -d $RUNDIR ) then
     mkdir -p $RUNDIR
@@ -96,8 +99,9 @@ foreach yy ( 2011 2012 2013 2014 2015 2016 2017 2018 )
     exit 1
   endif
 
-  foreach mm ( 01 02 03 04 05 06 07 08 09 10 11 12 )
-    foreach dd ( 01 15 )
+  #foreach mm ( 01 02 03 04 05 06 07 08 09 10 11 12 )
+  foreach mm ( 04 )
+    foreach dd ( 01 )
       setenv tag ${yy}${mm}${dd}
       setenv initial ${yy}${mm}${dd}
       setenv dashtag ${yy}-${mm}-${dd}

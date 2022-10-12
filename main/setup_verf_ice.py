@@ -16,7 +16,8 @@ from platforms import *
 exbase=os.environ['EXDIR']
 exdir = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#print("exbase, exdir, fixdir = ",exbase, exdir, fixdir)
+#debug 
+print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 
 #fixed files:
 #  seaice_alldist.bin
@@ -45,14 +46,14 @@ def solo_score(fcst, fdate):
   fname = fcst+"."+fdate.strftime("%Y%m%d")
   if (os.path.exists(fname)):
     cmd = (exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst)
+    print("integrals for ",fcst, flush=True)
     sys.stdout.flush()
     x = os.system(cmd)
     if (x != 0):
-      print("command ",cmd," returned error code ",x)
+      print("command ",cmd," returned error code ",x, flush=True)
     return x 
   else:
-    print("could not find ",fname)
+    print("could not find ",fname, flush=True)
     return 1
 
 def edge_score(fcst, fdate, obs, obsdate):
@@ -61,14 +62,15 @@ def edge_score(fcst, fdate, obs, obsdate):
   obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
   outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
                 + "."+obsdate.strftime("%Y%m%d") )
-  #print('edge_score ',fname,' ',obsname,' ',outfile)
+  #debug 
+  print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
       os.path.exists(outfile) ):
     cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
            " 50.0 > " + outfile )
     x = os.system(cmd)
     if (x != 0):
-      print("command ",cmd," returned error code ",x)
+      print("command ",cmd," returned error code ",x, flush=True)
       sys.stdout.flush()
       retcode += x
 
@@ -86,14 +88,15 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
   if (not os.path.exists(valid_fname)):
-    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d") )
+    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
     retcode = int(1)
     return retcode
   
   exname = 'generic'
   exname = 'score_nsidc'
   if (os.path.exists(exdir + exname)):
-    #print("Have the fcst vs. nsidc scoring executable")
+    #debug 
+    print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
     sys.stdout.flush()
     pole="north"
     ptag="n"
@@ -106,7 +109,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
                 ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
     x = os.system(cmd)
     if (x != 0):
-      print("command ",cmd," returned error code ",x)
+      print("command ",cmd," returned error code ",x, flush=True)
       retcode += x
 
 #    pole="south"
@@ -114,7 +117,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 #    obsname = nsidc_name(pole, obsdate, nsidcdir)
 
   else:
-    print("No executable to score vs. nsidc")
+    print("No executable to score vs. nsidc", flush=True)
     sys.stdout.flush()
     retcode += 1
 
@@ -128,13 +131,14 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
 #the +1 is for the command name itself, which is sys.argv[0]
 if (len(sys.argv) == 3+1):
-  #print("Initial date and verification time", flush=True)
-  sys.stdout.flush()
+  #debug 
+  print("setup_verf Initial date and verification time", flush=True)
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
   fcst_dir     = sys.argv[3]
   single = True
-   #rint(initial_date, " ", valid_date, flush=True)
+  #debug
+  print("setup_verf initial_date, " ", valid_date, flush=True)
   sys.stdout.flush()
 elif (len(sys.argv) == 4+1):
   initial_date = parse_8digits(sys.argv[1])
@@ -157,11 +161,11 @@ if (single):
   if (imsverf): 
     x = get_ims(initial_date, dirs['imsdir'])
     if (x != 0):
-      print("could not get file for ims verification, turning off imsverf\n")
+      print("could not get file for ims verification, turning off imsverf\n", flush=True)
       imsverf = False
     x = get_ims(valid_date, dirs['imsdir'])
     if (x != 0):
-      print("could not get file for ims verification, turning off imsverf\n")
+      print("could not get file for ims verification, turning off imsverf\n", flush=True)
       imsverf = False
 #NCEP -- grib/grib2
   if (ncepverf):
@@ -180,7 +184,7 @@ if (single):
          imsverf, ncepverf, nsidcverf, dirs['imsdir'], dirs['ncepdir'], 
                dirs['nsidcdir'])
   if (x != 0):
-    print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
+    print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     obs = False
   else:
     obs = True
@@ -188,16 +192,18 @@ if (single):
 #Model Forecast
   x = get_fcst(initial_date, valid_date, fcst_dir)
   if (x != 0):
-    print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
+    print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = False
   else:
-    #print("have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x)
+    #debug 
+    print("setup_verf have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = True
 
   print(flush=True)
 
   #now call verification with dirs, fcst, verf logicals
-  #print("working with observed data \n")
+  #debug 
+  print("setup_verf working with observed data \n", flush=True)
   if (imsverf):
     solo_score("ims", valid_date)
     ims_edge(initial_date.strftime("%Y%m%d"))
@@ -227,7 +233,7 @@ if (single):
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
     else:
-      print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
+      print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date, flush=True)
     
 
     print("\n")

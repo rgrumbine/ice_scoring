@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     fflush(stdout);
   #endif
 
-// Read in netcdf information from rtofs
+// Read in netcdf information from CICE (Consortium)
   float *x;
   int ncid, varid;
   int retval;

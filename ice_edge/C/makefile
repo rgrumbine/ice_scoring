@@ -28,8 +28,7 @@ find_edge_consortium : find_edge_consortium.C
 	$(CC) $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
 
 find_edge_cice : find_edge_cice.C
-	#$(CC) $(opts) $< $(NETCDF_INCLUDE) -Dbenchmark -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -o $(@)
-	$(CC) $(opts) $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -limf -lirc -o $(@)
+	$(CC) $(opts) -Dbenchmark $< $(NETCDF_INCLUDE) -I ../../../mmablib/include ../../../mmablib/libombf_4.a -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS) -limf -lirc -o $(@)
 
 find_edge_ims : find_edge_ims.C
 	$(CC) $(opts) $< -I ../../../mmablib/include ../../../mmablib/libombf_4.a -o $(@)
