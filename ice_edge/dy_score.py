@@ -2,6 +2,8 @@ import sys
 import os
 import datetime
 
+#Roughly (very) 1 year per hour on wcoss2
+
 #convert to a python script that will compare original and fcst N days later
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
@@ -18,7 +20,7 @@ dt    = day*int(sys.argv[2])
 #fdate = start + dt
 #print(start.strftime("%j"))
 
-for i in range(0,3*365+31):
+for i in range(0,4*365):
   fdate = start + dt
 
   sname = "cleaned/s."+start.strftime("%Y%j")+".beta"
@@ -31,7 +33,6 @@ for i in range(0,3*365+31):
   sname = "cleaned/n."+start.strftime("%Y%j")+".beta"
   fname = "cleaned/n."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
-    #debug print("./cscore_edge seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
     os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
   else:
     print("missing at least one of ",sname, fname)
@@ -40,5 +41,4 @@ for i in range(0,3*365+31):
 exit(0)
  
 #    ./cscore_edge seaice_alldist.bin s.${y1}${ddd}.beta s.${y2}${ddd}.beta 50. > score.s.$y1$ddd
-#
-#    ./cscore_edge seaice_alldist.bin n.${y1}${ddd}.beta n.${y2}${ddd}.beta 50. > score.n.$y1$ddd
+

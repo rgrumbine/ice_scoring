@@ -3,7 +3,6 @@
 export DCOM=~/rgdev/edges
 . ./bootstrap.sh
 
-
 yy=2019
 ddd=077
 

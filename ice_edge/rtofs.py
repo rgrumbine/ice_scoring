@@ -44,12 +44,18 @@ while (start <= end):
           os.system(cmd)
     
         #score it:
-        cmd =  exdir+'/cscore_edge '+fixdir+"/seaice_alldist.bin " + outname +" cleaned/n.2022"+valid_dy+".beta 50. > n."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
-        #debug print(cmd, flush=True)
-        os.system(cmd)
-        cmd =  exdir+'/cscore_edge '+fixdir+"/seaice_alldist.bin " + "cleaned/n.2022"+valid_dy+".beta " + outname + " 50. > nr."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
-        #debug print(cmd, flush=True)
-        os.system(cmd)
+        snamer = "rtofs_scores/nr."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
+        sname  = "rtofs_scores/n."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
+
+        if (not os.path.exists(sname)):
+          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + outname +' cleaned/n.2022'+valid_dy+'.beta 50. > '+sname
+          #debug print(cmd, flush=True)
+          os.system(cmd)
+
+        if (not os.path.exists(snamer)):
+          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + 'cleaned/n.2022'+valid_dy+'.beta ' + outname + ' 50. > '+snamer
+          #debug print(cmd, flush=True)
+          os.system(cmd)
       else:
         print("could not find model file:",fname, flush=True)
   
