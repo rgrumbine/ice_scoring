@@ -1,5 +1,9 @@
 # ice_scoring
-Tools for model evaluation, primarily of sea ice models
+Tools for model evaluation, primarily of sea ice models.
+
+Now includes, as submodules
+SIDFEx 
+SITools https://github.com/XiaLinUCL/Sea-Ice-Evaluation-Tool
 
 # Quick start:
 * Build the executables:
