@@ -1,0 +1,9 @@
+[submodule "mmablib"]
+	path = mmablib
+	url = https://github.com/rgrumbine/mmablib
+[submodule "SIDFEx"]
+	path = SIDFEx
+	url = https://github.com/helgegoessling/SIDFEx
+[submodule "Sea-Ice-Evaluation-Tool"]
+	path = Sea-Ice-Evaluation-Tool
+	url = https://github.com/XiaLinUCL/Sea-Ice-Evaluation-Tool

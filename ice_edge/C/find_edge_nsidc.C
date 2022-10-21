@@ -56,21 +56,21 @@ int main(int argc, char *argv[]) {
 
 // Get vars:
   retval = nc_inq_varid(ncid, "latitude", &varid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) ERR2(retval, "latitude");
   retval = nc_get_var_double(ncid, varid, dx);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "latitude");fflush(stdout);
   enter(lat, dx);
 
   retval = nc_inq_varid(ncid, "longitude", &varid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) ERR2(retval, "longitude");
   retval = nc_get_var_double(ncid, varid, dx);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "longitude");fflush(stdout);
   enter(lon, dx);
 
   retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) ERR2(retval, "seaice_conc_cdr");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "seaice_conc_cdr");fflush(stdout);
   enter(conc, x);
 
 /////////////////////////////////////////////////////////////////////////////

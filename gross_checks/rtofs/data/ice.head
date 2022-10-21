@@ -1,0 +1,73 @@
+netcdf rtofs_glo_2ds_f024_ice {
+dimensions:
+	MT = UNLIMITED ; // (1 currently)
+	Y = 3298 ;
+	X = 4500 ;
+variables:
+	double MT(MT) ;
+		MT:long_name = "time" ;
+		MT:units = "days since 1900-12-31 00:00:00" ;
+		MT:calendar = "standard" ;
+		MT:axis = "T" ;
+	double Date(MT) ;
+		Date:long_name = "date" ;
+		Date:units = "day as %Y%m%d.%f" ;
+		Date:C_format = "%13.4f" ;
+		Date:FORTRAN_format = "(f13.4)" ;
+	int Y(Y) ;
+		Y:point_spacing = "even" ;
+		Y:axis = "Y" ;
+	int X(X) ;
+		X:point_spacing = "even" ;
+		X:axis = "X" ;
+	float Latitude(Y, X) ;
+		Latitude:standard_name = "latitude" ;
+		Latitude:units = "degrees_north" ;
+	float Longitude(Y, X) ;
+		Longitude:standard_name = "longitude" ;
+		Longitude:units = "degrees_east" ;
+		Longitude:modulo = "360 degrees" ;
+	float ice_coverage(MT, Y, X) ;
+		ice_coverage:coordinates = "Longitude Latitude Date" ;
+		ice_coverage:standard_name = "ice_coverage [09.8H]|" ;
+		ice_coverage:units = "" ;
+		ice_coverage:_FillValue = 1.267651e+30f ;
+		ice_coverage:valid_range = 0.f, 1.f ;
+		ice_coverage:long_name = "layer=** icecov    [00.0H]" ;
+	float ice_temperature(MT, Y, X) ;
+		ice_temperature:coordinates = "Longitude Latitude Date" ;
+		ice_temperature:standard_name = "ice_temperature [09.8H]|" ;
+		ice_temperature:units = " degC" ;
+		ice_temperature:_FillValue = 1.267651e+30f ;
+		ice_temperature:valid_range = -39.85154f, 0.f ;
+		ice_temperature:long_name = "layer=** icetemp   [00.0H]" ;
+	float ice_thickness(MT, Y, X) ;
+		ice_thickness:coordinates = "Longitude Latitude Date" ;
+		ice_thickness:standard_name = "ice_thickness [09.8H]|" ;
+		ice_thickness:units = " m" ;
+		ice_thickness:_FillValue = 1.267651e+30f ;
+		ice_thickness:valid_range = 1.001027e-13f, 11.46087f ;
+		ice_thickness:long_name = "layer=** icethck   [00.0H]" ;
+	float ice_uvelocity(MT, Y, X) ;
+		ice_uvelocity:coordinates = "Longitude Latitude Date" ;
+		ice_uvelocity:standard_name = "ice_uvelocity [09.8H]|" ;
+		ice_uvelocity:units = " m/s" ;
+		ice_uvelocity:_FillValue = 1.267651e+30f ;
+		ice_uvelocity:valid_range = -1.319652f, 0.7876651f ;
+		ice_uvelocity:long_name = "layer=** iceuvel   [00.0H]" ;
+	float ice_vvelocity(MT, Y, X) ;
+		ice_vvelocity:coordinates = "Longitude Latitude Date" ;
+		ice_vvelocity:standard_name = "ice_vvelocity [09.8H]|" ;
+		ice_vvelocity:units = " m/s" ;
+		ice_vvelocity:_FillValue = 1.267651e+30f ;
+		ice_vvelocity:valid_range = -1.401755f, 1.188232f ;
+		ice_vvelocity:long_name = "layer=** icevvel   [00.0H]" ;
+
+// global attributes:
+		:Conventions = "CF-1.0" ;
+		:title = "HYCOM ATLb2.00" ;
+		:institution = "National Centers for Environmental Prediction" ;
+		:source = "HYCOM archive file" ;
+		:experiment = "00.0" ;
+		:history = "archv2ncdf2d" ;
+}

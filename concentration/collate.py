@@ -15,7 +15,9 @@ matplotlib.use('Agg') #for batch mode
 #dirbase='bm3.verf/out.'
 dirbase = sys.argv[1]
 figtitle = sys.argv[2]
-lead = 35
+crit     = float(sys.argv[3])
+ncrit = int(0.5 + crit / 0.05)
+lead = 34
 dt = datetime.timedelta(1)
 
 #define the indices to the contingency table .csv lines:
@@ -75,18 +77,18 @@ for mm in range (1,13):
 
       for i in range (0,lead):
         days[i] = i+1
-        mean[i] = sums[3,i]
-        rmse[i] = sqrt(sumsq[3,i])
-        var[i]  = sqrt(sumsq[3,i]-sums[3,i]*sums[3,i])
-        print("0.15 ","{0:5.3f}".format(sums[3,i]), " ","{0:5.3f}".format(sqrt(sumsq[3,i])), " ", "{0:6.4f}".format(sqrt(sumsq[3,i]-sums[3,i]*sums[3,i]))  )
+        mean[i] = sums[ncrit,i]
+        rmse[i] = sqrt(sumsq[ncrit,i])
+        var[i]  = sqrt(sumsq[ncrit,i]-sums[ncrit,i]*sums[ncrit,i])
+        print("{:4.2f}".format(crit),"{0:5.3f}".format(sums[ncrit,i]), " ","{0:5.3f}".format(sqrt(sumsq[ncrit,i])), " ", "{0:6.4f}".format(sqrt(sumsq[ncrit,i]-sums[ncrit,i]*sums[ncrit,i]))  )
         writer.writerow({'lead': days[i], 'mean': mean[i], 'rms': rmse[i], 'var':var[i]})
 
 
     #Now ready to plot:
     fig,ax = plt.subplots()
     ax.set(xlabel = "Forecast lead, days", ylabel = "threat score [0:1]")
-    ax.set(title = figtitle +" Summary for "+tag+" critical level = 0.15 ")
-    plt.ylim(0.5,1.0)
+    ax.set(title = figtitle +" Summary for "+tag+" critical level = "+"{:4.2f}".format(crit))
+    plt.ylim(min(0.5,mean.min()),1.0)
     ax.plot(days, mean, color="blue", label = "mean")
     #ax.plot(days, rmse, color="green", label = "rms")
     ax.legend()
@@ -96,7 +98,7 @@ for mm in range (1,13):
 
     fig,ax = plt.subplots()
     ax.set(xlabel = "Forecast lead, days", ylabel = "sqrt(variance) [0:1]")
-    ax.set(title = figtitle + " Summary for "+tag+" critical level = 0.15 ")
+    ax.set(title = figtitle + " Summary for "+tag+" critical level = "+"{:4.2f}".format(crit))
     plt.ylim(0,0.075)
     ax.plot(days, var, color="blue", label = "sqrt(variance)")
     ax.legend()

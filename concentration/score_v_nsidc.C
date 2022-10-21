@@ -18,6 +18,9 @@ void enter(grid2<float> &param, T *x) ;
 
 #include "contingency_ptwise.C"
 
+// RG: Will be better to make this compile arguments, and thence, too,
+//     the lower ifdefs
+// RG: alt, to read nx, ny from the input netcdf, but still need variable names
 #ifdef cice_file
   #define NX 1500
   #define NY 1099
@@ -77,6 +80,7 @@ int main(int argc, char *argv[]) {
   retval = nc_open(argv[2], NC_NOWRITE, &ncid);
   if (retval != 0) ERR(retval);
 
+  // V4 doesn't save latitude or longitude. It is map projection, polar stereo, Hughes 1980 ellipsoid
   retval = nc_inq_varid(ncid, "latitude", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_double(ncid, varid, xd); 
@@ -89,7 +93,8 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(obslon, xd);
 
-  retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
+  // v3: retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
+  retval = nc_inq_varid(ncid, "cdr_seaice_conc", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_uchar(ncid, varid, xb); 
   if (retval != 0) ERR(retval);fflush(stdout);
