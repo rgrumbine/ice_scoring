@@ -13,6 +13,10 @@ def parse_8digits(tag):
   return tag_out
 #------------------------------------------------
 
+obsdir = os.environ['OBSDIR']
+fixdir = os.environ['FIXDIR']
+exdir  = os.environ['EXDIR']
+
 day   = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
 dt    = day*int(sys.argv[2])
@@ -20,18 +24,18 @@ dt    = day*int(sys.argv[2])
 #fdate = start + dt
 #print(start.strftime("%j"))
 
-for i in range(0,4*365):
+for i in range(0,4*365-90):
   fdate = start + dt
 
-  sname = "cleaned/s."+start.strftime("%Y%j")+".beta"
-  fname = "cleaned/s."+fdate.strftime("%Y%j")+".beta"
+  sname = obsdir+"/cleaned/s."+start.strftime("%Y%j")+".beta"
+  fname = obsdir+"/cleaned/s."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
     os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
   else:
     print("missing at least one of ",sname, fname)
 
-  sname = "cleaned/n."+start.strftime("%Y%j")+".beta"
-  fname = "cleaned/n."+fdate.strftime("%Y%j")+".beta"
+  sname = obsdir+"/cleaned/n."+start.strftime("%Y%j")+".beta"
+  fname = obsdir+"/cleaned/n."+fdate.strftime("%Y%j")+".beta"
   if (os.path.exists(sname) and os.path.exists(fname) ):
     os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
   else:
@@ -41,4 +45,3 @@ for i in range(0,4*365):
 exit(0)
  
 #    ./cscore_edge seaice_alldist.bin s.${y1}${ddd}.beta s.${y2}${ddd}.beta 50. > score.s.$y1$ddd
-

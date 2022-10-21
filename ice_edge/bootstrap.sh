@@ -9,9 +9,10 @@ module load netcdf
 export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/ice_edge
 export EXDIR=$HOME/rgdev/ice_scoring/exec
 export FIXDIR=$HOME/rgdev/fix/
+export OBSDIR=$HOME/rgdev/edge.eval
 
 base=$HOME/rgdev/ice_scoring/ice_edge
-for f in dy_score.py nic_parse.py nicedge_parse.sh rtofs.py
+for f in dy_score.py nic_parse.py nicedge_parse.sh runup.sh rtofs.py
 do
 	if [ ! -f $f ] ; then
           cp -p $base/$f .
