@@ -1,0 +1,52 @@
+IMS, NCEP analy, NSIDC analy, forecast (CICE5, RTOFS+CICE4, CFSV2, ...)
+
+(For each):
+get file
+open + translate to binary
+find ice edge of file
+
+
+score ice edges -- persistence, vs. IMS
+integral area, extent by hemisphere
+
+
+fcst:
+gross checks
+
+null forecast of extent
+
+
+Robert Grumbine October 2008
+
+* Score where either model or obs report non-zero
+* Score where both model and obs report non-zero
+* Score where obs report nonzero
+* Score everywhere ('everywhere')
+* Score as above, but within selected domain(s)
+
+Scores -- obs vs. fcst:
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+POD
+FAR
+(a11, a12, a21, a22) -- threat matrix
+Murphy skill score
+
+
+Scores -- obsd deviation from climo vs. fcst deviation from climo
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+
+Utility ----------------------------------------
+Construct a climatology
+Construct a null forecast
+
+
