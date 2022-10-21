@@ -1,0 +1,14 @@
+python3 atm.py
+cp alpha beta
+vi beta        (delete variables you don't want, 
+                find names for next step, 
+                delete variables of the wrong dimensionality)
+
+vi atm.py (with names of lat, lon and, optionally: mask, area
+           also value of nx, ny 
+
+python3 atm.py
+# this gives a boot_out file that is complete. Can edit for sensibility
+# note that flag and nonvalue values might actually be listed. Be sure to 
+#   check manually for these
+

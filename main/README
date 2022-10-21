@@ -1,0 +1,74 @@
+To get the executables, go up to the main ice_scoring directory and execute
+makeall.sh
+
+Ensure that you have a link to the fixed files directory under your ice_scoring directory:
+WCOSS:  /u/Robert.Grumbine/rgdev/fix/
+Hera:   /home/Robert.Grumbine/rgdev/fix
+Orion:  /home/rgrumbin/rgdev/fix
+
+Gross checks and ice model scoring are currently run separately.
+
+To run gross checks on ice or ocean (or, in principle, anything else with a .nc output)
+    cd to gross_checks
+    decide whether it is ice or ocean, a single file (gross) or an entire 
+        forecast run (35 days, 6 hourly for the ocean 24 hourly at the 
+        moment for the ice) you want to examine.
+    select the level of verbosity you want (increasingly verbose going 
+        from .extremes, .vvhigh, .vhigh, .high, .moderate) for the 
+        diagnostic output (files in subdirectory ctl)
+    #old: If on hera, ensure you have /home/Robert.Grumbine/clim_data/anaconda3/bin in your path
+    If on hera, use a recent anaconda distribution, such as obtained by 
+        module use -a /contrib/anaconda/modulefiles
+        module load anaconda/latest
+    Then execute (further instructions in gross_checks/README)
+
+
+Ice model scoring:
+    export BASE=location_of_your_ice_scoring_directory (or setenv)
+    Select a directory to save output in, cd to it.
+    execute $BASE/main/bootstrap.sh
+      * now in bootstrap.sh:
+         python3 platforms.py
+      -- will tell you whether you're on a known platform with necessary directories
+      -- otherwise, you'll need to add a machine to machines = { ... }, 
+      --    and the corresponding paths for at least one of ims, ncep, or nsidc data 
+
+    Edit all.csh for your paths:
+       expt      -- tag for the experiment name
+       FCST_BASE -- where the forecast output is
+       EXDIR     -- where the scoring executables (compiled programs) are
+       RUNBASE   -- place to execute the scoring
+    Edit the foreach loops for yy, mm, dd to accord with your interest.
+       -- approximately 24 forecasts of 35 days, at quarter degree, 
+              global, resolution can be evaluated in 
+              8 hours, 1 cpu, on hera
+    Edit the references to the FCST_BASE in the if test and the python3 
+       line to accord with path naming convention. Ex, with $initial 
+       being an 8 digit date YYYYMMDD
+           ${FCST_BASE}/$initial/6hrly/ 
+           ${FCST_BASE}/gfs.$initial/6hrly/ 
+           ${FCST_BASE}/$initial/00/ 
+           ${FCST_BASE}/gfs.${initial}00/6hrly/ 
+           ... or whatever is currently the case. The next element should 
+       be files named as you edited verf_files.py and setup_verf_ice.py 
+       to reference. 
+
+    You'll need to edit the fname in functions fcst_name, get_fcst in file 
+       verf_files.py to accord with your naming convention for ice model output files.
+    Ditto file setup_verf_ice.py, function score_nsidc
+
+    ... and, finally, run all.csh
+    This will carry out the evaluations and put the results in subdirectories
+        named out.YYYYMMDD, where YYYYMMDD is the initial date of the forecast.
+    Results will include:
+        out. files -- comments for each verifying date
+        edge.fcst_VERIFYING_SOURCE.verifying_date ice edge files
+        score.n.${valid_date}f${start_date}.csv (comma separated threat 
+           scores for the valid_date on a forecast from start_date, at 
+           each threat level [0., 0.95, by 0.05]
+        threat_$lead_from_$start.png ($lead days from $start, showing all critical levels)
+        threat_$lvl_f$start.png (all leads, threat for given $lvl -- 
+           argument to contingency.py in all.csh, currently 0.15)
+
+Robert Grumbine
+6 May 2021

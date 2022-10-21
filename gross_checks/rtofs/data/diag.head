@@ -1,0 +1,72 @@
+netcdf rtofs_glo_2ds_f024_diag {
+dimensions:
+	MT = UNLIMITED ; // (1 currently)
+	Y = 3298 ;
+	X = 4500 ;
+variables:
+	double MT(MT) ;
+		MT:long_name = "time" ;
+		MT:units = "days since 1900-12-31 00:00:00" ;
+		MT:calendar = "standard" ;
+		MT:axis = "T" ;
+	double Date(MT) ;
+		Date:long_name = "date" ;
+		Date:units = "day as %Y%m%d.%f" ;
+		Date:C_format = "%13.4f" ;
+		Date:FORTRAN_format = "(f13.4)" ;
+	int Y(Y) ;
+		Y:point_spacing = "even" ;
+		Y:axis = "Y" ;
+	int X(X) ;
+		X:point_spacing = "even" ;
+		X:axis = "X" ;
+	float Latitude(Y, X) ;
+		Latitude:standard_name = "latitude" ;
+		Latitude:units = "degrees_north" ;
+	float Longitude(Y, X) ;
+		Longitude:standard_name = "longitude" ;
+		Longitude:units = "degrees_east" ;
+		Longitude:modulo = "360 degrees" ;
+	float ssh(MT, Y, X) ;
+		ssh:coordinates = "Longitude Latitude Date" ;
+		ssh:standard_name = "sea_surface_elevation" ;
+		ssh:units = "m" ;
+		ssh:_FillValue = 1.267651e+30f ;
+		ssh:valid_range = -1.938736f, 1.68068f ;
+		ssh:long_name = " sea surf. height  [92.8H]" ;
+	float u_barotropic_velocity(MT, Y, X) ;
+		u_barotropic_velocity:coordinates = "Longitude Latitude Date" ;
+		u_barotropic_velocity:standard_name = "barotropic_eastward_sea_water_velocity" ;
+		u_barotropic_velocity:units = "m/s" ;
+		u_barotropic_velocity:_FillValue = 1.267651e+30f ;
+		u_barotropic_velocity:valid_range = -1.309076f, 1.131058f ;
+		u_barotropic_velocity:long_name = "    baro. u-vel.   [92.8H]" ;
+	float v_barotropic_velocity(MT, Y, X) ;
+		v_barotropic_velocity:coordinates = "Longitude Latitude Date" ;
+		v_barotropic_velocity:standard_name = "barotropic_northward_sea_water_velocity" ;
+		v_barotropic_velocity:units = "m/s" ;
+		v_barotropic_velocity:_FillValue = 1.267651e+30f ;
+		v_barotropic_velocity:valid_range = -1.239076f, 1.383296f ;
+		v_barotropic_velocity:long_name = "    baro. v-vel.   [92.8H]" ;
+	float surface_boundary_layer_thickness(MT, Y, X) ;
+		surface_boundary_layer_thickness:coordinates = "Longitude Latitude Date" ;
+		surface_boundary_layer_thickness:units = "m" ;
+		surface_boundary_layer_thickness:_FillValue = 1.267651e+30f ;
+		surface_boundary_layer_thickness:valid_range = 0.9715048f, 554.0062f ;
+		surface_boundary_layer_thickness:long_name = "bnd.layr.thickness [92.8H]" ;
+	float mixed_layer_thickness(MT, Y, X) ;
+		mixed_layer_thickness:coordinates = "Longitude Latitude Date" ;
+		mixed_layer_thickness:standard_name = "ocean_mixed_layer_thickness" ;
+		mixed_layer_thickness:units = "m" ;
+		mixed_layer_thickness:_FillValue = 1.267651e+30f ;
+		mixed_layer_thickness:valid_range = 0.5099538f, 848.9689f ;
+		mixed_layer_thickness:long_name = "mix.layr.thickness [92.8H]" ;
+
+// global attributes:
+		:Conventions = "CF-1.0" ;
+		:title = "HYCOM ATLb2.00" ;
+		:institution = "National Centers for Environmental Prediction" ;
+		:source = "HYCOM archive file" ;
+		:experiment = "92.8" ;
+		:history = "archv2ncdf2d" ;
+}

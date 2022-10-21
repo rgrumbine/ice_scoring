@@ -12,12 +12,31 @@ delta_ice.py       -- examine differences between two ice runs
 Preface:
 On WCOSS: module load python/3.6.3
 On Orion: module load python/3.7.5
-  The hera python modules are not sufficient, so you'll need:
-On Hera: prepend /home/Robert.Grumbine/clim_data/anaconda3/bin to your PATH
+
+The hera default python modules are not sufficient, so you'll need:
+  module use -a /contrib/anaconda/modulefiles
+  module load anaconda/latest
+
 On Hera you might also need to add:
   setenv TERMINFO /usr/share/terminfo
-to your .cshrc
+      to your .cshrc
 
+0. Bootstrapping for new systems or models ...
+atm.py is the general script for learning about what is available in your data files, 
+  and then helping you develop appropriate limits and dictionaries
+first pass: python3 atm.py Full_path_and_file_name_to_data
+  read output file alpha, and:
+    edit atm.py to use the correct names for number of points in x and y
+    edit atm.py to use the correct names for latitude and longitudes of points*
+* note issue of T points vs. U points
+  copy alpha to beta
+  edit beta -- remove paraemters you're not interested in
+            -- trim out things like dimensions
+  re-run command
+second pass: 
+  
+
+1. Gross or Wholesale checks
 Usage:
 python3 gross_ice.py   NAME_OF_ICE.nc   ice.dictionary   redone.dictionary
 python3 gross_ocean.py NAME_OF_OCEAN.nc ocean.dictionary redone.dictionary
@@ -32,11 +51,16 @@ Any parameter which is listed, but not in the .nc, will give a message to stdout
   rain_h  not in data file 
   -- and execution will proceed without it.
 
-*.extremes gives bounds that are seldom exceeded in 6 years of prototype runs, 
+*.extremes gives bounds that are seldom exceeded in 7 years of prototype runs, 
   for the named (*) files
+*.vvhigh is in vicinity of 1 point per million
+*.vhigh ~10 ppm
+*.high  ~100 ppm
+*.moderate ~1000 ppm
 
 Examining output:
-If any value for a parameter on its grid violates the given limits, you'll get a message like:
+If any value for a parameter on its grid violates the given limits, you'll 
+get a message like:
     hi_h        excessively high maximum  6.14912  versus  5.0  allowed
 where the 6.14 is in the grid, and you said 5.0 was the highest allowed 
   value. Otherwise, it is silent.
@@ -49,13 +73,41 @@ hi_h 1111 907 338.3247 71.2918 6.14912  vs pmax  5.0
 hi_h 1110 909 338.0922 71.51021 5.651512  vs pmax  5.0
 hi_h 1046 1018 312.75015 83.079865 5.1349816  vs pmax  5.0
 
+Running time: NNN
 
 
+2. Removing known exceptions
+Depending on choice of bounds file, there may be extreme amounts of output, with much of it either being known errors or physically reasonable when in the correct geographic areas (e.g., the Persian Gulf can be extremely saline.)
+
+More elegant solution should come in the future, but, for now, grep pm from the output of your gross or wholesale analysis to a file, called, say, pm.
+
+Then select which exceptions you want to allow from the files ice.file or ocean.file in the ctl subdirectory. You may add exceptions, but ensure that there is a matching regional name in the gross_checks/curves directory. Current ones are extracted from IHO bounding boxes and region names, with some selected additions, which will have a parameter in the region name (e.g. Weddell_snow.curve). Curves must be specified with the interior to the left. Not all IHO regions are currently included.
+
+Exceptions to the global bounds done on regional basis, inside curves or bounding boxes
+  ex: Persian_Gulf.curve SSS  35.0 43.0  35.0 40.0
+  Additional comments can be given after these inputs, e.g.:
+    Weddell_Sea      MLD_0125  5.0 5100.0 500.0 1000.0              Known Error
+  (Weddell Sea should not be doing deep convection with such wild abandon as it does as I write on May 6th, 2021)
 
 
-Notes towards the future: --------------
+Then run
+python3 trial.py ctl/ocean.file pm > pm.out
 
-Build on some sort of progression such that the checks make sense in a sequence.
+pm.out will include only the points that are not allowed or known exceptions, and ends with a count of how often each region excercised an exception, for which parameter.
+
+Running time: proportional to size of pm, NNN
+
+
+3. Utilities:
+ice.sh and oc.sh will split ice or ocean output from the preceding in to separate files, one for each parameter. 
+Usage is ./ice.sh file_name
+output will be a set of files named
+parm1.s
+parm2.s
+...
+parmN.s
+
+-----------------------  Notes towards the future: -------------------
 
 Grid edge effects/checks:
 i = 0, nx; j = 0, ny
@@ -63,12 +115,4 @@ i = 0, nx; j = 0, ny
 Numerical artefact checks:
 Tripolar seam?
 Disk around pole divergent from rest of field?
-
-
-Regional/local range checks:
-Arctic ocean
-Southern ocean
-Gulf of Mexico
-Gulf Stream
-Nino 3.4, etc.
 

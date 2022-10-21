@@ -6,6 +6,8 @@
 // Robert Grumbine 21 May 2018 
 
 
+// RG: This should really detect NX, NY from the netcdf file, obviating
+//       the kludge here
 #ifdef cice_file
 // cice on hycom quarter degree tripolar grid
   #define NX 1500
@@ -17,7 +19,7 @@
 #else
 // hycom twelfth degree tripolar grid
   #define NX 4500
-  #define NY 3298
+  #define NY 3297
 #endif
 
 #include "small_nc.C"
@@ -34,8 +36,12 @@ int main(int argc, char *argv[]) {
   FILE *fin;
 
 // /////////////////////////////////////////////////////////////////////////////
-// Get data:
+// Get skip file data:
   fin = fopen(argv[1], "r");
+  if (fin == (FILE*) NULL) {
+    printf("find_edge_cice failed to open input file %s\n",argv[1]);
+    return 1;
+  }
   skip.binin(fin);
   fclose(fin);
   #ifdef DEBUG
@@ -43,7 +49,7 @@ int main(int argc, char *argv[]) {
     fflush(stdout);
   #endif
 
-// Read in netcdf information from rtofs
+// Read in netcdf information from rtofs/cice
   float *x;
   int ncid, varid;
   int retval;
@@ -54,39 +60,48 @@ int main(int argc, char *argv[]) {
 
 // Get vars:
   retval = nc_inq_varid(ncid, "TLAT", &varid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) ERR2(retval, "TLAT");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "TLAT");fflush(stdout);
   enter(lat, x);
 
   retval = nc_inq_varid(ncid, "TLON", &varid);
-  if (retval != 0) ERR(retval);
+  if (retval != 0) ERR2(retval, "TLAT");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "TLAT");fflush(stdout);
   enter(lon, x);
 
   retval = nc_inq_varid(ncid, "tarea", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, x);
   if (retval != 0) ERR(retval);fflush(stdout);
-  enter(conc, x);
+  enter(tarea, x);
 
   retval = nc_inq_varid(ncid, "hi_h", &varid);
-  if (retval != 0) ERR(retval);
+  //consortium retval = nc_inq_varid(ncid, "hi", &varid);
+  if (retval != 0) ERR2(retval, "hi_h");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "hi_h");fflush(stdout);
   enter(ice_thickness, x);
 
   retval = nc_inq_varid(ncid, "aice_h", &varid);
-  if (retval != 0) ERR(retval);
+  //consortium retval = nc_inq_varid(ncid, "aice", &varid);
+  if (retval != 0) ERR2(retval, "aice_h");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
+  if (retval != 0) ERR2(retval, "aice_h");fflush(stdout);
   enter(conc, x);
+  #ifdef DEBUG
+  printf("conc stats in find_edge %f %f\n",conc.gridmax(), conc.gridmin() );
+  #endif
 
 /////////////////////////////////////////////////////////////////////////////
 // Look for ice edge, defined by a concentration tolerance / critical value
 
   float conc_toler = atof(argv[3]);
+  #ifdef DEBUG
+  printf("conc_toler = %f\n",conc_toler);
+  #endif
+
   edge_finder(conc, lat, lon, conc_toler);
 
   return 0;

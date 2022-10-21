@@ -1,0 +1,43 @@
+hs           0.0     0.40    0. 0.2
+uatm       -11.0    15.0     -1. 1. 
+vatm       -11.0    11.0     -1. 1. 
+sice         0.0    14.0     1. 10.
+fswdn        0.0   350.0     0. 325.
+flwdn      150.0   425.0     175. 400.
+frzmlt   -1000.0    10.0    -900.   5.
+strairx    -0.25     0.25    -0.12 0.12
+strairy    -0.25     0.25    -0.12 0.12
+divu      -10.0     10.0     -50.0 30.0
+shear       0.0     18.0       0.0  50.0
+sig1       -0.8      0.04      -.8  0.0
+sig2       -1.05    -0.00      -.8  0.0
+uvel     -0.35  0.35     -0.10   0.10
+vvel     -0.35  0.35     -0.10   0.10
+hi        0.00  5.00      0.50   4.00
+Tsfc     -50.0  2.5e-6  -15.00  -3.50
+aice      0.00  1.0001    0.10   0.90  
+hs
+uatm
+vatm
+sice
+fswdn
+flwdn
+sst
+sss
+uocn
+vocn
+frzmlt
+strairx
+strairy
+divu
+shear
+sig1
+sig2
+apond
+apond_ai
+hpond
+hpond_ai
+ipond
+ipond_ai
+apeff
+apeff_ai

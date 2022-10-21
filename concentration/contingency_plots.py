@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 lead = int(sys.argv[1])
 idate = int(sys.argv[2])
 level_score = float(sys.argv[3]) #might be good to verify that this is integer multiple of 0.05
+title_base = sys.argv[4]
 
 
 (yy,mm,dd) = (int(int(idate)/10000), int(int(idate)%10000)/100, int(idate)%100)
@@ -46,10 +47,10 @@ valid_date = start_date
 for i in range (0,lead):
   valid_date = valid_date + dt 
   fname = ("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
-  #print("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
+  print(fname,flush=True)
   flead = (valid_date - start_date).days
   if (not os.path.exists(fname)):
-    print("missing ",valid_date.strftime("%Y%m%d"))
+    print("contingency plot missing ",valid_date.strftime("%Y%m%d"), fname, flush=True)
   else:    #at each forecast lead, plot the curve of threat vs. cutoff
     #print("can plot forcast lead ",flead," for ",valid_date.strftime("%Y%m%d"))
     with (open(fname)) as csvfile:
@@ -68,7 +69,7 @@ for i in range (0,lead):
     #Now have this lead in hand, plot the curve:
     fig, ax = plt.subplots()
     ax.set(xlabel = "Cutoff Concentration", ylabel = 'threat score [0:1]')
-    ax.set(title = 'Forecast lead '+str(flead)+' NH threat score')
+    ax.set(title = title_base + 'Forecast lead '+str(flead)+' NH threat score')
     plt.ylim(0,1.0)
     ax.plot(critical_level, threat_index)
     ax.grid()
@@ -79,7 +80,7 @@ for i in range (0,lead):
 #done with day by day, now plot summary vs. cutoff:
 fig,ax = plt.subplots()
 ax.set(xlabel = "Forecast lead, days", ylabel = 'threat score [0:1]')
-ax.set(title = "Threat score for critical = "+str(level_score)+" from "+start_date.strftime("%Y%m%d"))
+ax.set(title = title_base + "Threat score for critical = "+str(level_score)+" from "+start_date.strftime("%Y%m%d"))
 ax.plot(days,score)
 ax.grid()
 #fig.show()

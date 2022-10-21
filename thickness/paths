@@ -1,0 +1,6 @@
+EMC-ice:
+/scratch2/NCEPDEV/marine/marineda/ocean_observations/data/icec_l2.emc
+Cryosat-ice:
+/scratch2/NCEPDEV/marine/marineda/ocean_observations/data/ice.cryosat_GDR.esa
+NSIDC ice:
+/scratch2/NCEPDEV/marine/marineda/ocean_observations/data/icec.nsidc

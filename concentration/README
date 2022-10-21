@@ -1,0 +1,64 @@
+This contains the sources for executing scoring on sea ice concentration.
+
+While the executables can be built here, it is better to use the 
+  makeall.sh script in the directory above
+
+Also present are elementary python scripts to plot the results, as used 
+  by the UFS S2S coupled project standard runs.
+
+There are a number of specialized scoring programs (score_v_NNNN), but 
+  I'm starting to make more generic ones, such that variable elements 
+  (netcdf names, grid dimensions, ...) are read in (from a .def file) 
+  rather than compiled in. Ensure that your definition is in runtime.def 
+Contents of the .def file are:
+NX (NX, NY are numeric values)
+NY
+Latitude (the rest of these are variable names, e.g. TLAT, TLON, tarea, aice, hi)
+Longitude
+tarea
+ice concentration
+ice thickness
+
+Robert Grumbine
+20 August 2020
+5 August 2021
+
+
+#-------------------------------------------------------------------
+
+Some very old thoughts:
+
+Robert Grumbine October 2008
+
+* Score where either model or obs report non-zero
+* Score where both model and obs report non-zero
+* Score where obs report nonzero
+* Score everywhere ('everywhere')
+* Score as above, but within selected domain(s)
+
+Scores -- obs vs. fcst:
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+POD
+FAR
+(a11, a12, a21, a22) -- threat matrix
+Murphy skill score
+
+
+Scores -- obsd deviation from climo vs. fcst deviation from climo
+bias
+rms
+variance
+index of agreement
+correlation (+ regression a, b)
+[vector correlation]
+
+Utility ----------------------------------------
+Construct a climatology
+Construct a null forecast
+
+

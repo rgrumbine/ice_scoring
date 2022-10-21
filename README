@@ -1,8 +1,17 @@
 I'm using this as a catch-all for sea ice model skill measure files.
 
+Quick start:
+* To build the executables:
+first build the mmablib -- cd ../mmablib; make
+In the ice_scoring main directory ./makeall.sh
+* You'll also need the fixed files (binaries).
+
+
+Contents:
+
 Directly skill-related:
 
-master -- master .csh and python scripts to carry out model verification
+main  -- main .csh and python scripts to carry out model verification
 
 drift -- ice drift skill metrics, oriented to the old drift model (sk2) 
            using IABP for verification
@@ -25,7 +34,12 @@ integral -- for ice area and extent, within regions
 Supportive:
 exec    -- executables (not on git)
 
-fix      -- fixed files of use 
+fix      -- fixed files of use (not on git) 
+-- binary files not on github. Copy or use (ln -s)
+WCOSS: /u/Robert.Grumbine/rgdev/fix
+Hera: /home/Robert.Grumbine/rgdev/fix
+Orion: /home/rgrumbin/rgdev/fix
+ 
 
 gross_checks -- check for structural problems (grid seams) or impossible values ( T < -3)
 
@@ -35,8 +49,6 @@ formats -- brief demonstrations of decoding various input file types and formats
 
 legacy -- archive of codes used in support of papers 1994-2017.
 
-rtofs_variables_lists -- ncdump -h of different types of RTOFS output
-
 sidfex  -- Sea Ice Dynamics Forecast Experiment support files/scripts
 
 web -- towards web display of scores
@@ -44,3 +56,4 @@ web -- towards web display of scores
 Robert Grumbine
 22 May 2018
 18 Sep 2019
+12 Jun 2020

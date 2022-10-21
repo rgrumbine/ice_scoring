@@ -3,11 +3,12 @@ import sys
 import datetime
 from math import *
 import numpy as np
+import numpy.ma as ma
 
 import netCDF4
 
 #---------------------------------------------------
-#Delta bound checks on .nc files, developed primarily from the sea ice (CICE5) output
+#Delta bound checks on .nc files, developed primarily from the sea ice (CICE6) output
 #Robert Grumbine
 #1 April 2020
 #
@@ -45,7 +46,7 @@ tarea = model1.variables["tarea"][:,:]
 fdic = open(sys.argv[3])
 ratio = float(sys.argv[4])
 
-k = 0
+parmno = 0
 for line in fdic:
   words = line.split()
   parm = words[0]
@@ -59,25 +60,44 @@ for line in fdic:
     continue
 
   delta = (tgrid1 - tgrid2)
-  print("delta max min for parm {:10s}".format(parm), "{:.5e}".format(delta.max()), "{:.5e}".format(delta.min()) )
+  print("delta max min for parm {:10s}".format(parm), "{:.5e}".format(delta.max()), "{:.5e}".format(delta.min()), delta.mean() )
   print("tgrid1 max min for parm {:10s}".format(parm), "{:.5e}".format(tgrid1.max()), "{:.5e}".format(tgrid1.min()) )
   print("tgrid2 max min for parm {:10s}".format(parm), "{:.5e}".format(tgrid2.max()), "{:.5e}".format(tgrid2.min()) )
   sys.stdout.flush()
 
+  if (parm == "aice_h"):
+    ice_hist,bin_edges = np.histogram(delta, 40, range=(-1.,1.))
+    for k in range (0,len(ice_hist)):
+      print ((bin_edges[k]+bin_edges[k+1])/2., ice_hist[k])
+    #print(ice_hist)
+    #print(bin_edges)
+
+
   if (delta.max() > pmax or delta.min() < pmin):
      print("parameter i j longitude latitude model_value test_checked test_value")
-     for j in range (0,ny):
-       sys.stdout.flush()
-       for i in range (0,nx):
-         if (delta[j,i] < pmin):
-           print(parm,"{:4d}".format(i),"{:4d}".format(j),"{:7.3f}".format(tlons[j,i]), 
-              "{:7.3f}".format(tlats[j,i]), delta[j,i], " vs pmin ",pmin, 
-              "{:7.3f}".format(tgrid1[j,i]), 
-              "{:7.3f}".format(tgrid2[j,i]) )
-         if (delta[j,i] > pmax):
-           print(parm,"{:4d}".format(i),"{:4d}".format(j),"{:7.3f}".format(tlons[j,i]), 
-              "{:7.3f}".format(tlats[j,i]), delta[j,i], " vs pmax ",pmax, 
-              "{:7.3f}".format(tgrid1[j,i]), 
-              "{:7.3f}".format(tgrid2[j,i]) )
+     maskhigh = ma.masked_array(delta > pmax)
+     high = maskhigh.nonzero()
 
-  k += 1
+     masklow = ma.masked_array(delta < pmin)
+     low = masklow.nonzero()
+
+     for k in range(0,len(high[0])):
+       i = high[1][k]
+       j = high[0][k]
+       print(parm,"{:4d}".format(i),"{:4d}".format(j),"{:7.3f}".format(tlons[j,i]), 
+          "{:7.3f}".format(tlats[j,i]), delta[j,i], " vs pmax ",pmax, 
+          "{:7.3f}".format(tgrid1[j,i]), 
+          "{:7.3f}".format(tgrid2[j,i]),
+          "{:7.3f}".format(tgrid1[j,i] - tgrid2[j,i] ) )
+
+     for k in range(0, len(low[0])):
+       i = low[1][k]
+       j = low[0][k]
+       print(parm,"{:4d}".format(i),"{:4d}".format(j),"{:7.3f}".format(tlons[j,i]), 
+          "{:7.3f}".format(tlats[j,i]), delta[j,i], " vs pmin ",pmin, 
+          "{:7.3f}".format(tgrid1[j,i]), 
+          "{:7.3f}".format(tgrid2[j,i]),
+          "{:7.3f}".format(tgrid1[j,i] - tgrid2[j,i] ) )
+
+
+  parmno += 1

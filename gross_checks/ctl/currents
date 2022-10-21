@@ -1,0 +1,11 @@
+Somali_Current         speed  0.1  3.50   0.5 2.0
+Somali_Current         SSU   -2.25 3.50  -1.5 1.5
+Somali_Current         SSV   -2.75 2.75  -1.5 1.5
+N_equatorial_current   speed  0.1  3.0    0.5   1.5
+N_equatorial_current   SSU   -3.0 -1.50  -1.75 -1.5
+N_equatorial_current   SSV    1.50 2.5    1.80  2.5
+Kuroshio_Start         SSV    -2.50 3.0   -1.5 1.0
+Kuroshio_Start         speed   0.10 3.5    1.0 2.0
+Kuroshio_Start         SSU    -2.75 2.50  -1.5 1.0
+Atlantic_Equatorial_current  SSV   -2.25 3.00  -1.5 1.5
+Brazil_current               SSV   -3.00 3.25  -1.5 1.5
