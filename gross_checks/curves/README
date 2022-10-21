@@ -1,0 +1,4 @@
+There are two types of curve present:
+1) A simple bounding curve for a geographic region -- Name_of_region.curve
+2) A bounding curve where the usual bounds on a parameter are ignored --
+Name_of_region_Parameter.curve 
