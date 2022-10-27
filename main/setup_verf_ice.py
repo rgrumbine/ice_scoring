@@ -13,7 +13,7 @@ from verf_files import *
 #--------------- Utility Functions --------------------------------
 
 from platforms import *
-exbase=os.environ['EXDIR']
+exbase=os.environ['EXBASE']
 exdir = exbase+"/exec/"
 fixdir = exbase+"/fix/"
 #debug 
@@ -68,6 +68,8 @@ def edge_score(fcst, fdate, obs, obsdate):
       os.path.exists(outfile) ):
     cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
            " 50.0 > " + outfile )
+    #debug
+    print("edge_score: ",cmd,flush=True)
     x = os.system(cmd)
     if (x != 0):
       print("command ",cmd," returned error code ",x, flush=True)
@@ -138,7 +140,7 @@ if (len(sys.argv) == 3+1):
   fcst_dir     = sys.argv[3]
   single = True
   #debug
-  print("setup_verf initial_date, " ", valid_date, flush=True)
+  print("setup_verf initial_date", valid_date, flush=True)
   sys.stdout.flush()
 elif (len(sys.argv) == 4+1):
   initial_date = parse_8digits(sys.argv[1])
@@ -214,7 +216,9 @@ if (single):
     ncep_edge(initial_date.strftime("%Y%m%d"))
     ncep_edge(valid_date.strftime("%Y%m%d"))
     edge_score("ncep", initial_date, "ncep", valid_date)
-    if (imsverf): edge_score("ncep", valid_date, "ims", valid_date)
+    if (imsverf): 
+      edge_score("ncep", valid_date, "ims", valid_date)
+      edge_score("ims", valid_date, "ncep", valid_date)
   if (nsidcverf):
     solo_score("nsidc", valid_date) #-- still to work out NH/SH vs. single input
     nsidc_edge(initial_date.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
