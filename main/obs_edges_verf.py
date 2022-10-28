@@ -90,8 +90,12 @@ def edge_score(fcst, fdate, obs, obsdate):
 #---------------------------- Begin program -------------------------
 #If a single verification, then one thing, else, create many single verifications:
 dt = datetime.timedelta(1)
-start = datetime.date(2011, 4, 1)
-end   = datetime.date(2018, 4, 1)
+start = parse_8digits(sys.argv[1])
+end   = parse_8digits(sys.argv[2])
+#debug: print(start, end)
+#debug: exit(0)
+#start = datetime.date(2011, 4, 1)
+#end   = datetime.date(2018, 4, 1)
 lead = 1
 while (start < end):
 

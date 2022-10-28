@@ -17,6 +17,7 @@ module load intel/2020.2
 module load impi/2020.2
 module load netcdf/4.7.0
 module load wgrib2/2.0.8
+
 module use -a /contrib/anaconda/modulefiles
 module load anaconda/latest 
 
@@ -78,7 +79,7 @@ export x=`date`
 echo start of loop at dtime $x
 export fcst_len=1
 
-python3 obs_edges_verf.py 
+python3 obs_edges_verf.py 20150101 20180331 
 
 
 export x=`date`
