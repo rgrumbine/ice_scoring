@@ -65,7 +65,7 @@ export base=`pwd`
 
 echo env $FCST_BASE $EXDIR $base $RUNBASE
 
-cp $HOME/rgdev/ice_scoring/main/obs_edges_verf.py .
+cp $HOME/rgdev/ice_scoring/main/obs_area.py .
 cp $HOME/rgdev/ice_scoring/main/statview.py .
 
 # Fewer changes below here -------------------------------------------------
@@ -80,8 +80,8 @@ export x=`date`
 echo start of loop at dtime $x
 export fcst_len=1
 
-#python3 -m cProfile -o statsout obs_edges_verf.py 20110401 20180331 $fcst_len 
-python3 -m cProfile -o statsout obs_edges_verf.py 20110401 20110402 $fcst_len 
+python3 obs_area.py 20120401 20180331 $fcst_len 
+#python3 -m cProfile -o statsout obs_area.py 20110401 20110402 $fcst_len 
 python3 statview.py statsout > stats.evaluation 
 
 export x=`date`

@@ -14,11 +14,10 @@ from platforms import *
 exbase=os.environ['EXBASE']
 exdir = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#debug 
-print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
+#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 for p in (exbase, exdir, fixdir):
   if (not os.path.exists(p)):
-    print("could not find ",p)
+    print("could not find ",p,flush=True)
     exit(1)
 
 #fixed files:
@@ -26,13 +25,13 @@ for p in (exbase, exdir, fixdir):
 #  seaice_gland5min
 for f in ( 'seaice_alldist.bin',  'seaice_gland5min'):
   if (not os.path.exists(fixdir+f)):
-    print("could not find ",fixdir+f)
+    print("could not find ",fixdir+f,flush=True)
     exit(1)
 
 #execs:
 for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims', 'solo_ncep'):
   if (not os.path.exists(exdir+f)):
-    print("could not find ",exdir+f)
+    print("could not find ",exdir+f,flush=True)
     exit(1)
 
 #debug exit(0)
@@ -43,7 +42,7 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
   fname = fcst+"."+fdate.strftime("%Y%m%d")
   if (os.path.exists(fname)):
     cmd = ('' +exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, fdate.strftime("%Y%m%d"), flush=True)
+    print("integrals for ",fcst, fdate.strftime("%Y%m%d")," ", end="", flush=True)
     sys.stdout.flush()
     x = os.system(cmd)
     if (x != 0):
@@ -91,7 +90,7 @@ while (start < end):
   valid = start + lead*dt
   imsverf   = True
   ncepverf  = True
-  osiverf   = True
+  osiverf   = False
   nsidcverf = False
 
   #IMS:
@@ -117,52 +116,37 @@ while (start < end):
     print("ncep fail: ",dirs['ncepdir'], start, valid)
 
   #NSIDC -- netcdf
-  #if (nsidcverf):
-  #  x = get_nsidc(start, valid, dirs['nsidcdir'])
-  #  if (x != 0):
-  #    print("could not get files for nsidc verification, turning off nsidcverf\n",flush=True)
-  #    nsidcverf = False
+  if (nsidcverf):
+    x = get_nsidc(start, valid, dirs['nsidcdir'])
+    if (x != 0):
+      print("could not get files for nsidc verification, turning off nsidcverf\n",flush=True)
+      nsidcverf = False
   #if (not nsidcverf):
   #  print("nsidc fail: ",dirs['nsidcdir'], start, valid)
   #  exit(1)
 
   #OSI-SAF -- netcdf
+  if (osiverf):
+    x = get_nsidc(start, valid, dirs['osisafdir'])
+    if (x != 0):
+      print("could not get files for osisaf verification, turning off osisaf\n",flush=True)
+      osiverf = False
+      
 
-  print(flush=True)
+  sys.stdout.flush()
 
   #now call verification with dirs, fcst, verf logicals
   #debug print("setup_verf working with observed data \n", flush=True)
   if (imsverf):
     solo_score("ims", valid)
-    ims_edge(start.strftime("%Y%m%d"))
-    ims_edge(valid.strftime("%Y%m%d"))
-    edge_score("ims", start, "ims", valid)
   if (ncepverf):
     solo_score("ncep", valid)
-    ncep_edge(start.strftime("%Y%m%d"))
-    ncep_edge(valid.strftime("%Y%m%d"))
-    edge_score("ncep", start, "ncep", valid)
-    if (imsverf): 
-      edge_score("ncep", valid, "ims", valid)
-      edge_score("ims", valid, "ncep", valid)
-  #if (nsidcverf):
-  #  solo_score("nsidc", valid) #-- still to work out NH/SH vs. single input
-  #  nsidc_edge(start.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
-  #  nsidc_edge(valid.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
-  #  edge_score("nsidc_north", start, "nsidc_north", valid)
-  #  if(imsverf): edge_score("nsidc_north", valid, "ims", valid)
-  #  if(ncepverf): edge_score("nsidc_north", valid, "ncep", valid)
-  #if (osiverf):
-  #  solo_score("osi",valid)
-  #  osi_edge(start.strftime("%Y%m%d"))
-  #  osi_edge(valid.strftime("%Y%m%d"))
-  #  edge_score("osi", start, "osi", valid)
-  #  if (imsverf):
-  #  if (ncepverf):
-    
+  if (nsidcverf):
+    solo_score("nsidc", valid) #-- still to work out NH/SH vs. single input
+  if (osiverf):
+    solo_score("osi",valid)
 
-
-  print("\n")
-  sys.stdout.flush()
+  print("\n", flush=True)
+  #sys.stdout.flush()
   start += dt
 
