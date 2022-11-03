@@ -2,22 +2,27 @@ import os
 import sys
 import datetime
 from math import *
-#print("importing external modules",flush=True)
+#debug: print("importing external modules",flush=True)
 
 import numpy as np
 import numpy.ma as ma
-#print("imported numpy",flush=True)
+#debug: print("imported numpy",flush=True)
 
 import netCDF4
-#print("Finished importing external modules",flush=True)
+#debug: print("Finished importing external modules",flush=True)
 
 import bounders
-#print("Finished importing private  modules",flush=True)
+#debug: print("Finished importing private  modules",flush=True)
 
 #---------------------------------------------------
 # new management of header variable names
 # -- requires names to be present, but may be followed by nothing
-fin = open('rtofs.ice.def','r')
+if (os.path.exists(os.environ['MODDEF']+'/rtofs.ice.def')):
+  fin = open(os.environ['MODDEF']+'/rtofs.ice.def','r')
+else:
+  print("could not open definition file ",os.environ['MODDEF']+'/rtofs.ice.def')
+  exit(1)
+
 headers = {
   'nx' : '',
   'ny' : '',
