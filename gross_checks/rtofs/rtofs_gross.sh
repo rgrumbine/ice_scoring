@@ -24,6 +24,9 @@ date
 tag=`date +"%Y%m%d"`
 tag=20221031
 
+#level=extremes
+level=high
+
 set +e
 for parm in ice prog diag
 do
@@ -33,7 +36,7 @@ do
   do
     if [ -f $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc ] ; then 
       python3 $EXDIR/rtofs.py $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc \
-              ${GBASE}/ctl/rtofs${parm}.extremes a > n.${n}.$parm
+              ${GBASE}/ctl/rtofs${parm}.${level} a > n.${n}.$parm
     fi
     n=`expr $n + 1`
     if [ $n -lt 10 ] ; then
@@ -49,7 +52,7 @@ do
   do
     if [ -f $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc ] ; then 
       python3 $EXDIR/rtofs.py $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc \
-                       ${GBASE}/ctl/rtofs${parm}.extremes a > f.${f}.$parm
+                       ${GBASE}/ctl/rtofs${parm}.${level} a > f.${f}.$parm
     fi
     f=`expr $f + 1`
     if [ $f -lt 10 ] ; then
@@ -67,6 +70,6 @@ date
 for hh in 024 048 072 096 120 144 168 192
 do
   python3 $EXDIR/rtofs3d.py $OUTBASE/rtofs.${tag}/rtofs_glo_3dz_f${hh}_daily_3ztio.nc \
-                     ${GBASE}/ctl/rtofs3zt.extremes a > ztio.f${hh}
+                     ${GBASE}/ctl/rtofs3zt.${level} a > ztio.f${hh}
 done
 exit
