@@ -1,0 +1,7 @@
+This takes for its input 
+1) a file with exceptions (ex: ignore, summary.exc, SSS)
+2) the pm output from a gross check scan
+
+and produces output of those values which aren't being granted an exception either because
+the flagged (i.e. in pm) line is a parameter or area which is being ignored, it's a parameter in a location where the normal bound is inappropriate (e.g. the Persian Gulf gets extremely hot), or it's a known error
+
