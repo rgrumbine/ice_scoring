@@ -7,6 +7,11 @@ N_equatorial_current  SSU      -3.0  -1.50  -1.75 -1.5
 N_equatorial_current  SSV       1.50  2.5    1.80  2.5
 N_equatorial_current  uocn     -3.0  -1.50  -1.75 -1.5
 N_equatorial_current  vocn      1.50  2.5    1.80  2.5
+EGreenland_current    vvel_h   -2.5   2.0    0.2   0.8          
+EGreenland_current    vvel     -2.5   2.0    0.2   0.8          
+EGreenland_current    vocn     -2.75  2.0    0.2   0.8          
+EGreenland_current    uvel_h   -2.5   2.0    0.2   0.8          
+EGreenland_current    uvel     -2.5   2.0    0.2   0.8          
 Persian_Gulf          SST      25.0  39.0   30.0  35.0
 Persian_Gulf          sst      25.0  39.0   30.0  35.0
 Red_Sea               SST      25.0  39.0   30.0  35.0
@@ -33,10 +38,10 @@ Archipelago_snow      hs_h      0.6   2.8    0.25  1.0          Known Error
 Archipelago_snow      hs        0.6   2.8    0.25  1.0          Known Error
 Beaufort_snow         hs_h      0.6   2.8    0.25  1.0          Known Error
 Beaufort_snow         hs        0.6   2.8    0.25  1.0          Known Error
-Greenland_Sea         vvel_h   -2.0   2.0    0.2   0.8          Known Error
-Greenland_Sea         vvel     -2.0   2.0    0.2   0.8          Known Error
-Greenland_Sea         uvel_h   -2.0   2.0    0.2   0.8          Known Error
-Greenland_Sea         uvel     -2.0   2.0    0.2   0.8          Known Error
+Greenland_Sea         vvel_h   -2.0   2.0    0.2   0.8          
+Greenland_Sea         vvel     -2.0   2.0    0.2   0.8          
+Greenland_Sea         uvel_h   -2.0   2.0    0.2   0.8          
+Greenland_Sea         uvel     -2.0   2.0    0.2   0.8          
 Greenland_Sea         hs_h      0.0   2.8    0.2   0.8          Known Error
 Greenland_Sea         hs        0.0   2.8    0.2   0.8          Known Error
 Greenland_snow        hs_h      0.0   2.8        0.25  1.0          Known Error 
