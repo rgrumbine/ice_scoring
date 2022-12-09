@@ -17,10 +17,10 @@ import bounders
 #---------------------------------------------------
 # new management of header variable names
 # -- requires names to be present, but may be followed by nothing
-if (os.path.exists(os.environ['MODDEF']+'/rtofs.ice.def')):
-  fin = open(os.environ['MODDEF']+'/rtofs.ice.def','r')
+if (os.path.exists(os.environ['MODDEF']+'/rtofs.cice.def')):
+  fin = open(os.environ['MODDEF']+'/rtofs.cice.def','r')
 else:
-  print("could not open definition file ",os.environ['MODDEF']+'/rtofs.ice.def')
+  print("could not open definition file ",os.environ['MODDEF']+'/rtofs.cice.def')
   exit(1)
 
 headers = {

@@ -1,5 +1,5 @@
 ice_uvelocity     -1.50   1.25    -0.35   0.35
 ice_vvelocity     -1.50   1.25    -0.35   0.35
-ice_thickness      0.00  10.00     0.50   4.00
+ice_thickness      0.00  15.00     0.50   4.00
 ice_temperature   -50.0  1.e-6   -21.00  -3.50
 ice_coverage       0.00  1.0001    0.10   0.90  
