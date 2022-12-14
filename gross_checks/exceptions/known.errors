@@ -1,16 +1,16 @@
-Archipelago_snow      hi_h      0.6  30.0    0.25  1.0          Known Error
-Archipelago_snow      hi        0.6  30.0    0.25  1.0          Known Error
-Antarctic_snow        hs_h      0.6   2.9    0.25  1.0          Known Error
-Antarctic_snow        hs        0.6   2.9    0.25  1.0          Known Error
-Archipelago_snow      hs_h      0.6   2.8    0.25  1.0          Known Error
-Archipelago_snow      hs        0.6   2.8    0.25  1.0          Known Error
-Beaufort_snow         hs_h      0.6   2.8    0.25  1.0          Known Error
-Beaufort_snow         hs        0.6   2.8    0.25  1.0          Known Error
-Greenland_Sea         hs_h      0.0   2.8    0.2   0.8          Known Error
-Greenland_Sea         hs        0.0   2.8    0.2   0.8          Known Error
-Greenland_snow        hs_h      0.0   2.8        0.25  1.0          Known Error 
-Greenland_snow        hs        0.0   2.8        0.25  1.0          Known Error 
-Weddell_snow          hs_h      0.6   2.8        0.25  1.0          Known Error
-Weddell_snow          hs        0.6   2.8        0.25  1.0          Known Error
-Weddell_Sea           MLD_0125  5.0  5100.0    500.0 1000.0        Known Error
-Weddell_Sea           MLD_0125  5.0  5100.0    500.0 1000.0        Known Error
+Archipelago_snow      hi_h      0.6  30.0    0.25  1.0          Known Error -- rtofs_cice
+Archipelago_snow      hi        0.6  30.0    0.25  1.0          Known Error -- rtofs_cice
+Antarctic_snow        hs_h      0.6   2.9    0.25  1.0          Known Error -- rtofs_cice
+Antarctic_snow        hs        0.6   2.9    0.25  1.0          Known Error -- rtofs_cice
+Archipelago_snow      hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Archipelago_snow      hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Beaufort_snow         hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Beaufort_snow         hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Greenland_Sea         hs_h      0.0   2.8    0.2   0.8          Known Error -- rtofs_cice
+Greenland_Sea         hs        0.0   2.8    0.2   0.8          Known Error -- rtofs_cice
+Greenland_snow        hs_h      0.0   2.8    0.25  1.0          Known Error -- rtofs_cice
+Greenland_snow        hs        0.0   2.8    0.25  1.0          Known Error -- rtofs_cice
+Weddell_snow          hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Weddell_snow          hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
+Weddell_Sea           MLD_0125  5.0  5100.0    500.0 1000.0        Known Error -- rtofs_cice
+Weddell_Sea           MLD_0125  5.0  5100.0    500.0 1000.0        Known Error -- rtofs_cice
