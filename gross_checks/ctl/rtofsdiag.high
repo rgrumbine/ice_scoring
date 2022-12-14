@@ -1,0 +1,5 @@
+u_barotropic_velocity     -1.10  1.10    -0.35   0.35
+v_barotropic_velocity     -1.10  1.10    -0.35   0.35
+ssh                       -1.95  1.50    -1.50   1.0
+mixed_layer_thickness            0.5   900.0    2.00  100.0
+surface_boundary_layer_thickness 0.5   750.0    2.00  100.0

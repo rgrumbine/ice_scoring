@@ -5,7 +5,7 @@ import datetime
 #run with argument 'trial' to get output for success
 
 #------------------------------------------------------------------
-exbase = os.environ['EXDIR']
+exbase = os.environ['EXBASE']
 exdir  = exbase+"/exec/"
 fixdir = exbase+"/fix/"
 #debug 
@@ -21,9 +21,10 @@ def parse_8digits(tag):
 #----------------- High level declarations -----------------------------
 # Directories w. verification data
 dirs = {
-  'imsdir' : '',
-  'ncepdir' : '',
-  'nsidcdir' : ''
+  'imsdir'    : '' ,
+  'ncepdir'   : '' ,
+  'nsidcdir'  : '' ,
+  'osisafdir' :''
 }
 
 # Known machines:
@@ -60,26 +61,25 @@ if (machine == 'HERA'):
   dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ice5min/'
   #dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/nsidc.nc/'
   dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/G02202_V4/'
+  dirs['osisafdir'] = '/home/Robert.Grumbine/clim_data/verification_data/osisaf/'
   dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/fix'
 elif (machine == 'Orion'):
   dirs['imsdir'] = '/home/rgrumbin/rgdev/verification_data/ims/'
   dirs['ncepdir'] = '/home/rgrumbin/rgdev/verification_data/ice5min/'
-  dirs['nsidcdir'] = '/home/rgrumbin/rgdev/verification_data/nsidc.nc/'
+  dirs['nsidcdir'] = '/home/rgrumbin/rgdev/verification_data/G02202_V4/'
+  dirs['osisafdir'] = '/home/rgrumbin/rgdev/verification_data/osisaf/'
   dirs['fixdir']   = '/home/rgrumbin/rgdev/ice_scoring/fix'
 elif (machine == 'WCOSS_C'):
-  dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/sice/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/nsidc/'
-  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
-elif (machine == 'WCOSS_DELL_P3'):
-  dirs['imsdir'] = '/u/Robert.Grumbine/noscrub/ims/'
-  dirs['ncepdir'] = '/u/Robert.Grumbine/noscrub/ice5min/'
-  dirs['nsidcdir'] = '/u/Robert.Grumbine/noscrub/sidads.colorado.edu/pub/DATASETS/NOAA/G02202_V3/'
-  dirs['fixdir']   = '/u/Robert.Grumbine/para/mmablib/ice_scoring/fix'
+  dirs['imsdir'] = '/u/robert.grumbine/noscrub/verification/ims/'
+  dirs['ncepdir'] = '/u/robert.grumbine/noscrub/verification/sice/'
+  dirs['nsidcdir'] = '/u/robert.grumbine/noscrub/verification/G02202_V4/'
+  dirs['osisafdir'] = '/u/robert.grumbine/noscrub/verification/osisaf/'
+  dirs['fixdir']   = '/u/robert.grumbine/rgdev/ice_scoring/fix'
 elif (machine == 'Gaea'):
   dirs['imsdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ims/'
   dirs['ncepdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/ice5min/'
-  dirs['nsidcdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/nsidc.nc/'
+  dirs['nsidcdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/G02202_V4/'
+  dirs['osisafdir'] = '/lustre/f2/dev/ncep/Robert.Grumbine/CICE_INPUTDATA/Verification_data/osisaf/'
   dirs['fixdir']   = '/lustre/f2/dev/ncep/Robert.Grumbine/fix'
 elif (machine == 'RG_Home'):
   dirs['imsdir'] = '/Volumes/ncep/allconc/ims/'
