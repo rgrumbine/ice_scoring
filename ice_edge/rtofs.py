@@ -9,7 +9,7 @@ if (not os.path.exists(fixdir+"/skip_hr") ):
   print("fixdir = ",fixdir)
   exit(1)
 
-start = datetime.datetime(2022,1,31)
+start = datetime.datetime(2022,1,1)
 end   = datetime.datetime(2022,10,31)
 dt    = datetime.timedelta(1)
 
@@ -21,15 +21,14 @@ while (start <= end):
   print("dy = ",dy, flush=True)
   valid    = start
 
-  valid -= dt
+  #valid -= dt
   # looks like n00 refers to the day before the nominal analysis time
-
+  nlead=0
   for lead in ("n00", "f24", "f48", "f72", "f96", "f120", "f144", "f168", "f192"):
-  #for lead in ("n00", "f24"):
-    #lead = "f24"
     fname   = dbase+start.strftime("%Y%m%d")+"/rtofs_glo.t00z."+lead+".cice_inst"
 
     valid_dy = valid.strftime("%03j")
+    yy       = valid.strftime("%Y")
 
     for crit in (0.01, 0.03, 0.05, 0.10, 0.15 ):
       if (os.path.exists(fname)): 
@@ -44,22 +43,23 @@ while (start <= end):
           os.system(cmd)
     
         #score it:
-        snamer = "rtofs_scores/nr."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
-        sname  = "rtofs_scores/n."+valid_dy+"."+start.strftime("%Y%m%d")+critstring
+        snamer = "rtofs_scores/nr."+"{:1d}".format(nlead)+"."+start.strftime("%Y%m%d")+critstring
+        sname  = "rtofs_scores/n."+"{:1d}".format(nlead)+"."+start.strftime("%Y%m%d")+critstring
 
         if (not os.path.exists(sname)):
-          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + outname +' cleaned/n.2022'+valid_dy+'.beta 50. > '+sname
+          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + outname +' cleaned/n.'+yy+valid_dy+'.beta 50. > '+sname
           #debug print(cmd, flush=True)
           os.system(cmd)
 
         if (not os.path.exists(snamer)):
-          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + 'cleaned/n.2022'+valid_dy+'.beta ' + outname + ' 50. > '+snamer
+          cmd =  exdir+'/cscore_edge '+fixdir+'/seaice_alldist.bin ' + 'cleaned/n.'+yy+valid_dy+'.beta ' + outname + ' 50. > '+snamer
           #debug print(cmd, flush=True)
           os.system(cmd)
       else:
         print("could not find model file:",fname, flush=True)
   
     valid += dt
+    nlead += 1
   
   start += dt
 
