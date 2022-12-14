@@ -3,6 +3,11 @@ import sys
 
 import numpy as np
 
+try:
+  title_tag = sys.argv[2]
+except:
+  title_tag = "ref"
+
 fin = open(sys.argv[1],"r")
 parm = []
 i = []
@@ -44,7 +49,7 @@ matplotlib.use('Agg') #batch mode
 fig,ax = plt.subplots()
 ax.scatter(i,j)
 ax.grid() 
-plt.savefig("ij_errs.png")
+plt.savefig("ij_errs_"+title_tag+".png")
 plt.close()
 
 
@@ -73,7 +78,7 @@ ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
 ax.add_feature(cfeature.GSHHSFeature(levels=[1,2,3,4], scale="c") )
 plt.scatter(lon, lat, transform=ccrs.PlateCarree())
-plt.savefig("ll_errs.png")
+plt.savefig("ll_errs_"+title_tag+".png")
 plt.close()
 
 
