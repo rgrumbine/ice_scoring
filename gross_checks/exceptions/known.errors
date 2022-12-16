@@ -1,22 +1,60 @@
-Archipelago_snow      hi_h      0.6  30.0    0.25  1.0          Known Error -- rtofs_cice
-Archipelago_snow      hi        0.6  30.0    0.25  1.0          Known Error -- rtofs_cice
-Archipelago_snow      strength  0.0  1.e7    0.25  1.e5         Known Error -- rtofs_cice
-Antarctic_snow        hs_h      0.6   2.9    0.25  1.0          Known Error -- rtofs_cice
-Antarctic_snow        hs        0.6   2.9    0.25  1.0          Known Error -- rtofs_cice
-Archipelago_snow      hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Archipelago_snow      hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Beaufort_snow         hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Beaufort_snow         hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Greenland_Sea         hs_h      0.0   2.8    0.2   0.8          Known Error -- rtofs_cice
-Greenland_Sea         hs        0.0   2.8    0.2   0.8          Known Error -- rtofs_cice
-Greenland_snow        hs_h      0.0   2.8    0.25  1.0          Known Error -- rtofs_cice
-Greenland_snow        hs        0.0   2.8    0.25  1.0          Known Error -- rtofs_cice
-Greenland_snow        snow_ai   0.0   0.6    0.25  0.4          Known Error -- rtofs_cice
-Weddell_snow          hs_h      0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Weddell_snow          hs        0.6   2.8    0.25  1.0          Known Error -- rtofs_cice
-Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs_cice
-Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs_cice
-Laptev_Sea            SST      -3.0  15.0   -1.0  10.0          Known Error -- rtofs_cice 
-Laptev_Sea            sst      -3.0  15.0   -1.0  10.0          Known Error -- rtofs_cice
-Indian_Ocean_hot      SST      13.0  38.0   15.0  30.0          Known Error -- rtofs_cice
-Indian_Ocean_hot      sst      13.0  38.0   15.0  30.0          Known Error -- rtofs_cice
+Archipelago_snow      hi_h      0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hi        0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      strength  0.0  1.e7    0.25  1.e5        Known Error -- rtofs_cice
+Antarctic_snow        hs_h      0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
+Antarctic_snow        hs        0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Beaufort_snow         hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Beaufort_snow         hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Greenland_Sea         hs_h      0.0   2.8    0.2   0.8         Known Error -- rtofs_cice
+Greenland_Sea         hs        0.0   2.8    0.2   0.8         Known Error -- rtofs_cice
+Greenland_snow        hs_h      0.0   2.8    0.25  1.0         Known Error -- rtofs_cice
+Greenland_snow        hs        0.0   2.8    0.25  1.0         Known Error -- rtofs_cice
+Greenland_snow        snow_ai   0.0   0.6    0.25  0.4         Known Error -- rtofs_cice
+Weddell_snow          hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Weddell_snow          hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs
+Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs
+Laptev_Sea            SST      -3.0  15.0   -1.0  10.0         Known Error -- rtofs_cice 
+Laptev_Sea            sst      -3.0  15.0   -1.0  10.0         Known Error -- rtofs_cice
+Indian_Ocean_hot      SST      13.0  38.0   15.0  30.0         Known Error -- rtofs_cice
+Indian_Ocean_hot      sst      13.0  38.0   15.0  30.0         Known Error -- rtofs_cice
+Hudson_saline         SSS      39.0  45.0   39.0  40.0         Known Error -- ufs
+Hudson_saline         sss      39.0  45.0   39.0  40.0         Known Error -- ufs
+Tropics               uocn     -3.0   3.0   -1.0   1.0         Known, may or may not be error
+Adriatic_Sea          SSS 35.0 39.5  37.0 38.0 
+Aegean_Sea            SSS 35.0 40.0  37.0 38.0 
+Amazon_Outflow        SSS  0.0 15.0   1.0 12.0
+Baltic_Sea            SSS  0.0 15.0   1.0 12.0
+Barentsz_Sea          SSS  0.0 15.0   1.0 12.0      ?
+Beaufort_fresh        SSS  0.0 15.0   1.0 12.0      ?
+Chesapeake_fresh      SSS  0.0 15.0   1.0  4.0 
+Congo_fresh           SSS  0.0 15.0   1.0  4.0
+East_Siberian_fresh   SSS  0.0 15.0   1.0 12.0      ?
+G_AK_fresh            SSS  0.0 15.0   1.0 12.0      ?
+Ganges_Delta          SSS  0.0 15.0   1.0 12.0
+Gulf_of_Aqaba         SSS 35.0 41.0  37.0 38.0 
+Gulf_of_Bothnia       SSS  0.5 15.0   1.0 12.0
+Gulf_of_Finland       SSS  0.0 15.0   1.0 12.0
+Gulf_of_Martaban      SSS  0.0 15.0   1.0 12.0
+Gulf_of_Riga          SSS  1.5 15.0   2.0 12.0
+Gulf_of_St_Lawrence   SSS  0.0 15.0   1.0 12.0      ?
+Gulf_of_Suez          SSS 35.0 41.5  37.0 38.0
+Ionian_Sea            SSS 35.0 39.5  37.0 38.0
+James_Bay_fresh       SSS  0.0 15.0   1.0  4.0 
+Kara_fresh            SSS  0.0 15.0   1.0 12.0
+Laptev_fresh          SSS  0.0 15.0   1.0 12.0      ?
+Mediterranean_Sea_-_Eastern_Basin SSS 35.0 41.0  37.0 38.0
+MS_Outflow            SSS  0.0 15.0   1.0 12.0
+North_Sea             SSS  0.0 15.0   1.0 12.0      ?
+Persian_fresh         SSS  0.0 15.0   1.0  4.0
+Persian_Gulf          SSS 35.0 43.0  35.0 40.0
+Red_Sea               SSS 35.0 40.5  37.0 38.0
+Rio_de_La_Plata       SSS  0.0 15.0   1.0 12.0
+Sea_of_Azov_fresh     SSS  0.0 15.0   1.0  4.0
+Sea_of_Okhotsk        SSS  0.0 15.0   1.0 12.0      ?
+The_NWP_fresh         SSS  0.0 15.0   1.0 12.0      ?
+Trinidad_Tobago_fresh SSS  0.0 15.0   1.0  4.0
+White_Sea             SSS  0.0 15.0   1.0 12.0
+Yangtze_Outflow       SSS  0.0 15.0   1.0 12.0

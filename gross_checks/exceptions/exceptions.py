@@ -43,7 +43,7 @@ for line in f:
     if (regions[i].is_ok(pt, value, param)):
       ok = True
       counter[i] += 1
-      #debug print("curve ",i," is ok with this location and value ",pt, value, param, flush=True)
+    
     if (ok):
       break
 

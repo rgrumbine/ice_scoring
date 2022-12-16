@@ -23,7 +23,10 @@ class region(curve, bounds) :
   def is_ok(self, pt, value, param = "NULL"):
     tmp = self.inside(pt)         # is the point inside the curve?
     t2  = self.ptinbounds(value)  # is it out in bounds?
-    if (param != "NULL"):
+    #debug print("region is_ok,",tmp,t2,param, self.param, flush=True) 
+    if (self.param == "all"):
+      return(tmp and t2)
+    elif (param != "NULL"):
       return (tmp and t2) and (param == self.param)    # is it the right parameter?
     return(tmp and t2)
 
