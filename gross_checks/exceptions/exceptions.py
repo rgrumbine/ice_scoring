@@ -26,6 +26,8 @@ freq = 1000
 ok = False
 
 for line in f:
+  if (not "pm" in line): #added to avoid having to pre-grep prior output
+      continue
   words = line.split()
   param = words[0]
   tlon = float(words[3])

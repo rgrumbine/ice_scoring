@@ -49,6 +49,7 @@ matplotlib.use('Agg') #batch mode
 fig,ax = plt.subplots()
 ax.scatter(i,j)
 ax.grid() 
+plt.title(title_tag)
 plt.savefig("ij_errs_"+title_tag+".png")
 plt.close()
 
@@ -63,6 +64,7 @@ proj = ccrs.PlateCarree()
 ax = plt.axes(projection = proj)
 fig = plt.figure(figsize = (8,6))
 ax = fig.add_subplot(1,1,1,projection = proj)
+plt.title(title_tag)
 
 xlocs = list(range(-180,181,30))
 #xlocs = list(range(10*int(lonmin/10), 10*int(lonmax/10), 10))
@@ -76,12 +78,8 @@ else:
 
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
-ax.add_feature(cfeature.GSHHSFeature(levels=[1,2,3,4], scale="c") )
+ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="c") )
 plt.scatter(lon, lat, transform=ccrs.PlateCarree())
 plt.savefig("ll_errs_"+title_tag+".png")
 plt.close()
 
-
-#ice.20110815:uvel_h 428 187 167.125 -61.725048 1.5127246  vs pmax  1.5
-#ice.20110815:uvel_h 429 187 167.375 -61.725048 1.5152752  vs pmax  1.5
-#ice.20110815:uvel_h 430 187 167.625 -61.725048 1.5041997  vs pmax  1.5
