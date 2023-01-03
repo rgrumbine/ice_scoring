@@ -4,7 +4,7 @@
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=4:00:00
+#PBS -l walltime=9:00:00
 #PBS -l select=1:ncpus=1
 #
 
@@ -20,11 +20,9 @@ export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
 export modelout=$HOME/noscrub/model_intercompare/rtofs_cice
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 
-#920++
-#for mm in 09 10 11 12
-#to 0615
-tag=20220327
-while [ $tag -le 20220615 ] 
+
+tag=20220101
+while [ $tag -le 20221215 ] 
 do
   mm=`echo $tag | cut -c5-6`
   dd=`echo $tag | cut -c7-8`
