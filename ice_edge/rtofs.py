@@ -10,7 +10,7 @@ if (not os.path.exists(fixdir+"/skip_hr") ):
   exit(1)
 
 start = datetime.datetime(2022,1,1)
-end   = datetime.datetime(2022,10,31)
+end   = datetime.datetime(2023,1,8)
 dt    = datetime.timedelta(1)
 
 

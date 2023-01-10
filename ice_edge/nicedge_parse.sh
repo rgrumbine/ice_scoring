@@ -3,14 +3,17 @@
 export DCOM=~/rgdev/edges
 . ./bootstrap.sh
 
-yy=2019
-ddd=077
+#yy=2019
+#ddd=077
+
+yy=2022
+ddd=001
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned
 fi
 
-while [ $yy -lt 2023 ]
+while [ $yy -le 2023 ]
 do
   if [ ! -f cleaned/n.${yy}${ddd}.beta ] ; then
     if [ -f ${DCOM}/nedge_${yy}${ddd} ] ; then
