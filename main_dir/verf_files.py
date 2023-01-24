@@ -3,11 +3,23 @@ import datetime
 
 from platforms import *
 
+#-------------------------------------------
+"""
+Tools for working with grids of information --
+get of: ims, cfsv2, nsidc, ncep analysis, model forecast 
+edge for: (likewise)
+
+get_ims
+ims_edge
+(repeat for others)
+
+Also present is nsidc_name, fcst_name, for constructing file names and paths
+For these two, it's more involved and less predictable
+Shouldn't be needed by user, but may need updates
+
+"""
+#-------------------------------------------
 # RG: logfile for comments out
-#moved to 'platforms': 
-#exbase = os.environ['EXDIR']
-#exdir  = exbase+"/exec/"
-#fixdir = exbase+"/fix/"
 
 #-------- Skeleton for grid type sources: ---
 # NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)
@@ -96,7 +108,7 @@ def get_ims(initial_date, imsdir):
   initial    = int(initial_date.strftime("%Y%m%d"))
 
 #more efficient to gunzip binaries than go to grib
-  fname = 'ims.'+str(initial)
+  fname = imsdir + 'ims.'+str(initial)
   if (not os.path.exists(fname)):
     fin = imsdir + "ims."+str(initial) +'.gz'
     if (os.path.exists(fin) ):
@@ -119,23 +131,28 @@ def get_ims(initial_date, imsdir):
 
   return retcode
 
-def ims_edge(initial):
+def ims_edge(initial, imsdir):
   retcode = int(0)
-  fname = 'ims.'+str(initial)
-  if (not os.path.exists('ims_edge.' + str(initial))):
-    cmd = exdir + 'find_edge_ims ' + fname + ' > ims_edge.' + str(initial)
+  inname = imsdir+'ims.'+str(initial)
+  outname = imsdir+'ims_edge.' + str(initial)
+  if (not os.path.exists(outname) and os.path.exists(inname) ):
+    cmd = exdir + 'find_edge_ims ' + inname +  '>' + outname
     os.system(cmd)
     x = os.system(cmd)
     if (x != 0): retcode += x
   return retcode
 
 #------------------------------------------------------------------
-def ncep_edge(initial):
+def ncep_edge(initial, ncepdir):
   retcode = int(0)
-  fname = 'ncep.'+str(initial)
-  if (not os.path.exists('ncep_edge.' + str(initial))) :
-      #note that name does not follow convention
-    cmd = exdir + 'find_edge ' + fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > ncep_edge.' + str(initial)
+  edgedir = dirs['edgedir']
+  fname = ncepdir + 'ncep.'+str(initial)
+  edgename = edgedir + 'ncep_edge.' + str(initial)
+  print("ncep_edge ",edgedir, fname, edgename, flush=True)
+
+  if (not os.path.exists(edgename) and os.path.exists(fname)  ):
+    #note that name does not follow convention
+    cmd = exdir + 'find_edge ' + fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > ' + edgename
     x = os.system(cmd)
     if (x != 0): retcode += x
     return retcode
@@ -151,7 +168,7 @@ def get_ncep(initial_date, valid_date, ncepdir):
     initial = int(tag.strftime("%Y%m%d"))
     ncep_file = ncepdir + "ice5min.grib2." + str(yyyymm) 
     if (os.path.exists(ncep_file) ):
-      fname = 'ncep.'+str(initial)
+      fname = ncepdir + 'ncep.'+str(initial)
       if (not os.path.exists(fname)):
 #far more efficient to gunzip binaries
         cmd=('wgrib2 '+ncep_file + "| grep "+str(initial) + " | wgrib2 -i " + 

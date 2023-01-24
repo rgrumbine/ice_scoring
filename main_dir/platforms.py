@@ -2,14 +2,17 @@ import os
 import sys
 import datetime
 
-#run with argument 'trial' to get output for success
+#run with argument 'trial' to get output for success v. failure
 
 #------------------------------------------------------------------
-exbase = os.environ['EXBASE']
+try:
+  exbase = os.environ['EXBASE']
+except:
+  exbase = "."
+
 exdir  = exbase+"/exec/"
 fixdir = exbase+"/fix/"
-#debug 
-print("platforms.py exbase, exdir, fixdir = ","\n",exbase,"\n", exdir,"\n", fixdir, flush=True)
+#debug print("platforms.py exbase, exdir, fixdir = ","\n",exbase,"\n", exdir,"\n", fixdir, flush=True)
 
 #--------------- Utility Functions --------------------------------
 def parse_8digits(tag):
@@ -21,10 +24,12 @@ def parse_8digits(tag):
 #----------------- High level declarations -----------------------------
 # Directories w. verification data
 dirs = {
+  'verf_head' : '' ,
+  'edgedir'   : '' ,
   'imsdir'    : '' ,
   'ncepdir'   : '' ,
   'nsidcdir'  : '' ,
-  'osisafdir' :''
+  'osisafdir' : ''
 }
 
 # Known machines:
@@ -57,11 +62,13 @@ if not machine:
 #------------------------------------------------------------------
 # Establish paths to verification data:
 if (machine == 'HERA'):
-  dirs['imsdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ims/'
-  dirs['ncepdir'] = '/home/Robert.Grumbine/clim_data/verification_data/ice5min/'
-  #dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/nsidc.nc/'
-  dirs['nsidcdir'] = '/home/Robert.Grumbine/clim_data/verification_data/G02202_V4/'
-  dirs['osisafdir'] = '/home/Robert.Grumbine/clim_data/verification_data/osisaf/'
+  dirs['verf_head'] = '/home/Robert.Grumbine/clim_data/verification_data/'
+  dirs['edgedir']   = dirs['verf_head']+'/edges/'
+  dirs['imsdir']    = dirs['verf_head']+'/ims/'
+  dirs['ncepdir']   = dirs['verf_head']+'/ice5min/'
+  #dirs['nsidcdir'] = dirs['verf_head']+'/nsidc.nc/'
+  dirs['nsidcdir']  = dirs['verf_head']+'/G02202_V4/'
+  dirs['osisafdir'] = dirs['verf_head']+'/osisaf/'
   dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/fix'
 elif (machine == 'Orion'):
   dirs['imsdir'] = '/home/rgrumbin/rgdev/verification_data/ims/'

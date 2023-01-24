@@ -5,15 +5,13 @@ import datetime
 #Arguments:
 #   start_date verification_date forecast_dir_path
 
+from platforms import *
+
 from verf_files import *
 
 ##################### ------------- 
-#--------------- Utility Functions --------------------------------
+#--------------- Environment Checks  --------------------------------
 
-from platforms import *
-exbase=os.environ['EXBASE']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
 #debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 for p in (exbase, exdir, fixdir):
   if (not os.path.exists(p)):
@@ -36,8 +34,15 @@ for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_i
 
 #debug exit(0)
 #------------------------------------------------------------------
+#--------------- Utility Functions --------------------------------
 
 def solo_score(fcst, fdate, fout = sys.stdout ):
+"""
+  solo_score is items that can be computed with just the given
+  forecast, on a given date
+  So far, just the area and extent integrals
+"""
+
   if (fcst == "nsidc"): return 0
   fname = fcst+"."+fdate.strftime("%Y%m%d")
   if (os.path.exists(fname)):
@@ -52,47 +57,24 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
     print("could not find ",fname, flush=True)
     return 1
 
-def edge_score(fcst, fdate, obs, obsdate):
-  retcode = int(0)
-  fname   = fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
-  outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
-                + "."+obsdate.strftime("%Y%m%d") )
-  #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
-
-  if (os.path.exists(fname) and os.path.exists(obsname) and not 
-      os.path.exists(outfile) ):
-    cmd = ('time ' +exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
-           " 50.0 > " + outfile )
-    #debug print("edge_score: ",cmd,flush=True)
-
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      sys.stdout.flush()
-      retcode += x
-
-  return retcode
-
-
 #====================================================================
 #---------------------------- Begin program -------------------------
-#If a single verification, then one thing, else, create many single verifications:
 dt = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
 end   = parse_8digits(sys.argv[2])
-#debug: print(start, end)
+#debug: print(start, end, flush=True)
 
 lead = 1
 
 while (start < end):
 
   valid = start + lead*dt
+
+  #-------------------------------------- Observation Suite ------
   imsverf   = True
   ncepverf  = True
   osiverf   = False
   nsidcverf = False
-
   #IMS:
   if (imsverf): 
     x = get_ims(start, dirs['imsdir'])
@@ -132,10 +114,12 @@ while (start < end):
       print("could not get files for osisaf verification, turning off osisaf\n",flush=True)
       osiverf = False
       
-
   sys.stdout.flush()
 
+  #-- END ------------------------------- Observation Suite ------
+
   #now call verification with dirs, fcst, verf logicals
+
   #debug print("setup_verf working with observed data \n", flush=True)
   if (imsverf):
     solo_score("ims", valid)
@@ -147,6 +131,6 @@ while (start < end):
     solo_score("osi",valid)
 
   print("\n", flush=True)
-  #sys.stdout.flush()
   start += dt
 
+  #sys.stdout.flush()

@@ -5,17 +5,13 @@ import datetime
 #Arguments:
 #   start_date verification_date forecast_dir_path
 
+from platforms import *
 from verf_files import *
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
 
-from platforms import *
-exbase=os.environ['EXBASE']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
-#debug 
-print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
+#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 for p in (exbase, exdir, fixdir):
   if (not os.path.exists(p)):
     print("could not find ",p)
@@ -30,35 +26,22 @@ for f in ( 'seaice_alldist.bin',  'seaice_gland5min'):
     exit(1)
 
 #execs:
-for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims', 'solo_ncep'):
+for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims' ):
   if (not os.path.exists(exdir+f)):
     print("could not find ",exdir+f)
     exit(1)
 
-#debug exit(0)
 #------------------------------------------------------------------
-
-def solo_score(fcst, fdate, fout = sys.stdout ):
-  if (fcst == "nsidc"): return 0
-  fname = fcst+"."+fdate.strftime("%Y%m%d")
-  if (os.path.exists(fname)):
-    cmd = ('' +exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, fdate.strftime("%Y%m%d"), flush=True)
-    sys.stdout.flush()
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-    return x 
-  else:
-    print("could not find ",fname, flush=True)
-    return 1
 
 def edge_score(fcst, fdate, obs, obsdate):
   retcode = int(0)
-  fname   = fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
-  outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
+  edgedir = dirs['edgedir']
+  fname   = edgedir+fcst+"_edge."+fdate.strftime("%Y%m%d")
+  obsname = edgedir+obs +"_edge."+obsdate.strftime("%Y%m%d")
+
+  outfile = (edgedir + "edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
                 + "."+obsdate.strftime("%Y%m%d") )
+
   #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
 
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
@@ -70,7 +53,6 @@ def edge_score(fcst, fdate, obs, obsdate):
     x = os.system(cmd)
     if (x != 0):
       print("command ",cmd," returned error code ",x, flush=True)
-      sys.stdout.flush()
       retcode += x
 
   return retcode
@@ -82,7 +64,7 @@ def edge_score(fcst, fdate, obs, obsdate):
 dt = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
 end   = parse_8digits(sys.argv[2])
-#debug: print(start, end)
+#debug: print(start, end, flush=True)
 
 lead = 1
 
@@ -91,7 +73,7 @@ while (start < end):
   valid = start + lead*dt
   imsverf   = True
   ncepverf  = True
-  osiverf   = True
+  osiverf   = False
   nsidcverf = False
 
   #IMS:
@@ -133,27 +115,24 @@ while (start < end):
   #now call verification with dirs, fcst, verf logicals
   #debug print("setup_verf working with observed data \n", flush=True)
   if (imsverf):
-    solo_score("ims", valid)
-    ims_edge(start.strftime("%Y%m%d"))
-    ims_edge(valid.strftime("%Y%m%d"))
+    ims_edge(start.strftime("%Y%m%d"), dirs['imsdir'])
+    ims_edge(valid.strftime("%Y%m%d"), dirs['imsdir'])
     edge_score("ims", start, "ims", valid)
   if (ncepverf):
-    solo_score("ncep", valid)
-    ncep_edge(start.strftime("%Y%m%d"))
-    ncep_edge(valid.strftime("%Y%m%d"))
+    print("on ncepverf ",start, valid, dirs['ncepdir'], flush=True)
+    ncep_edge(start.strftime("%Y%m%d"), dirs['ncepdir'])
+    ncep_edge(valid.strftime("%Y%m%d"), dirs['ncepdir'])
     edge_score("ncep", start, "ncep", valid)
     if (imsverf): 
       edge_score("ncep", valid, "ims", valid)
       edge_score("ims", valid, "ncep", valid)
   #if (nsidcverf):
-  #  solo_score("nsidc", valid) #-- still to work out NH/SH vs. single input
   #  nsidc_edge(start.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
   #  nsidc_edge(valid.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
   #  edge_score("nsidc_north", start, "nsidc_north", valid)
   #  if(imsverf): edge_score("nsidc_north", valid, "ims", valid)
   #  if(ncepverf): edge_score("nsidc_north", valid, "ncep", valid)
   #if (osiverf):
-  #  solo_score("osi",valid)
   #  osi_edge(start.strftime("%Y%m%d"))
   #  osi_edge(valid.strftime("%Y%m%d"))
   #  edge_score("osi", start, "osi", valid)
@@ -162,7 +141,6 @@ while (start < end):
     
 
 
-  print("\n")
-  sys.stdout.flush()
+  print("\n", flush=True)
   start += dt
 
