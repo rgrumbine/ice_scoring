@@ -355,13 +355,16 @@ def get_fcst(initial_date, valid_date, fcst_dir):
 #pass 8digit dates:
 def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
+  edgedir = dirs['edgedir']
+  fname = edgedir + 'fcst_edge.' + str(valid)
   
-  if (not os.path.exists('fcst_edge.' + str(valid))):
-    fname = fcst_name(valid, initial, fcst_dir)
+  if (not os.path.exists(fname) ):
+    fcstin = fcst_name(valid, initial, fcst_dir)
     #RG: want something cleaner for selecting model format/version!
     #UFS
-    #debug print("cmd", type(exdir), type(fixdir), type(fname), type(valid), flush=True )
-    cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
+    #debug print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
+    cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fcstin + ' 0.40 > ' + fname
+
     #CICE
     #cmd = exdir + 'find_edge_consortium '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
 

@@ -43,7 +43,8 @@ def edge_score(fcst, fdate, obs, obsdate):
   outfile = (edgedir + "edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
                 + "."+obsdate.strftime("%Y%m%d") )
 
-  #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
+  #debug 
+  print('scores: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
 
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
       os.path.exists(outfile) ):
@@ -59,13 +60,13 @@ def edge_score(fcst, fdate, obs, obsdate):
   return retcode
 
 #------------------------------------------------------------------
-
-def solo_score(fcst, fdate, fout = sys.stdout ):
 """
   solo_score is items that can be computed with just the given
   forecast, on a given date
   So far, just the area and extent integrals
 """
+
+def solo_score(fcst, fdate, fout = sys.stdout ):
 
   if (fcst == "nsidc"): return 0
   fname = fcst+"."+fdate.strftime("%Y%m%d")

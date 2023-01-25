@@ -12,42 +12,7 @@ from platforms import *
 #--------------- Utility Functions --------------------------------
 
 #------------------------------------------------------------------
-
-def solo_score(fcst, fdate):
-  if (fcst == "nsidc"): return 0
-  fname = fcst+"."+fdate.strftime("%Y%m%d")
-  if (os.path.exists(fname)):
-    cmd = (exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, flush=True)
-    sys.stdout.flush()
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-    return x 
-  else:
-    print("could not find ",fname, flush=True)
-    return 1
-
-def edge_score(fcst, fdate, obs, obsdate):
-  retcode = int(0)
-  fname   = fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
-  outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
-                + "."+obsdate.strftime("%Y%m%d") )
-
-  if (os.path.exists(fname) and os.path.exists(obsname) and not 
-      os.path.exists(outfile) ):
-    cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
-           " 50.0 > " + outfile )
-    #debug
-    print("edge_score: ",cmd,flush=True)
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      sys.stdout.flush()
-      retcode += x
-
-  return retcode
+from scores import *
 
 def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
@@ -104,9 +69,9 @@ valid_date   = parse_8digits(sys.argv[2])
 fcst_dir     = sys.argv[3] 
 fcst_dir     += "/"+sys.argv[1]
 single       = True
-#debug
-print("setup_verf initial_date", valid_date, flush=True)
+#debug print("fcst_verf initial_date", valid_date, flush=True)
 
+#===============================================================================
 imsverf   = True
 nsidcverf = False
 ncepverf  = True
@@ -120,12 +85,14 @@ if (single):
     if (x != 0):
       print("could not get file for ims verification, turning off imsverf\n", flush=True)
       imsverf = False
+
 #NCEP -- grib/grib2
   if (ncepverf):
     x = get_ncep(initial_date, valid_date, dirs['ncepdir'])
     if (x != 0):
       print("could not get file for ncep verification, turning off ncepverf\n",flush=True)
       ncepverf = False
+
 #NSIDC -- netcdf
   if (nsidcverf):
     x = get_nsidc(initial_date, valid_date, dirs['nsidcdir'])
@@ -135,10 +102,11 @@ if (single):
 
   obs = (nsidcverf or ncepverf or imsverf or osiverf)
 
-#Model Forecast
+#Get Model Forecast ---------------------------------------------
   x = get_fcst(initial_date, valid_date, fcst_dir)
   if (x != 0):
-    print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
+    print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", 
+           valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = False
   else:
     #debug print("setup_verf have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
@@ -150,25 +118,27 @@ if (single):
   #debug print("setup_verf working with observed data \n", flush=True)
 
   if (fcst):
-    print("fcst = True, try scoring",flush=True)
+    #debug: print("fcst = True, try scoring",flush=True)
     #solo_score("fcst", valid_date) -- to be developed
 
     fcst_edge(initial_date.strftime("%Y%m%d"), valid_date.strftime("%Y%m%d"), fcst_dir)
     if (imsverf):   
-      print("trying imsverf edge",flush=True)
+      #debug print("trying imsverf edge",flush=True)
       edge_score("fcst", valid_date, "ims", valid_date)
+      edge_score("ims", valid_date, "fcst", valid_date)
     if (ncepverf):  
-      print("trying ncepverf edge",flush=True)
+      #debug print("trying ncepverf edge",flush=True)
       edge_score("fcst", valid_date, "ncep", valid_date)
+      edge_score("ncep", valid_date, "fcst", valid_date)
     if (nsidcverf): 
-      print("trying nsidcverf edge",flush=True)
+      #debug print("trying nsidcverf edge",flush=True)
       edge_score("fcst", valid_date, "nsidc_north", valid_date)
+      edge_score("nsidc_north", valid_date, "fcst", valid_date)
 
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
     else:
-      print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date, flush=True)
-    
+      print("could not score concentration for ",fcst_dir, 
+             dirs['nsidcdir'], initial_date, valid_date, flush=True)
 
     print("\n", flush=True)
-
