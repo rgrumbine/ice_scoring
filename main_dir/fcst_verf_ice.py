@@ -4,41 +4,14 @@ import datetime
 
 #Arguments:
 #   start_date verification_date forecast_dir_path
-#   or
-#   start_date number_days_forward time_delta_days forecast_dir_path
 
 from verf_files import *
+from platforms import *
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
 
-from platforms import *
-exbase=os.environ['EXBASE']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
-#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-#execs:
-# cscore_edge
-# find_edge_nsidc
-# find_edge_ncep
-# find_edge_ims
-# solo_ncep
-
 #------------------------------------------------------------------
-def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
-             imsdir, ncepdir, nsidcdir):
-  retcode = int(0)
-  initial    = int(initial_date.strftime("%Y%m%d"))
-  valid      = int(valid_date.strftime("%Y%m%d"))
-  moninitial = int(initial_date.strftime("%Y%m"))
-  monvalid   = int(valid_date.strftime("%Y%m"))
-  yearinitial = int(initial_date.strftime("%Y"))
-  yearvalid   = int(valid_date.strftime("%Y"))
-  return retcode
 
 def solo_score(fcst, fdate):
   if (fcst == "nsidc"): return 0
@@ -61,7 +34,7 @@ def edge_score(fcst, fdate, obs, obsdate):
   obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
   outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
                 + "."+obsdate.strftime("%Y%m%d") )
-  #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
+
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
       os.path.exists(outfile) ):
     cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
@@ -95,7 +68,6 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   exname = 'generic'
   exname = 'score_nsidc'
   if (os.path.exists(exdir + exname)):
-    #debug print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
     sys.stdout.flush()
     pole="north"
     ptag="n"
@@ -123,31 +95,27 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   return retcode
 
 #---------------------------- Begin program ---------------------
-
-
 # dates, times -- initial date/time, verification date-time, or initial, 
 #     lead range, and delta
 
 #the +1 is for the command name itself, which is sys.argv[0]
-if (len(sys.argv) >= 3+1):
-  #debug print("setup_verf Initial date and verification time", flush=True)
-  initial_date = parse_8digits(sys.argv[1])
-  valid_date   = parse_8digits(sys.argv[2])
-  fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
-  single = True
-  #debug
-  print("setup_verf initial_date", valid_date, flush=True)
-  sys.stdout.flush()
+initial_date = parse_8digits(sys.argv[1])
+valid_date   = parse_8digits(sys.argv[2])
+fcst_dir     = sys.argv[3] 
+fcst_dir     += "/"+sys.argv[1]
+single       = True
+#debug
+print("setup_verf initial_date", valid_date, flush=True)
+
+imsverf   = True
+nsidcverf = False
+ncepverf  = True
+osiverf   = False
 
 #===============================================================================
-#If a single verification, then one thing, else, create many single verifications:
 if (single):
 #IMS:
   if (imsverf): 
-    x = get_ims(initial_date, dirs['imsdir'])
-    if (x != 0):
-      print("could not get file for ims verification, turning off imsverf\n", flush=True)
-      imsverf = False
     x = get_ims(valid_date, dirs['imsdir'])
     if (x != 0):
       print("could not get file for ims verification, turning off imsverf\n", flush=True)
@@ -165,14 +133,7 @@ if (single):
       print("could not get file for nsidc verification, turning off nsidcverf\n",flush=True)
       nsidcverf = False
 
-  x = get_obs(initial_date, valid_date,
-         imsverf, ncepverf, nsidcverf, dirs['imsdir'], dirs['ncepdir'], 
-               dirs['nsidcdir'])
-  if (x != 0):
-    print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
-    obs = False
-  else:
-    obs = True
+  obs = (nsidcverf or ncepverf or imsverf or osiverf)
 
 #Model Forecast
   x = get_fcst(initial_date, valid_date, fcst_dir)
@@ -187,33 +148,21 @@ if (single):
 
   #now call verification with dirs, fcst, verf logicals
   #debug print("setup_verf working with observed data \n", flush=True)
-  if (imsverf):
-    solo_score("ims", valid_date)
-    ims_edge(initial_date.strftime("%Y%m%d"))
-    ims_edge(valid_date.strftime("%Y%m%d"))
-    edge_score("ims", initial_date, "ims", valid_date)
-  if (ncepverf):
-    solo_score("ncep", valid_date)
-    ncep_edge(initial_date.strftime("%Y%m%d"))
-    ncep_edge(valid_date.strftime("%Y%m%d"))
-    edge_score("ncep", initial_date, "ncep", valid_date)
-    if (imsverf): 
-      edge_score("ncep", valid_date, "ims", valid_date)
-      edge_score("ims", valid_date, "ncep", valid_date)
-  if (nsidcverf):
-    solo_score("nsidc", valid_date) #-- still to work out NH/SH vs. single input
-    nsidc_edge(initial_date.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
-    nsidc_edge(valid_date.strftime("%Y%m%d"), 0.40, dirs['nsidcdir'] )
-    edge_score("nsidc_north", initial_date, "nsidc_north", valid_date)
-    if(imsverf): edge_score("nsidc_north", valid_date, "ims", valid_date)
-    if(ncepverf): edge_score("nsidc_north", valid_date, "ncep", valid_date)
+
   if (fcst):
+    print("fcst = True, try scoring",flush=True)
     #solo_score("fcst", valid_date) -- to be developed
 
     fcst_edge(initial_date.strftime("%Y%m%d"), valid_date.strftime("%Y%m%d"), fcst_dir)
-    if (imsverf):   edge_score("fcst", valid_date, "ims", valid_date)
-    if (ncepverf):  edge_score("fcst", valid_date, "ncep", valid_date)
-    if (nsidcverf): edge_score("fcst", valid_date, "nsidc_north", valid_date)
+    if (imsverf):   
+      print("trying imsverf edge",flush=True)
+      edge_score("fcst", valid_date, "ims", valid_date)
+    if (ncepverf):  
+      print("trying ncepverf edge",flush=True)
+      edge_score("fcst", valid_date, "ncep", valid_date)
+    if (nsidcverf): 
+      print("trying nsidcverf edge",flush=True)
+      edge_score("fcst", valid_date, "nsidc_north", valid_date)
 
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
@@ -221,41 +170,5 @@ if (single):
       print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date, flush=True)
     
 
-    print("\n")
-    sys.stdout.flush()
-
-else:
-  print("in elses branch of setup-verf",flush=True)
-  for d in range (1,lead+1):
-    valid_date = initial_date + d*dt
-    x = get_obs(initial_date, valid_date,
-           imsverf, ncepverf, nsidcverf, dirs['imsdir'], dirs['ncepdir'], dirs['nsidcdir'])
-    if (x != 0):
-      print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ",
-             valid_date.strftime("%Y%m%d")," ",x)
-      obs = False
-    else:
-      obs = True
-
-    x = get_fcst(initial_date, valid_date, fcst_dir)
-    if (x != 0):
-      print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ",
-             valid_date.strftime("%Y%m%d")," ",x)
-      fcst = False
-    else:
-      fcst = True
-
-    #now call verification with dirs, fcst, verf logicals
-    if (imsverf):
-      ims_edge(initial_date.strftime("%Y%m%d"))
-      ims_edge(valid_date.strftime("%Y%m%d"))
-      edge_score("ims", initial_date, "ims", valid_date)
-    if (ncepverf):
-      ncep_edge(initial_date.strftime("%Y%m%d"))
-      ncep_edge(valid_date.strftime("%Y%m%d"))
-    if (nsidcverf):
-      nsidc_edge(initial_date.strftime("%Y%m%d"))
-      nsidc_edge(valid_date.strftime("%Y%m%d"))
-    if (fcst):
-      print("\n")
+    print("\n", flush=True)
 

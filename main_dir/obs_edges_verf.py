@@ -64,6 +64,7 @@ def edge_score(fcst, fdate, obs, obsdate):
 dt = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
 end   = parse_8digits(sys.argv[2])
+fcst_dir = sys.argv[3] + "/" + sys.argv[4] + "/"
 #debug: print(start, end, flush=True)
 
 lead = 1
@@ -75,6 +76,7 @@ while (start < end):
   ncepverf  = True
   osiverf   = False
   nsidcverf = False
+  fcstverf  = True
 
   #IMS:
   if (imsverf): 
@@ -110,6 +112,12 @@ while (start < end):
 
   #OSI-SAF -- netcdf
 
+  if (fcstverf):
+    x = get_fcst(start, valid, fcst_dir)
+    if (x != 0):
+      print("could not get files for forecast output",flush=True)
+      fcstverf = False
+
   print(flush=True)
 
   #now call verification with dirs, fcst, verf logicals
@@ -138,6 +146,18 @@ while (start < end):
   #  edge_score("osi", start, "osi", valid)
   #  if (imsverf):
   #  if (ncepverf):
+
+  if (fcstverf):
+    fcst_edge(start.strftime("%Y%m%d"), 0.40, fcst_dir)
+    fcst_edge(valid.strftime("%Y%m%d"), 0.40, fcst_dir)
+    edge_score("fcst", start, "fcst", valid)
+    if (imsverf):
+      edge_score("fcst",valid, "ims",valid)
+      edge_score("ims",valid, "fcst",valid)
+    if (ncepverf):
+      edge_score("fcst",valid, "ncep",valid)
+      edge_score("ncep",valid, "fcst",valid)
+
     
 
 
