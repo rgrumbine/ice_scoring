@@ -35,27 +35,7 @@ for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_i
 #debug exit(0)
 #------------------------------------------------------------------
 #--------------- Utility Functions --------------------------------
-
-def solo_score(fcst, fdate, fout = sys.stdout ):
-"""
-  solo_score is items that can be computed with just the given
-  forecast, on a given date
-  So far, just the area and extent integrals
-"""
-
-  if (fcst == "nsidc"): return 0
-  fname = fcst+"."+fdate.strftime("%Y%m%d")
-  if (os.path.exists(fname)):
-    cmd = ('' +exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, fdate.strftime("%Y%m%d")," ", end="", flush=True)
-    sys.stdout.flush()
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-    return x 
-  else:
-    print("could not find ",fname, flush=True)
-    return 1
+from scores import *
 
 #====================================================================
 #---------------------------- Begin program -------------------------

@@ -33,29 +33,7 @@ for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_i
 
 #------------------------------------------------------------------
 
-def edge_score(fcst, fdate, obs, obsdate):
-  retcode = int(0)
-  edgedir = dirs['edgedir']
-  fname   = edgedir+fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = edgedir+obs +"_edge."+obsdate.strftime("%Y%m%d")
-
-  outfile = (edgedir + "edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
-                + "."+obsdate.strftime("%Y%m%d") )
-
-  #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
-
-  if (os.path.exists(fname) and os.path.exists(obsname) and not 
-      os.path.exists(outfile) ):
-    cmd = ('time ' +exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
-           " 50.0 > " + outfile )
-    #debug print("edge_score: ",cmd,flush=True)
-
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      retcode += x
-
-  return retcode
+from scores import *
 
 
 #====================================================================

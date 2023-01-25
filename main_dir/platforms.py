@@ -52,8 +52,7 @@ for x in machines:
     machine = (x)
     break
 
-#debug 
-print("platforms.py machine = ",machine, flush=True)
+#debug print("platforms.py machine = ",machine, flush=True)
 
 if not machine:
     print ('ice verification is currently only supported on: %s' % ' '.join(machines))
@@ -97,9 +96,8 @@ else:
   print ('ice verification is currently only supported on: %s' % ' '.join(machines))
   raise NotImplementedError('Cannot find verification data directory, ABORT!')
 
-#debug 
-print("platforms.py fixdir = ", (dirs['fixdir']) , flush=True)
-print("platforms.py os path exists ", os.path.exists(dirs['fixdir']), flush=True)
+#debug print("platforms.py fixdir = ", (dirs['fixdir']) , flush=True)
+#debug print("platforms.py os path exists ", os.path.exists(dirs['fixdir']), flush=True)
 #debug0 exit(1)
 
 #------------------------------------------------------------------
@@ -112,8 +110,7 @@ if (not os.path.exists(dirs['fixdir'])):
 nsidcverf = os.path.exists(dirs['nsidcdir'])
 ncepverf  = os.path.exists(dirs['ncepdir'])
 imsverf   = os.path.exists(dirs['imsdir'])
-#debug 
-print("platforms.py obsdirs: ",dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] , flush=True)
+#debug print("platforms.py obsdirs: ",dirs['nsidcdir'], dirs['ncepdir'], dirs['imsdir'] , flush=True)
 
 if (not nsidcverf and not ncepverf and not imsverf):
   print('no ice verification directory is present, aborting')

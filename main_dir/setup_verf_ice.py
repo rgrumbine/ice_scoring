@@ -7,16 +7,12 @@ import datetime
 #   or
 #   start_date number_days_forward time_delta_days forecast_dir_path
 
+
+from platforms import *
 from verf_files import *
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
-
-from platforms import *
-exbase=os.environ['EXBASE']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
-#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 
 #fixed files:
 #  seaice_alldist.bin
@@ -40,41 +36,7 @@ def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf,
   yearvalid   = int(valid_date.strftime("%Y"))
   return retcode
 
-def solo_score(fcst, fdate):
-  if (fcst == "nsidc"): return 0
-  fname = fcst+"."+fdate.strftime("%Y%m%d")
-  if (os.path.exists(fname)):
-    cmd = (exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, flush=True)
-    sys.stdout.flush()
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-    return x 
-  else:
-    print("could not find ",fname, flush=True)
-    return 1
-
-def edge_score(fcst, fdate, obs, obsdate):
-  retcode = int(0)
-  fname   = fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
-  outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
-                + "."+obsdate.strftime("%Y%m%d") )
-  #debug print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
-  if (os.path.exists(fname) and os.path.exists(obsname) and not 
-      os.path.exists(outfile) ):
-    cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
-           " 50.0 > " + outfile )
-    #debug
-    print("edge_score: ",cmd,flush=True)
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      sys.stdout.flush()
-      retcode += x
-
-  return retcode
+from scores import *
 
 def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
