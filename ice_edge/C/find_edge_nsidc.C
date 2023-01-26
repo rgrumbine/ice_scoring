@@ -6,26 +6,14 @@
 // Robert Grumbine 21 May 2018 
 
 
-#ifdef cice_file
-// cice on hycom quarter degree tripolar grid
-  #define NX 1500
-  #define NY 1099
-#elif benchmark
-// cice on mom6 quarter degree tripolar grid
-  #define NX 1440
-  #define NY 1080 
-#elif nsidc_north
-// NSIDC CDR NH grid:
+#ifdef nsidc_north
+// NSIDC CDRv4 NH grid:
   #define NX 304
   #define NY 448 
 #elif nsidc_south
-// NSIDC CDR SH grid:
+// NSIDC CDRv4 SH grid:
   #define NX 316
   #define NY 332 
-#else
-// hycom twelfth degree tripolar grid
-  #define NX 4500
-  #define NY 3298
 #endif
 
 #include "small_nc.C"
@@ -35,7 +23,7 @@
 int main(int argc, char *argv[]) {
 // metric grid of some kind
   global_12th<unsigned char> skip;
-// rtofs:
+// model:
   grid2<float> lat(NX, NY), lon(NX, NY);
   grid2<float> conc(NX, NY), tarea(NX, NY);
 

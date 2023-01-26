@@ -17,7 +17,7 @@
   #define NX 1440
   #define NY 1080 
 #else
-// hycom twelfth degree tripolar grid
+// rtofs twelfth degree tripolar grid
   #define NX 4500
   #define NY 3297
 #endif
