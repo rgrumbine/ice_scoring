@@ -33,6 +33,9 @@ for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_i
 
 #------------------------------------------------------------------
 #--------------- Scoring Functions --------------------------------
+"""
+Edges
+"""
 
 def edge_score(fcst, fdate, obs, obsdate):
   retcode = int(0)
@@ -73,7 +76,6 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
   if (os.path.exists(fname)):
     cmd = ('' +exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
     print("integrals for ",fcst, fdate.strftime("%Y%m%d")," ", end="", flush=True)
-    sys.stdout.flush()
     x = os.system(cmd)
     if (x != 0):
       print("command ",cmd," returned error code ",x, flush=True)
@@ -83,3 +85,61 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
     return 1
 
 #---------------------------------------------------------------------
+"""
+Evaluating the ice concentrations
+"""
+def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
+  #debug: print("py entered score_nsidc",flush=True)
+  retcode = int(0)
+  vyear = int(obsdate.strftime("%Y"))
+
+  #isolate forecast file name references to fcst_name:
+  valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+  #UFS style:
+  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+  #CICE consortium name:
+  #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
+
+  if (not os.path.exists(valid_fname)):
+    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
+    retcode = int(1)
+    return retcode
+
+  #exname = 'generic'
+  exname = 'score_nsidc'
+  if (os.path.exists(exdir + exname)):
+    #debug print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
+    sys.stdout.flush()
+    pole="north"
+    ptag="n"
+    #obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
+    #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
+    obsname = nsidc_name(pole, obsdate, nsidcdir)
+
+    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " +
+           fixdir + "G02202-cdr-ancillary-nh.nc" +
+           " > score."+ ptag+"."+obsdate.strftime("%Y%m%d")+"f"+
+                                 fdate.strftime("%Y%m%d")+".csv"  )
+    x = os.system(cmd)
+    if (x != 0):
+      print("\n\n command ",cmd,"\n returned error code ",x, flush=True)
+      print("\n")
+      print(exdir+exname, os.path.exists(exdir+exname))
+      print(valid_fname, os.path.exists(valid_fname))
+      print(obsname , os.path.exists(obsname))
+      print(fixdir, os.path.exists(fixdir))
+      print(fixdir+ "G02202-cdr-ancillary-nh.nc", os.path.exists(fixdir+ "G02202-cdr-ancillary-nh.nc"))
+      print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
+      retcode += x
+
+#    pole="south"
+#    ptag="s"
+#    obsname = nsidc_name(pole, obsdate, nsidcdir)
+
+  else:
+    print("No executable to score vs. nsidc", flush=True)
+    retcode += 1
+
+  return retcode
+
+

@@ -10,54 +10,7 @@ from platforms import *
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
-
-#------------------------------------------------------------------
 from scores import *
-
-def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
-  retcode = int(0)
-  vyear = int(obsdate.strftime("%Y"))
-
-  #isolate forecast file name references to fcst_name:
-  valid_fname = fcst_name(obsdate, fdate, fcst_dir)
-  #UFS style:
-  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
-  #CICE consortium name:
-  #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
-
-  if (not os.path.exists(valid_fname)):
-    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
-    retcode = int(1)
-    return retcode
-  
-  exname = 'generic'
-  exname = 'score_nsidc'
-  if (os.path.exists(exdir + exname)):
-    sys.stdout.flush()
-    pole="north"
-    ptag="n"
-    #obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
-    #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
-    obsname = nsidc_name(pole, obsdate, nsidcdir)
-
-    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " + 
-                exdir+"runtime.def "+ " > score."+
-                ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      retcode += x
-
-#    pole="south"
-#    ptag="s"
-#    obsname = nsidc_name(pole, obsdate, nsidcdir)
-
-  else:
-    print("No executable to score vs. nsidc", flush=True)
-    sys.stdout.flush()
-    retcode += 1
-
-  return retcode
 
 #---------------------------- Begin program ---------------------
 # dates, times -- initial date/time, verification date-time, or initial, 
@@ -73,7 +26,7 @@ single       = True
 
 #===============================================================================
 imsverf   = True
-nsidcverf = False
+nsidcverf = True
 ncepverf  = True
 osiverf   = False
 
@@ -100,6 +53,13 @@ if (single):
       print("could not get file for nsidc verification, turning off nsidcverf\n",flush=True)
       nsidcverf = False
 
+#OSI-SAF
+  #if (osiverf):
+    #x = get_osisaf(initial_date, valid_date, dirs['osidir'])
+    #if (x != 0):
+    #  print("could not get file for osi verification, turning off osiverf\n",flush=True)
+    #  osiverf = False
+
   obs = (nsidcverf or ncepverf or imsverf or osiverf)
 
 #Get Model Forecast ---------------------------------------------
@@ -108,19 +68,26 @@ if (single):
     print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", 
            valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = False
+    exit(1)
   else:
     #debug print("setup_verf have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = True
 
   print(flush=True)
 
+#------------------------------------------------------------------
+
   #now call verification with dirs, fcst, verf logicals
   #debug print("setup_verf working with observed data \n", flush=True)
+  solo = False
+  edges = False
+  conc  = True
 
-  if (fcst):
-    #debug: print("fcst = True, try scoring",flush=True)
-    #solo_score("fcst", valid_date) -- to be developed
+  #debug: print("fcst = True, try scoring",flush=True)
+  if (solo):
+    solo_score("fcst", valid_date) # -- to be developed
 
+  if (edges):
     fcst_edge(initial_date.strftime("%Y%m%d"), valid_date.strftime("%Y%m%d"), fcst_dir)
     if (imsverf):   
       #debug print("trying imsverf edge",flush=True)
@@ -135,10 +102,14 @@ if (single):
       edge_score("fcst", valid_date, "nsidc_north", valid_date)
       edge_score("nsidc_north", valid_date, "fcst", valid_date)
 
+  if (conc):
+    #debug: print("pymain trying concentration verf",flush=True)
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
+    #elif (ncepverf):
+    #elif (osiverf):
     else:
       print("could not score concentration for ",fcst_dir, 
              dirs['nsidcdir'], initial_date, valid_date, flush=True)
 
-    print("\n", flush=True)
+  print("\n", flush=True)
