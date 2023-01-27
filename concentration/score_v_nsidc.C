@@ -10,27 +10,8 @@
 #define ERRCODE 2
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 
-#include "grid_math.h"
-#include "ncepgrids.h"
-template <class T>
-void enter(grid2<float> &param, T *x) ;
+#include "ALL.C"
 
-
-#include "contingency_ptwise.C"
-
-// RG: Will be better to make this compile arguments, and thence, too,
-//     the lower ifdefs
-// RG: alt, to read nx, ny from the input netcdf, but still need variable names
-#ifdef cice_file
-  #define NX 1500
-  #define NY 1099
-#elif benchmark
-  #define NX 1440
-  #define NY 1080 
-#else
-  #define NX 4500
-  #define NY 3298
-#endif
 
 int main(int argc, char *argv[]) {
   float *x;
@@ -63,7 +44,7 @@ int main(int argc, char *argv[]) {
   #endif
 
 ////////////////// Sea ice analysis ///////////////////////////////
-// High res sea ice analysis from netcdf:
+// sea ice analysis from netcdf -- NSIDC climate data record
   nsidcnorth<float> obs;
   grid2<float> obslat(obs.ypoints(), obs.xpoints()), obslon(obs.ypoints(), obs.xpoints());
   grid2<float> tmp(obs.ypoints(), obs.xpoints());
@@ -76,11 +57,11 @@ int main(int argc, char *argv[]) {
   xb = (unsigned char*) malloc(sizeof(unsigned char)*obs.xpoints()*obs.ypoints() );
   xd = (double*) malloc(sizeof(double)*obs.xpoints()*obs.ypoints() );
 
-////////////////// Sea ice analysis ///////////////////////////////
   retval = nc_open(argv[2], NC_NOWRITE, &ncid);
   if (retval != 0) ERR(retval);
 
   // V4 doesn't save latitude or longitude. It is map projection, polar stereo, Hughes 1980 ellipsoid
+  // V4 puts lat-lon in ancillary files, or in compilation files
   retval = nc_inq_varid(ncid, "latitude", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_double(ncid, varid, xd); 
@@ -103,7 +84,7 @@ int main(int argc, char *argv[]) {
   retval = nc_close(ncid);
   if (retval != 0) ERR(retval); fflush(stdout);
 
-////////////////// Latlon check and transfer ///////////////////////////////
+  //////////////// Latlon check and transfer ///////////////////////////////
   obs.set((float) 157.0);
   for (int i = 0; i < tmp.xpoints()*tmp.ypoints(); i++) {
     ll.lat = obslat[i];
@@ -290,20 +271,4 @@ int main(int argc, char *argv[]) {
   }
 
   return 0;
-}
-
-template <class T>
-void enter(grid2<float> &param, T *x) {
-  ijpt loc;
-  for (loc.j = 0; loc.j < param.ypoints(); loc.j++) {
-  for (loc.i = 0; loc.i < param.xpoints(); loc.i++) {
-    if (x[loc.i+ param.xpoints()*loc.j] > 1e20) x[loc.i+ param.xpoints()*loc.j] = 0;
-    param[loc] = x[loc.i+ param.xpoints()*loc.j];
-  }
-  }
-  #ifdef DEBUG
-  printf("stats: %f %f %f %f\n",param.gridmax(), param.gridmin(), param.average(), param.rms() );
-  #endif
-
-  return;
 }

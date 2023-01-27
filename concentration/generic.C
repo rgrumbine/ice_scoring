@@ -10,75 +10,26 @@
 #define ERRCODE 2
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 
-#include "grid_math.h"
-#include "ncepgrids.h"
-template <class T>
-void enter(grid2<float> &param, T *x) ;
-
-
-#include "contingency_ptwise.C"
+#include "ALL.C"
 
 int main(int argc, char *argv[]) {
-  float *x;
-  int ncid, varid;
-  int retval;
   ijpt loc;
   fijpt floc, sloc;
   latpt ll;
 
 // File of pts to skip
-  global_12th<unsigned char> skip;
   FILE *fin;
 
 ////////////////// skip grid ///////////////////////////////
-  skip.set(0);
   fin = fopen(argv[3], "r");
-  skip.binin(fin);
-  fclose(fin);
-  #ifdef DEBUG
-    FILE *verbout;
-    printf("skip stats %d %d %d %d \n",(int) skip.gridmax(),(int) skip.gridmin(), skip.average(), skip.rms()); 
-    verbout = fopen("verboseout","w");
-  #endif
+  #include "stub.skip.C"
 
 ////////////////// Sea ice analysis ///////////////////////////////
 // High res sea ice analysis from netcdf:
-  nsidcnorth<float> obs;
-  grid2<float> obslat(obs.ypoints(), obs.xpoints()), obslon(obs.ypoints(), obs.xpoints());
-  grid2<float> tmp(obs.ypoints(), obs.xpoints());
+  char *fname;
+  fname = argv[2];
 
-  float *xf;
-  unsigned char *xb;
-  double *xd;
-
-  xf = (float*) malloc(sizeof(float)*obs.xpoints()*obs.ypoints() );
-  xb = (unsigned char*) malloc(sizeof(unsigned char)*obs.xpoints()*obs.ypoints() );
-  xd = (double*) malloc(sizeof(double)*obs.xpoints()*obs.ypoints() );
-
-////////////////// Sea ice analysis ///////////////////////////////
-  retval = nc_open(argv[2], NC_NOWRITE, &ncid);
-  if (retval != 0) ERR(retval);
-
-  retval = nc_inq_varid(ncid, "latitude", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_double(ncid, varid, xd); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(obslat, xd);
-
-  retval = nc_inq_varid(ncid, "longitude", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_double(ncid, varid, xd); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(obslon, xd);
-
-  retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_uchar(ncid, varid, xb); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(tmp, xb);
-
-  retval = nc_close(ncid);
-  if (retval != 0) ERR(retval); fflush(stdout);
+  #include "stub.nsidc.C"
 
 ////////////////// Latlon check and transfer ///////////////////////////////
   obs.set((float) 157.0);
@@ -113,26 +64,27 @@ int main(int argc, char *argv[]) {
     printf("failed to open model variable definition file %s\n",argv[4]);
     exit(1);
   }
-  int NX, NY;
+  int nx, ny;
   char latname[900], lonname[900], areaname[900], concname[900], thickname[900];
+  float *x;
 
-  fscanf(fin, "%d", &NX);
-  fscanf(fin, "%d", &NY);
+  fscanf(fin, "%d", &nx);
+  fscanf(fin, "%d", &ny);
   fscanf(fin, "%s", latname);
   fscanf(fin, "%s", lonname);
   fscanf(fin, "%s", areaname);
   fscanf(fin, "%s", concname);
   fscanf(fin, "%s", thickname);
   #ifdef DEBUG
-    printf("%d %d %s %s %s %s %s\n",NX, NY, latname, lonname, areaname, concname, thickname);
+    printf("%d %d %s %s %s %s %s\n",nx, ny, latname, lonname, areaname, concname, thickname);
     fflush(stdout);
   #endif
 
-  grid2<float> lat(NX, NY), lon(NX, NY), tarea(NX, NY);
-  grid2<float> ice_coverage(NX, NY), ice_thickness(NX, NY);
+  grid2<float> lat(nx, ny), lon(nx, ny), tarea(nx, ny);
+  grid2<float> ice_coverage(nx, ny), ice_thickness(nx, ny);
 
 
-  x = (float*) malloc(sizeof(float)*NX*NY);
+  x = (float*) malloc(sizeof(float)*nx*ny);
 
 
   retval = nc_open(argv[1], NC_NOWRITE, &ncid);
@@ -273,20 +225,4 @@ int main(int argc, char *argv[]) {
   }
 
   return 0;
-}
-
-template <class T>
-void enter(grid2<float> &param, T *x) {
-  ijpt loc;
-  for (loc.j = 0; loc.j < param.ypoints(); loc.j++) {
-  for (loc.i = 0; loc.i < param.xpoints(); loc.i++) {
-    if (x[loc.i+ param.xpoints()*loc.j] > 1e20) x[loc.i+ param.xpoints()*loc.j] = 0;
-    param[loc] = x[loc.i+ param.xpoints()*loc.j];
-  }
-  }
-  #ifdef DEBUG
-  printf("stats: %f %f %f %f\n",param.gridmax(), param.gridmin(), param.average(), param.rms() );
-  #endif
-
-  return;
 }

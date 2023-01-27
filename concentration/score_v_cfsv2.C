@@ -10,24 +10,15 @@
 #define ERRCODE 2
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 
-#include "grid_math.h"
-#include "ncepgrids.h"
-template <class T>
-void enter(grid2<float> &param, T *x) ;
-
-
-#include "contingency_ptwise.C"
+#include "ALL.C"
 
 int main(int argc, char *argv[]) {
-  float *x;
-  int ncid, varid;
-  int retval;
   ijpt loc;
   fijpt floc, sloc;
   latpt ll;
+  char* fname;
 
 // File of pts to skip
-  global_12th<unsigned char> skip;
   FILE *fin;
 
 // CFSv2 file variables of interest:
@@ -35,52 +26,12 @@ int main(int argc, char *argv[]) {
 
 ////////////////// skip grid ///////////////////////////////
   fin = fopen(argv[3], "r");
-  skip.binin(fin);
-  fclose(fin);
-  skip.set(0);
-  #ifdef DEBUG
-  printf("skip stats %d %d %d %d \n", skip.gridmax(), skip.gridmin(), skip.average(), skip.rms()); 
-  #endif
+  #include "stub.skip.C"
 
 ////////////////// Sea ice analysis ///////////////////////////////
 // High res sea ice analysis from nsidc netcdf:
-  nsidcnorth<float> obs;
-  grid2<float> obslat(obs.ypoints(), obs.xpoints()), obslon(obs.ypoints(), obs.xpoints());
-  grid2<float> tmp(obs.ypoints(), obs.xpoints());
-
-  float *xf;
-  unsigned char *xb;
-  double *xd;
-
-  xf = (float*) malloc(sizeof(float)*obs.xpoints()*obs.ypoints() );
-  xb = (unsigned char*) malloc(sizeof(unsigned char)*obs.xpoints()*obs.ypoints() );
-  xd = (double*) malloc(sizeof(double)*obs.xpoints()*obs.ypoints() );
-
-////////////////// Sea ice analysis ///////////////////////////////
-  retval = nc_open(argv[2], NC_NOWRITE, &ncid);
-  if (retval != 0) ERR(retval);
-
-  retval = nc_inq_varid(ncid, "latitude", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_double(ncid, varid, xd); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(obslat, xd);
-
-  retval = nc_inq_varid(ncid, "longitude", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_double(ncid, varid, xd); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(obslon, xd);
-
-  retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
-  if (retval != 0) ERR(retval);
-  retval = nc_get_var_uchar(ncid, varid, xb); 
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(tmp, xb);
-
-// close when done:
-  retval = nc_close(ncid);
-  if (retval != 0) ERR(retval); fflush(stdout);
+  fname = argv[2];
+  #include "stub.nsidc.C"
 
 ////////////////// Latlon check and transfer ///////////////////////////////
   obs.set((float) 157.0);
@@ -203,20 +154,4 @@ int main(int argc, char *argv[]) {
 //  }
 
   return 0;
-}
-
-template <class T>
-void enter(grid2<float> &param, T *x) {
-  ijpt loc;
-  for (loc.j = 0; loc.j < param.ypoints(); loc.j++) {
-  for (loc.i = 0; loc.i < param.xpoints(); loc.i++) {
-    if (x[loc.i+ param.xpoints()*loc.j] > 1e20) x[loc.i+ param.xpoints()*loc.j] = 0;
-    param[loc] = x[loc.i+ param.xpoints()*loc.j];
-  }
-  }
-  #ifdef DEBUG
-  printf("stats: %f %f %f %f\n",param.gridmax(), param.gridmin(), param.average(), param.rms() );
-  #endif
-
-  return;
 }
