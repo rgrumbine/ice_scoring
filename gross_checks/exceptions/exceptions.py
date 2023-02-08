@@ -26,6 +26,8 @@ freq = 1000
 ok = False
 
 for line in f:
+  if (not "pm" in line): #added to avoid having to pre-grep prior output
+      continue
   words = line.split()
   param = words[0]
   tlon = float(words[3])
@@ -41,7 +43,7 @@ for line in f:
     if (regions[i].is_ok(pt, value, param)):
       ok = True
       counter[i] += 1
-      #debug print("curve ",i," is ok with this location and value ",pt, value, param, flush=True)
+    
     if (ok):
       break
 

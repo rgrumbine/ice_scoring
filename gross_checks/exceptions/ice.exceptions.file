@@ -1,8 +1,0 @@
-Antarctic_snow      hs_h      0.6   2.0  0.25  1.0          Known Error
-Arctic_cold         Tsfc_h  -52.0 -30.0  -42.0 -44.0 
-Antarctic_ice_flow  uvel_h   -1.5   1.5  -0.5  0.5
-Antarctic_ice_flow  vvel_h   -1.5   1.5  -0.5  0.5
-Archipelago_snow    hs_h      0.6   2.0  0.25  1.0          Known Error
-Beaufort_snow       hs_h      0.6   2.0  0.25  1.0          Known Error
-Greenland_snow      hs_h      0.0   2.0  0.25  1.0 
-Weddell_snow        hs_h      0.6   2.0  0.25  1.0          Known Error

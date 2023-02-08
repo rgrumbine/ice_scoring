@@ -7,17 +7,12 @@ import datetime
 #   or
 #   start_date number_days_forward time_delta_days forecast_dir_path
 
+
+from platforms import *
 from verf_files import *
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
-
-from platforms import *
-exbase=os.environ['EXBASE']
-exdir = exbase+"/exec/"
-fixdir = exbase+"/fix/"
-#debug 
-print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 
 #fixed files:
 #  seaice_alldist.bin
@@ -41,42 +36,7 @@ def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf,
   yearvalid   = int(valid_date.strftime("%Y"))
   return retcode
 
-def solo_score(fcst, fdate):
-  if (fcst == "nsidc"): return 0
-  fname = fcst+"."+fdate.strftime("%Y%m%d")
-  if (os.path.exists(fname)):
-    cmd = (exdir + "solo_" +fcst+" "+fixdir+"seaice_gland5min "+fname)
-    print("integrals for ",fcst, flush=True)
-    sys.stdout.flush()
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-    return x 
-  else:
-    print("could not find ",fname, flush=True)
-    return 1
-
-def edge_score(fcst, fdate, obs, obsdate):
-  retcode = int(0)
-  fname   = fcst+"_edge."+fdate.strftime("%Y%m%d")
-  obsname = obs +"_edge."+obsdate.strftime("%Y%m%d")
-  outfile = ("edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
-                + "."+obsdate.strftime("%Y%m%d") )
-  #debug 
-  print('setup_verf: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
-  if (os.path.exists(fname) and os.path.exists(obsname) and not 
-      os.path.exists(outfile) ):
-    cmd = (exdir + "cscore_edge "+fixdir+"seaice_alldist.bin "+fname+" "+obsname +
-           " 50.0 > " + outfile )
-    #debug
-    print("edge_score: ",cmd,flush=True)
-    x = os.system(cmd)
-    if (x != 0):
-      print("command ",cmd," returned error code ",x, flush=True)
-      sys.stdout.flush()
-      retcode += x
-
-  return retcode
+from scores import *
 
 def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
@@ -97,8 +57,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   exname = 'generic'
   exname = 'score_nsidc'
   if (os.path.exists(exdir + exname)):
-    #debug 
-    print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
+    #debug print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
     sys.stdout.flush()
     pole="north"
     ptag="n"
@@ -132,29 +91,15 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 #     lead range, and delta
 
 #the +1 is for the command name itself, which is sys.argv[0]
-if (len(sys.argv) == 3+1):
-  #debug 
-  print("setup_verf Initial date and verification time", flush=True)
+if (len(sys.argv) >= 3+1):
+  #debug print("setup_verf Initial date and verification time", flush=True)
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
-  fcst_dir     = sys.argv[3]
+  fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
   single = True
   #debug
   print("setup_verf initial_date", valid_date, flush=True)
   sys.stdout.flush()
-elif (len(sys.argv) == 4+1):
-  initial_date = parse_8digits(sys.argv[1])
-  lead         = int(sys.argv[2])
-  dt       = datetime.timedelta(int(sys.argv[3]));
-  fcst_dir = sys.argv[4]
-  single = False
-#RG Note: a timedelta is days and hh:mm:ss, fix arguments to handle 
-#         hours as a delta
-  print("Date, max lead, delta", initial_date," ",lead," ", dt, flush=True)
-  sys.stdout.flush()
-else:
-  print("wrong number of arguments", flush=True)
-  raise NotImplementedError('need 3 or 4 args, last being forecast directory')
 
 #===============================================================================
 #If a single verification, then one thing, else, create many single verifications:
@@ -197,15 +142,13 @@ if (single):
     print("get_fcst failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = False
   else:
-    #debug 
-    print("setup_verf have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
+    #debug print("setup_verf have forecast ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
     fcst = True
 
   print(flush=True)
 
   #now call verification with dirs, fcst, verf logicals
-  #debug 
-  print("setup_verf working with observed data \n", flush=True)
+  #debug print("setup_verf working with observed data \n", flush=True)
   if (imsverf):
     solo_score("ims", valid_date)
     ims_edge(initial_date.strftime("%Y%m%d"))

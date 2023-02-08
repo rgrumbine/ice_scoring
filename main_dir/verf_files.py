@@ -3,11 +3,23 @@ import datetime
 
 from platforms import *
 
+#-------------------------------------------
+"""
+Tools for working with grids of information --
+get of: ims, cfsv2, nsidc, ncep analysis, model forecast 
+edge for: (likewise)
+
+get_ims
+ims_edge
+(repeat for others)
+
+Also present is nsidc_name, fcst_name, for constructing file names and paths
+For these two, it's more involved and less predictable
+Shouldn't be needed by user, but may need updates
+
+"""
+#-------------------------------------------
 # RG: logfile for comments out
-#moved to 'platforms': 
-#exbase = os.environ['EXDIR']
-#exdir  = exbase+"/exec/"
-#fixdir = exbase+"/fix/"
 
 #-------- Skeleton for grid type sources: ---
 # NNN tools (NNN = ims, ncep, nsidc_north, cfsv2, ...)
@@ -96,7 +108,7 @@ def get_ims(initial_date, imsdir):
   initial    = int(initial_date.strftime("%Y%m%d"))
 
 #more efficient to gunzip binaries than go to grib
-  fname = 'ims.'+str(initial)
+  fname = imsdir + 'ims.'+str(initial)
   if (not os.path.exists(fname)):
     fin = imsdir + "ims."+str(initial) +'.gz'
     if (os.path.exists(fin) ):
@@ -119,23 +131,28 @@ def get_ims(initial_date, imsdir):
 
   return retcode
 
-def ims_edge(initial):
+def ims_edge(initial, imsdir):
   retcode = int(0)
-  fname = 'ims.'+str(initial)
-  if (not os.path.exists('ims_edge.' + str(initial))):
-    cmd = exdir + 'find_edge_ims ' + fname + ' > ims_edge.' + str(initial)
+  inname = imsdir+'ims.'+str(initial)
+  outname = imsdir+'ims_edge.' + str(initial)
+  if (not os.path.exists(outname) and os.path.exists(inname) ):
+    cmd = exdir + 'find_edge_ims ' + inname +  '>' + outname
     os.system(cmd)
     x = os.system(cmd)
     if (x != 0): retcode += x
   return retcode
 
 #------------------------------------------------------------------
-def ncep_edge(initial):
+def ncep_edge(initial, ncepdir):
   retcode = int(0)
-  fname = 'ncep.'+str(initial)
-  if (not os.path.exists('ncep_edge.' + str(initial))) :
-      #note that name does not follow convention
-    cmd = exdir + 'find_edge ' + fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > ncep_edge.' + str(initial)
+  edgedir = dirs['edgedir']
+  fname = ncepdir + 'ncep.'+str(initial)
+  edgename = edgedir + 'ncep_edge.' + str(initial)
+  print("ncep_edge ",edgedir, fname, edgename, flush=True)
+
+  if (not os.path.exists(edgename) and os.path.exists(fname)  ):
+    #note that name does not follow convention
+    cmd = exdir + 'find_edge ' + fname + ' '+fixdir+'/seaice_alldist.bin 0.40 > ' + edgename
     x = os.system(cmd)
     if (x != 0): retcode += x
     return retcode
@@ -151,7 +168,7 @@ def get_ncep(initial_date, valid_date, ncepdir):
     initial = int(tag.strftime("%Y%m%d"))
     ncep_file = ncepdir + "ice5min.grib2." + str(yyyymm) 
     if (os.path.exists(ncep_file) ):
-      fname = 'ncep.'+str(initial)
+      fname = ncepdir + 'ncep.'+str(initial)
       if (not os.path.exists(fname)):
 #far more efficient to gunzip binaries
         cmd=('wgrib2 '+ncep_file + "| grep "+str(initial) + " | wgrib2 -i " + 
@@ -275,34 +292,42 @@ def nsidc_edge(initial, toler, nsidcdir):
   return retcode
 
 #-----------------------------------------------------------------===
+def tostr(valid):
+  if (type(valid) == int):
+    #debug print(" is int ", flush=True)
+    tvalid = str(valid)
+  elif (type(valid) == float):
+    #debug print(" is float", flush=True)
+    tvalid = str(int(valid))
+  elif (type(valid) == str):
+    #debug print(" is str", flush=True)
+    tvalid = valid
+  else:
+    #debug print("assume  is datetime", flush=True)
+    tvalid = valid.strftime("%Y%m%d")
+  return tvalid
+
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
-  if (type(valid) == int):
-    #debug 
-    print("valid is int ", flush=True)
-    tvalid = str(valid)
-    tinitial = str(initial)
-  elif (type(valid) == str):
-    #debug 
-    print("valid is str", flush=True)
-    tvalid = valid
-    tinitial = initial
-  else:
-    #debug 
-    print("assume valid is datetime", flush=True)
-    tvalid = valid.strftime("%Y%m%d")
-    tinitial = initial.strftime("%Y%m%d")
+  #debug print("fcst_name valid, initial, fcstdir:",valid, initial,fcst_dir, flush=True)
+  #debug print("types ",type(valid), type(initial), type(fcst_dir), flush=True )
+
+  tvalid = tostr(valid)
+  tinitial = tostr(initial)
+  #debug: print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
 
   #Some UFS prototype names:
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
+
   fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
 
   #CICE consortium default
   #fdate = parse_8digits(int(tvalid))
   #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
+  #debug: print("fname, type", fname, type(fname),flush=True)
   if (not os.path.exists(fname) ):
     print("fcst_name: could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
     print(fname)
@@ -315,10 +340,12 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
   valid   = int(valid_date.strftime("%Y%m%d"))
-  #debug 
-  print('get fcst ',initial, valid, flush=True)
+  #debug print('get fcst ',initial, valid, flush=True)
+  #debug print('get fcst ', initial, type(initial), initial_date, type(initial_date))
 
   fname = fcst_name(valid, initial, fcst_dir)
+  #debug print("fname = ",fname, flush=True)
+
   if (not os.path.exists(fname)):
     retcode += 1
     print("Do not have forecast file ",fname," for ",initial, valid, flush=True)
@@ -328,14 +355,19 @@ def get_fcst(initial_date, valid_date, fcst_dir):
 #pass 8digit dates:
 def fcst_edge(initial, valid, fcst_dir):
   retcode = int(0)
+  edgedir = dirs['edgedir']
+  fname = edgedir + 'fcst_edge.' + str(valid)
   
-  if (not os.path.exists('fcst_edge.' + str(valid))):
-    fname = fcst_name(valid, initial, fcst_dir)
+  if (not os.path.exists(fname) ):
+    fcstin = fcst_name(valid, initial, fcst_dir)
     #RG: want something cleaner for selecting model format/version!
     #UFS
-    cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
+    #debug print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
+    cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fcstin + ' 0.40 > ' + fname
+
     #CICE
     #cmd = exdir + 'find_edge_consortium '+fixdir+'skip_hr ' + fname + ' 0.40 > fcst_edge.' + str(valid)
+
     x = os.system(cmd)
     if (x != 0): retcode += x
   return retcode

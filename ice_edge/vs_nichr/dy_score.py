@@ -19,29 +19,32 @@ exdir  = os.environ['EXDIR']
 
 day   = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
-dt    = day*int(sys.argv[2])
+end   = datetime.date.today()
+lead  = int(sys.argv[2])
+dt    = day*lead
 
-#fdate = start + dt
-#print(start.strftime("%j"))
-
-for i in range(0,4*365-90):
+for i in range(0,4*365+1):
   fdate = start + dt
+  if (start >= end):
+      break
 
   sname = obsdir+"/cleaned/s."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/s."+fdate.strftime("%Y%j")+".beta"
+  oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.s."+start.strftime("%Y%j") 
   if (os.path.exists(sname) and os.path.exists(fname) ):
-    os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.s."+start.strftime("%Y%j") )
+    if (not os.path.exists(oname) ):
+      os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
     print("missing at least one of ",sname, fname)
 
   sname = obsdir+"/cleaned/n."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/n."+fdate.strftime("%Y%j")+".beta"
+  #oname = "score.n."+start.strftime("%Y%j") 
+  oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.n."+start.strftime("%Y%j") 
   if (os.path.exists(sname) and os.path.exists(fname) ):
-    os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > score.n."+start.strftime("%Y%j") )
+    if (not os.path.exists(oname) ):
+      os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
     print("missing at least one of ",sname, fname)
 
   start += day
-exit(0)
- 
-#    ./cscore_edge seaice_alldist.bin s.${y1}${ddd}.beta s.${y2}${ddd}.beta 50. > score.s.$y1$ddd

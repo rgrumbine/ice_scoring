@@ -17,7 +17,7 @@ export BASE=${BASE:-$HOME/rgdev/ice_scoring/}
 echo BASE = $BASE
 
 #Check the python environment -- assumes that path already references an appropriate interpreter 
-python3 ${BASE}/main/checkenv.py
+python3 ${BASE}/main_dir/checkenv.py
 if [ $? -ne 0 ] ; then
   echo you are missing necessary elements of the python environment.
   echo please install the needed modules and retry
@@ -29,7 +29,8 @@ fi
 
 #Check the directory / data environment for needed directories
 export EXDIR=`pwd`
-python3 ${BASE}/main/platforms.py trial
+export EXBASE=`pwd`
+python3 ${BASE}/main_dir/platforms.py trial
 if [ $? -ne 0 ] ; then
   echo you need to correct the machines list and directory references in platforms.py
   exit 1
@@ -45,12 +46,16 @@ do
   fi
 done
 
-for f in README verf_files.py setup_verf_ice.py platforms.py all.csh year.csh final.py
+for f in README verf_files.py setup_verf_ice.py platforms.py final.py all.csh year.csh 
 do
-  cp -p ${BASE}/main/$f .
+  cp -p ${BASE}/main_dir/$f .
   if [ ! -f $f ] ; then
-    echo could not find $f in $BASE, exiting
-    exit 1
+    if [ -f ${BASE}/main_dir/shells/$f ] ; then
+      cp -p ${BASE}/main_dir/shells/$f .
+    else
+      echo could not find $f in $BASE
+      exit 1
+    fi
   fi
 done
 

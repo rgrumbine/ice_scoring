@@ -1,0 +1,7 @@
+
+platforms.py  -- declarations for different compute platforms
+verf_files.py -- tools for verification files (read, find edge, )
+total 1172
+492 -rw-r--r-- 1 Robert.Grumbine climate 501116 Jul 14  2021 G02202-cdr-ancillary-sh.nc
+680 -rw-r--r-- 1 Robert.Grumbine climate 692627 Jul 14  2021 G02202-cdr-ancillary-nh.nc
+  0 -rw-r--r-- 1 Robert.Grumbine climate      0 Jan 26 16:44 nsidc.ancillary
