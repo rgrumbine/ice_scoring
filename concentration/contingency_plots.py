@@ -10,7 +10,7 @@ matplotlib.use('Agg') #for batch mode
 #matplotlib.use('Qt5Agg') #for interactive mode
 import matplotlib.pyplot as plt
 
-lead = int(sys.argv[1])
+lead = int(sys.argv[1]) - 1
 idate = int(sys.argv[2])
 level_score = float(sys.argv[3]) #might be good to verify that this is integer multiple of 0.05
 title_base = sys.argv[4]
@@ -68,9 +68,9 @@ for i in range (0,lead):
           score[i] = threat_index[k-20]
     #Now have this lead in hand, plot the curve:
     fig, ax = plt.subplots()
-    ax.set(xlabel = "Cutoff Concentration", ylabel = 'threat score [0:1]')
-    ax.set(title = title_base + 'Forecast lead '+str(flead)+' NH threat score')
-    plt.ylim(0,1.0)
+    ax.set(xlabel = "Critical Concentration", ylabel = 'threat score [0:1]')
+    ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\nNH threat score')
+    plt.ylim(0.5,1.0)
     ax.plot(critical_level, threat_index)
     ax.grid()
     #fig.show()
@@ -80,7 +80,7 @@ for i in range (0,lead):
 #done with day by day, now plot summary vs. cutoff:
 fig,ax = plt.subplots()
 ax.set(xlabel = "Forecast lead, days", ylabel = 'threat score [0:1]')
-ax.set(title = title_base + "Threat score for critical = "+str(level_score)+" from "+start_date.strftime("%Y%m%d"))
+ax.set(title = title_base + " Threat score for critical = "+str(level_score)+" \nfrom "+start_date.strftime("%Y%m%d"))
 ax.plot(days,score)
 ax.grid()
 #fig.show()
