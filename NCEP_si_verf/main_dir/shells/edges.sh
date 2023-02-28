@@ -34,12 +34,12 @@ cd $HOME/clim_data/edges/
 #WCOSS
 #  tbd
 
-export EXBASE=$HOME/rgdev/ice_scoring/
+export EXBASE=$HOME/rgdev/ice_scoring/NCEP_si_verf
 
 export mmablib=$HOME/rgdev/mmablib/
 #
 echo pre-pythonpath $PYTHONPATH
-export PYTHONPATH=$PYTHONPATH:$mmablib/py:$HOME/rgdev/ice_scoring/main
+export PYTHONPATH=$PYTHONPATH:$mmablib/py:$HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir
 echo post-pythonpath $PYTHONPATH
 
 export XDG_RUNTIME_DIR=/scratch1/NCEPDEV/climate/${USER}/runtime
@@ -49,7 +49,7 @@ export expt=edges
 export EXDIR=$HOME/clim_data/edges
 export RUNBASE=/scratch1/NCEPDEV/stmp2/${USER}/prototype_evaluations/${expt}.verf
 
-#export FCST_BASE=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
+export FCST_BASE=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
 
 #All systems:
 
@@ -65,8 +65,8 @@ export base=`pwd`
 
 echo env $FCST_BASE $EXDIR $base $RUNBASE
 
-cp $HOME/rgdev/ice_scoring/main/obs_edges_verf.py .
-cp $HOME/rgdev/ice_scoring/main/statview.py .
+cp $HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir/obs_edges_verf.py .
+cp $HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir/statview.py .
 
 # Fewer changes below here -------------------------------------------------
 
