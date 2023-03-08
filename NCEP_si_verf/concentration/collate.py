@@ -42,7 +42,8 @@ for mm in range (1,13):
     for yy in range (2011,2019):
       tag = "{0:4d}".format(yy) + "{0:02d}".format(mm) + dd
       start_date = datetime.date(int(yy), int(mm), int(dd))
-      dirname = dirbase + tag
+      #dirname = dirbase + tag
+      dirname = dirbase 
       if (os.path.exists(dirname)):
         for flead in range (int(0),int(lead)):
           valid_date = start_date + (flead+1)*dt
