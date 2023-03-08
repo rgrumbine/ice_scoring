@@ -3,12 +3,15 @@ import sys
 
 import numpy as np
 
+fin = open(sys.argv[1],"r")
+
 try:
   title_tag = sys.argv[2]
 except:
   title_tag = "ref"
 
-fin = open(sys.argv[1],"r")
+markersize = float(sys.argv[3])
+
 parm = []
 i = []
 j = []
@@ -42,12 +45,15 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('Agg') #batch mode
 
+
 #Elaborations:
 #  title
 #  axis labels
 #  separate color/symbol per parameter
+#  different sizes per parameter
+
 fig,ax = plt.subplots()
-ax.scatter(i,j)
+plt.scatter(i,j, s = markersize)
 ax.grid() 
 plt.title(title_tag)
 plt.savefig("ij_errs_"+title_tag+".png")
@@ -79,7 +85,8 @@ else:
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
 ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="c") )
-plt.scatter(lon, lat, transform=ccrs.PlateCarree())
+plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize)
 plt.savefig("ll_errs_"+title_tag+".png")
 plt.close()
 
+print(markersize)

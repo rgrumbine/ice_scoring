@@ -1,19 +1,25 @@
 #!/bin/sh
 
-export DCOM=~/rgdev/edges
-. ./bootstrap.sh
+set -x
 
-#yy=2019
-#ddd=077
+export DCOM=~/rgdev/edges
+cd $DCOM
+
+. $HOME/rgdev/ice_scoring/NCEP_si_verf/ice_edge/vs_nichr/bootstrap.sh
 
 yy=2022
-ddd=001
+ddd=250
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned
 fi
+if [ ! -d first ] ; then
+  mkdir first
+fi
 
-while [ $yy -le 2023 ]
+export tag=${yy}${ddd}
+
+while [ $tag -le `date +"%Y%j"` ] 
 do
   if [ ! -f cleaned/n.${yy}${ddd}.beta ] ; then
     if [ -f ${DCOM}/nedge_${yy}${ddd} ] ; then
@@ -49,11 +55,9 @@ do
     yy=`expr $yy + 1`
     ddd=001
   fi  
+
+  export tag=${yy}${ddd}
 done
 
 mv [ns].*.beta cleaned
-
-if [ ! -d first ] ; then
-  mkdir first
-fi
-mv [ns].20????? first
+mv [ns].${yy}??? first

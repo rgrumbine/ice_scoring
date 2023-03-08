@@ -3,6 +3,10 @@ EGreenland_current    uvel     -2.7   2.2        0.2   0.8         Physical
 EGreenland_current    vocn     -2.7   2.2        0.2   0.8         Physical
 EGreenland_current    strocnx  -2.7   2.2        0.2   0.8         Physical?
 EGreenland_current    strocny  -2.7   2.2        0.2   0.8         Physical?
+Gulf_Stream           uocn     -2.7   2.7        0.2   0.8         Physical
+Gulf_Stream           vocn     -2.7   2.7        0.2   0.8         Physical
+Agulhas               uocn     -2.7   2.7        0.2   0.8         Physical
+Agulhas               vocn     -2.7   2.7        0.2   0.8         Physical
 Greenland_Sea         vvel_h   -2.0   2.0        0.2   0.8         Physical          
 Greenland_Sea         vvel     -2.0   2.0        0.2   0.8         Physical          
 Greenland_Sea         uvel_h   -2.0   2.0        0.2   0.8         Physical          
