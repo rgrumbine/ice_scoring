@@ -20,8 +20,8 @@ export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 export modelout=$HOME/noscrub/model_intercompare/rtofs_cice
 
-tag=20221001
-while [ $tag -le 20230228 ] 
+tag=20220920
+while [ $tag -le 20230305 ] 
 do
   mm=`echo $tag | cut -c5-6`
   dd=`echo $tag | cut -c7-8`
@@ -30,7 +30,7 @@ do
     if [ -f $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst ] ; then
      time python3 $GDIR/rtofs_cice/rtofs_cice.py \
          $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst \
-         $GDIR/rtofs_cice/rtofs_cice.extremes fly > beta.${mm}${dd}.${lead}
+         $GDIR/rtofs_cice/rtofs_cice.extremes fly > beta.$tag.${lead}
     fi
   done
 
