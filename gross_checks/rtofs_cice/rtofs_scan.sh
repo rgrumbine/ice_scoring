@@ -4,7 +4,7 @@
 #PBS -j oe
 #PBS -A ICE-DEV
 #PBS -q dev
-#PBS -l walltime=5:00:00
+#PBS -l walltime=1:00:00
 #PBS -l select=1:ncpus=1
 #
 
@@ -20,8 +20,8 @@ export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 export modelout=$HOME/noscrub/model_intercompare/rtofs_cice
 
-tag=20220920
-while [ $tag -le 20230305 ] 
+tag=20230306
+while [ $tag -le 20230311 ] 
 do
   mm=`echo $tag | cut -c5-6`
   dd=`echo $tag | cut -c7-8`
@@ -31,6 +31,7 @@ do
      time python3 $GDIR/rtofs_cice/rtofs_cice.py \
          $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst \
          $GDIR/rtofs_cice/rtofs_cice.extremes fly > beta.$tag.${lead}
+     mv fhistogram fhistogram.$tag.$lead
     fi
   done
 

@@ -2,9 +2,11 @@ exceptions.py -- takes for its input:
 1) a file with exceptions (ex: ignore, known.errors, physical.exceptions)
 2) output from a gross check scan
 
-and produces output of those values which aren't being granted an exception either because
-the flagged (i.e. in pm) line is a parameter or area which is being ignored, it's a parameter in a location where the normal bound is inappropriate (e.g. the Persian Gulf gets extremely hot), or it's a known error -- whatever conditions are being allowed
-
+and produces output text file of those values which aren't being granted 
+an exception either because the flagged (i.e. in pm) line is a parameter 
+or area which is being ignored, it's a parameter in a location where the 
+normal bound is inappropriate (e.g. the Persian Gulf gets extremely hot), 
+or it's a known error -- whatever conditions are being allowed
 
 Exception control files: --------------------------------------------
 Note: More efficient if most common exceptions are listed first.
@@ -15,4 +17,6 @@ Note: More efficient if most common exceptions are listed first.
 
 * known.errors -- per name. Ideally this file goes to size 0
 
-* ignore.tropics -- per name. Would be better to have parm = all to ignore all parameters in the region.
+* ignore.tropics -- per name. Has parm = all to ignore all parameters in the region.
+
+* ice.extremes  -- Adding 'Globe' to the start of each line in a bounds control file allows you to see the effect of widening the allowed ranges
