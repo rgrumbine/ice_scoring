@@ -17,6 +17,6 @@ for dy in 1 2 3 4 5 6 7 8 10 16 365
 do
   echo working on $dy day lead
 
-  time python3 dy_score.py 20220101 $dy 
+  time python3 dy_score.py 20220801 $dy 
 
 done

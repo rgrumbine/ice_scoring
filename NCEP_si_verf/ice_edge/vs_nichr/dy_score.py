@@ -25,7 +25,7 @@ dt    = day*lead
 
 for i in range(0,4*365+1):
   fdate = start + dt
-  if (start >= end):
+  if (fdate >= end):
       break
 
   sname = obsdir+"/cleaned/s."+start.strftime("%Y%j")+".beta"
@@ -35,7 +35,11 @@ for i in range(0,4*365+1):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
-    print("missing at least one of ",sname, fname)
+    if (not os.path.exists(sname)):
+      print("missing ",sname)
+    if (not os.path.exists(fname)):
+      print("missing ", fname)
+    print(flush=True)
 
   sname = obsdir+"/cleaned/n."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/n."+fdate.strftime("%Y%j")+".beta"
@@ -45,6 +49,10 @@ for i in range(0,4*365+1):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
-    print("missing at least one of ",sname, fname)
+    if (not os.path.exists(sname)):
+      print("missing ",sname)
+    if (not os.path.exists(fname)):
+      print("missing ", fname)
+    print(flush=True)
 
   start += day
