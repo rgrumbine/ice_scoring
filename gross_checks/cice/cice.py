@@ -24,7 +24,8 @@ headers = {
   'tmask' : '',
   'tarea' : ''
 }
-fin = open('ctl/cice.header','r')
+HOME="/ncrc/home1/Robert.Grumbine/rgdev/"
+fin = open(HOME+'/ice_scoring/model_definitions/cice.header','r')
 k = 0
 for line in fin:
   #print(k, len(line))
