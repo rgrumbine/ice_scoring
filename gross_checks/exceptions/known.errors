@@ -1,14 +1,18 @@
-Archipelago_snow      hi_h      0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
-Archipelago_snow      hi        0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
-Greenland_snow        snow_ai   0.0   0.6    0.25  0.4         Known Error -- rtofs_cice
 Antarctic_snow        hs_h      0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
 Antarctic_snow        hs        0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
-Archipelago_snow      strength  0.0  1.e7    0.25  1.e5        Known Error -- rtofs_cice
-Archipelago_snow      hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
-Archipelago_snow      hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Mauritania_saline     SSS      39.0  47.0   39.0  40.0         Known Error -- rtofs_cice
+Mauritania_saline     sss      39.0  47.0   39.0  40.0         Known Error -- rtofs_cice
 Weddell_snow          hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
 Weddell_snow          hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
 Tropics               uocn     -3.0   3.0   -1.0   1.0         Known, may or may not be error
+NileDelta_saline      SSS      39.0  46.0   35.0  40.0         Known Error -- rtofs_cice
+NileDelta_saline      sss      39.0  46.0   35.0  40.0         Known Error -- rtofs_cice
+Archipelago_snow      hi_h      0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hi        0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Greenland_snow        snow_ai   0.0   1.0    0.25  0.4         Known Error -- rtofs_cice
+Archipelago_snow      strength  0.0  1.e7    0.25  1.e5        Known Error -- rtofs_cice
+Archipelago_snow      hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
 Beaufort_snow         hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
 Beaufort_snow         hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
 Greenland_Sea         hs_h      0.0   2.8    0.2   0.8         Known Error -- rtofs_cice
