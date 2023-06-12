@@ -1,8 +1,8 @@
 #!/bin/bash
 # --- Hera
-#SBATCH -J gross2
-#SBATCH -e gross2.err
-#SBATCH -o gross2.out
+#SBATCH -J gross4
+#SBATCH -e gross4.err
+#SBATCH -o gross4.out
 #SBATCH -t 5:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
@@ -22,13 +22,16 @@
 ##PBS -l select=1:ncpus=1
 #--- WCOSS2
 
+
+#. $HOME/rgdev/toolbox/misc/python_load.wcoss2
+. $HOME/rgdev/toolbox/misc/python_load.hera
+
+
+#------------------------ General across platforms --------------
 export MODEL=rtofs_cice
 export modelout=$HOME/clim_data/rtofs_gross
 
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
-
-#. $HOME/rgdev/toolbox/misc/python_load.wcoss2
-. $HOME/rgdev/toolbox/misc/python_load.hera
 
 export PYTHONPATH=$PYTHONPATH:$GDIR/shared
 
@@ -42,7 +45,7 @@ fi
 cd  $HOME/scratch/gross/$MODEL
 
 ln -sf $GDIR/curves curves
-$GDIR/$MODEL/${MODEL}_scan.sh
+time $GDIR/$MODEL/${MODEL}_scan.sh
 
 
 #after check has been done -- summaries and graphics
