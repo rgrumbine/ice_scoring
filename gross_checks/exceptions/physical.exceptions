@@ -1,0 +1,21 @@
+Gulf_of_Bothnia       sss       0.5  15.0        1.0  12.0         Physical
+Gulf_of_Finland       sss       0.0  15.0        1.0  12.0         Physical
+Gulf_Ob               sss       0.0  15.0        1.0  12.0         Physical
+Persian_Gulf          sss      35.0  47.0       35.0  40.0         Physical
+Gulf_of_Suez          sss      35.0  42.5       37.0  38.0         Physical
+Red_Sea               sss      35.0  42.0       37.0  38.0         Physical
+Amazon_Outflow        sss       0.0  15.0        1.0  12.0         Physical
+Shark_Bay             sss      40.0  47.0       20.0  37.0         Physical
+Yangtze_Outflow       sss       0.0  15.0        1.0  12.0         Physical
+Rio_de_La_Plata       sss       0.0  15.0        1.0  12.0         Physical
+Baltic_Sea            sss       0.0  15.0        1.0  10.0         Physical
+Laptev_fresh          sss       0.0  15.0        1.0  12.0
+Ganges_Delta          sss       0.0  15.0        1.0  12.0         Physical
+Gulf_Stream           uocn     -2.7   2.7        0.2   0.8         Physical
+Gulf_Stream           vocn     -2.7   2.7        0.2   0.8         Physical
+Kuroshio_Start        uocn     -2.75  3.50      -1.5   1.0         Physical
+Kuroshio_Start        vocn     -2.50  3.5       -1.5   1.0         Physical
+Agulhas               uocn     -2.7   2.7        0.2   0.8         Physical
+Agulhas               vocn     -2.7   2.7        0.2   0.8         Physical
+Kuroshio_Separate     uocn     -2.75  3.50      -1.5   1.0         Physical
+Kuroshio_Separate     vocn     -2.50  3.5       -1.5   1.0         Physical
