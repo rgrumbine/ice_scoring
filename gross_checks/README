@@ -39,4 +39,4 @@
 Additional:
 atm/atm.py  -- a start towards an atmospheric model gross checker
 statview.py -- for processing -mcProfile -o statout profiling of script
-notes       -- additional notes
+notes/       -- additional notes

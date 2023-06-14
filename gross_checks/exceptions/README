@@ -11,6 +11,8 @@ or it's a known error -- whatever conditions are being allowed
 Exception control files: --------------------------------------------
 Note: More efficient if most common exceptions are listed first.
 
+* reference     -- summary of different bounds, physical or errors
+
 * ignore.params -- parameters to ignore (even if present, don't bother about them for now)
 
 * physical.exceptions -- parameters and regions which may exceed normal bounds for acceptable physical reasons (e.g. the Persian Gulf can be hot and salty)

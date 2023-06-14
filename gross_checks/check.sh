@@ -1,8 +1,8 @@
 #!/bin/bash
 # --- Hera
-#SBATCH -J gross4
-#SBATCH -e gross4.err
-#SBATCH -o gross4.out
+#SBATCH -J gross5
+#SBATCH -e gross5.err
+#SBATCH -o gross5.out
 #SBATCH -t 5:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
@@ -18,7 +18,7 @@
 ##PBS -j oe
 ##PBS -A ICE-DEV
 ##PBS -q hera
-##PBS -l walltime=1:00:00
+##PBS -l walltime=4:00:00
 ##PBS -l select=1:ncpus=1
 #--- WCOSS2
 
@@ -59,12 +59,12 @@ done
 
 # For plots, last number is dot size. Expect fewer pts as go down list, 
 #    so make pts larger
-python3 $GDIR/graphics/plot_errs.py all all 1.
+python3 $GDIR/graphics/plot_errs.py all all 2.
 
 python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/physical.exceptions all > nonphysical
-python3 $GDIR/graphics/plot_errs.py nonphysical nonphysical 2.
+python3 $GDIR/graphics/plot_errs.py nonphysical nonphysical 4.
 
 python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/known.errors nonphysical > unknown
-python3 $GDIR/graphics/plot_errs.py unknown unknown 4.
+python3 $GDIR/graphics/plot_errs.py unknown unknown 8.
 
 $GDIR/$MODEL/split.sh unknown | sort -n
