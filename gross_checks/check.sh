@@ -1,8 +1,8 @@
 #!/bin/bash
 # --- Hera
-#SBATCH -J gross5
-#SBATCH -e gross5.err
-#SBATCH -o gross5.out
+#SBATCH -J gross6
+#SBATCH -e gross6.err
+#SBATCH -o gross6.out
 #SBATCH -t 5:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
