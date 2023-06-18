@@ -1,3 +1,5 @@
+sss            4.0     41.0       5.0      39.0     # WOA annual average bounds
+sst           -1.92    34.5       1.6      30.0     # -1.92 = Tf(35.0)
 aice           0.0      1.0       0.10      0.9
 hi             0.0     10.0       0.50      4.0
 hs             0.0      1.75      0.15      1.5
@@ -5,10 +7,12 @@ Tair         220.00   313.15    243.15    300.0
 Tsfc         -51.0      5.0e-5  -15.0      -3.50
 uvel          -1.5      1.5      -0.15      0.15
 vvel          -1.5      1.5      -0.15      0.15
+uocn          -2.25     2.25     -1.25    1.8
+vocn          -2.25     2.25     -1.5     1.5
 frzmlt     -1000.0   1000.0    -850.00    -27.3
 meltb          0.0     27.5       2.0      20.0
 meltl          0.0      3.0       0.1       0.9
-meltt          0.0     10.0       0.1       0.9
+meltt          0.0     12.0       0.1       0.9
 albsni         0.0     70.0       0.0      40.0
 congel         0.0     11.0       0.7       6.5
 divu       -2000.0   2000.0     -50.0      50.0
@@ -25,18 +29,14 @@ fswabs         0.0    675.0      50.0     600.0
 fswabs_ai      0.0    525.0      40.0     360.0
 fswdn          0.0   1115.0      41.0     340.0        # reaching this requires overhead sun and exceptionally clear atmosphere
 fswfac         0.0      1.0667    0.1       0.9
-fswthru_ai     0.0    125.0      10.0     105.0
+fswthru_ai     0.0    150.0      10.0     105.0
 opening        0.0   2000.0     200.0    1800.0
 rain_ai        0.0      0.60      0.03      0.27
 snoice         0.0      3.25      0.275     2.5        # snow->ice conversion
 snow           0.0      0.95      0.04      0.36
 snow_ai        0.0      0.50      0.04      0.36
-sss            4.0     41.0       5.0      39.0
-sst           -1.92    34.5       1.6      30.0        # -1.92 = Tf(35.0)
 strcorx       -0.375    0.375    -0.10      0.20
 strcory       -0.375    0.375    -0.30      0.05
 strength       0.0      2.5e5     2.0e4     1.8e5
 strocnx       -2.0      2.25     -0.5       1.5
 strocny       -2.0      2.25     -0.8       0.6
-uocn          -2.0      2.25     -1.25    1.8
-vocn          -2.25     2.25     -1.5     1.5

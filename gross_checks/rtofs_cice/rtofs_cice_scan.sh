@@ -20,8 +20,8 @@ export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 
 export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
 
-start=20191001
-end=20191231
+start=${start:-20200401}
+end=${end:-20200630}
 
 tag=$start
 while [ $tag -le $end ] 
