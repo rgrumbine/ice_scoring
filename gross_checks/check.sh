@@ -1,8 +1,8 @@
 #!/bin/bash
 # --- Hera
-#SBATCH -J gross8
-#SBATCH -e gross8.err
-#SBATCH -o gross8.out
+#SBATCH -J gross9
+#SBATCH -e gross9.err
+#SBATCH -o gross9.out
 #SBATCH -t 5:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
@@ -28,6 +28,11 @@
 
 
 #------------------------ General across platforms --------------
+set -x
+
+export start=20200601
+export end=20200930
+
 export MODEL=rtofs_cice
 export modelout=$HOME/clim_data/rtofs_gross
 

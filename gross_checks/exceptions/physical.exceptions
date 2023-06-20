@@ -18,8 +18,11 @@ Mackenzie_Outflow     sss       0.0  15.0        1.0  12.0         Physical
 Orinoco_Outflow       sss       0.0  15.0        1.0  12.0         Physical
 Mississippi_Outflow   sss       0.0  15.0        1.0  12.0         Physical
 Delaware_Bay          sss       0.0  15.0        1.0  12.0         Physical
+Sea_of_Azov_fresh     sss       0.0  15.0        1.0   4.0         Physical
+YK_Delta              sss       0.0  15.0        1.0   4.0         Physical
 Red_Sea               sss      35.0  42.0       37.0  38.0         Physical
 Persian_Gulf          sst      25.0  36.5       27.0  30.0         Physical
+Red_Sea               sst      25.0  37.0       30.0  35.0         Physical
 Agulhas               uocn     -2.7   3.25       0.2   0.8         Physical
 Agulhas               vocn     -2.7   3.25       0.2   0.8         Physical
 Somali_Current        uocn     -2.75  2.75      -1.5   1.5         Physical

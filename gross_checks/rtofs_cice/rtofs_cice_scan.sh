@@ -15,13 +15,15 @@
 #export GDIR=$HOME/rgdev/ice_scoring/gross_checks
 #cd $GDIR
 
+set -x
+
 export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 
 export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
 
-start=${start:-20200401}
-end=${end:-20200630}
+export start=${start:-20200401}
+export end=${end:-20200630}
 
 tag=$start
 while [ $tag -le $end ] 
@@ -48,5 +50,3 @@ do
   tag=`dtgfix3 $tag`
 done
 
-#  cat beta.${mm}*.* > beta.$mm
-#  python3 $GDIR/plot_errs.py beta.$mm early_$mm
