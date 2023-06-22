@@ -79,8 +79,8 @@ else:
     parmno += 1
 
 #exit codes are bounded, while error counts are not
-print("errcount = ",errcount)
 if (errcount == 0):
   exit(0)
 else:
+  print("errcount = ",errcount)
   exit(1)
