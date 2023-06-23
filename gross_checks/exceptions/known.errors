@@ -1,7 +1,7 @@
+Archipelago_snow      hi        0.6  35.0    0.25  1.0         Known Error -- rtofs_cice
 Greenland_snow        snow_ai   0.0   1.0    0.25  0.4         Known Error -- rtofs_cice
 Antarctic_snow        hs        0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
-Mauritania_saline     sss      39.0  47.0   39.0  40.0         Known Error -- rtofs_cice
+Mauritania_saline     sss      39.0  47.5   39.0  40.0         Known Error -- rtofs_cice
 NileDelta_saline      sss      39.0  46.0   35.0  40.0         Known Error -- rtofs_cice
 Weddell_snow          hs        0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
-Archipelago_snow      hi        0.6  35.0    0.25  1.0         Known Error -- rtofs_cice
 Archipelago_snow      strength  2.e5 2.e6    2.e4  2.5e5       Known Error -- rtofs_cice
