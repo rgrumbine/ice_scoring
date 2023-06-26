@@ -1,0 +1,122 @@
+Adriatic_Sea          SSS      35.0  39.5       37.0  38.0         Physical
+Aegean_Sea            SSS      35.0  40.0       37.0  38.0         Physical
+Agulhas               uocn     -2.7   2.7        0.2   0.8         Physical
+Agulhas               vocn     -2.7   2.7        0.2   0.8         Physical
+Amazon_Outflow        SSS       0.0  15.0        1.0  12.0         Physical
+Antarctic_cold        Tair    213.15 280.15    243.15  263.15      Physical
+Antarctic_ice_flow    uvel     -1.5   1.5       -0.5   0.5         Physical
+Antarctic_ice_flow    uvel_h   -1.5   1.5       -0.5   0.5         Physical
+Antarctic_ice_flow    vvel     -1.5   1.5       -0.5   0.5         Physical
+Antarctic_ice_flow    vvel_h   -1.5   1.5       -0.5   0.5         Physical
+Antarctic_snow        hs        0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
+Antarctic_snow        hs_h      0.6   2.9    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hi        0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hi_h      0.6  30.0    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Archipelago_snow      strength  0.0  1.e7    0.25  1.e5        Known Error -- rtofs_cice
+Arctic_cold           Tsfc    -60.0 -30.0      -42.0 -44.0         Physical 
+Arctic_cold           Tsfc_h  -60.0 -30.0      -42.0 -44.0         Physical 
+Arctic_Ocean          Tsfc    -60.0   0.0      -21.0  -3.5         Physical
+Arctic_Ocean          Tsfc_h  -60.0   0.0      -21.0  -3.5         Physical
+Atlantic_Equatorial_current   SSV      -2.25  3.00  -1.5   1.5     Physical
+Atlantic_Equatorial_current   vocn     -2.25  3.00  -1.5   1.5     Physical
+Baltic_Sea            SSS       0.0  15.0        1.0  10.0         Physical
+Barentsz_Sea          SSS       0.0  15.0        1.0  12.0         Physical
+Beaufort_fresh        SSS       0.0  15.0        1.0  12.0         Physical
+Beaufort_snow         hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Beaufort_snow         hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Brazil_current        SSV      -3.00  3.25      -1.5   1.5         Physical
+Brazil_current        vocn     -3.00  3.25      -1.5   1.5         Physical
+Chesapeake_fresh      SSS       0.0  15.0        1.0   4.0         Physical
+Congo_fresh           SSS       0.0  15.0        1.0   4.0         Physical
+East_Siberian_fresh   SSS       0.0  15.0        1.0  12.0         Physical
+EGreenland_current    strocnx  -2.7   2.2        0.2   0.8         Physical?
+EGreenland_current    strocny  -2.7   2.2        0.2   0.8         Physical?
+EGreenland_current    uvel     -2.7   2.2        0.2   0.8         Physical          
+EGreenland_current    uvel_h   -2.7   2.2        0.2   0.8         Physical          
+EGreenland_current    vocn     -2.7   2.2        0.2   0.8         Physical
+EGreenland_current    vvel     -2.7   2.2        0.2   0.8         Physical          
+EGreenland_current    vvel_h   -2.7   2.2        0.2   0.8         Physical          
+G_AK_fresh            SSS       0.0  15.0        1.0  12.0      ?
+Ganges_Delta          SSS       0.0  15.0        1.0  12.0
+Greenland_Sea         hs        0.0   2.8        0.2   0.8     Known Error -- rtofs_cice
+Greenland_Sea         hs_h      0.0   2.8        0.2   0.8     Known Error -- rtofs_cice
+Greenland_Sea         uvel     -2.0   2.0        0.2   0.8         Physical          
+Greenland_Sea         uvel_h   -2.0   2.0        0.2   0.8         Physical          
+Greenland_Sea         vvel     -2.0   2.0        0.2   0.8         Physical          
+Greenland_Sea         vvel_h   -2.0   2.0        0.2   0.8         Physical          
+Greenland_snow        hs        0.0   2.8        0.25  1.0     Known Error -- rtofs_cice
+Greenland_snow        hs_h      0.0   2.8        0.25  1.0     Known Error -- rtofs_cice
+Greenland_snow        snow_ai   0.0   1.0        0.25  0.4     Known Error -- rtofs_cice
+Gulf_of_Aqaba         SSS      35.0  41.0       37.0  38.0         Physical
+Gulf_of_Aqaba         sss      35.0  41.0       37.0  38.0         Physical 
+Gulf_of_Aqaba         SSS      35.0  41.0       37.0  38.0         Physical
+Gulf_of_Bothnia       SSS       0.0  15.0        1.0  10.0         Physical
+Gulf_of_Finland       SSS       0.0  15.0        1.0  10.0         Physical
+Gulf_of_Martaban      SSS       0.0  15.0        1.0  12.0         Physical
+Gulf_of_Riga          SSS       0.0  15.0        1.0  10.0         Physical
+Gulf_of_Riga          SSS       1.5  15.0        2.0  12.0         Physical
+Gulf_of_St_Lawrence   SSS       0.0  15.0        1.0  12.0         Physical
+Gulf_of_Suez          SSS      35.0  41.5       37.0  38.0         Physical
+Gulf_of_Suez          sss      35.0  43.0       37.0  38.0         Physical
+Gulf_Stream           uocn     -2.7   2.7        0.2   0.8         Physical
+Gulf_Stream           vocn     -2.7   2.7        0.2   0.8         Physical
+Hudson_saline         sss      39.0  45.0       39.0  40.0     Known Error -- ufs
+Hudson_saline         SSS      39.0  45.0       39.0  40.0     Known Error -- ufs
+Indian_Ocean_hot      sst      13.0  38.0       15.0  30.0     Known Error -- rtofs_cice
+Indian_Ocean_hot      SST      13.0  38.0       15.0  30.0     Known Error -- rtofs_cice
+Ionian_Sea            SSS      35.0  39.5       37.0  38.0         Physical
+James_Bay_fresh       SSS       0.0  15.0        1.0   4.0         Physical 
+Kara_fresh            SSS       0.0  15.0        1.0  12.0         Physical
+Kuroshio_Start        speed     0.10  3.5        1.0   2.0         Physical
+Kuroshio_Start        SSU      -2.75  3.50      -1.5   1.0         Physical
+Kuroshio_Start        SSV      -2.50  3.5       -1.5   1.0         Physical
+Kuroshio_Start        uocn     -2.75  3.50      -1.5   1.0         Physical
+Kuroshio_Start        vocn     -2.50  3.5       -1.5   1.0         Physical
+Laptev_fresh          SSS       0.0  15.0        1.0  12.0      ?
+Laptev_Sea            sst      -3.0  15.0       -1.0  10.0     Known Error -- rtofs_cice
+Laptev_Sea            SST      -3.0  15.0       -1.0  10.0     Known Error -- rtofs_cice 
+Mauritania_saline     sss      39.0  47.0       39.0  40.0     Known Error -- rtofs_cice
+Mauritania_saline     SSS      39.0  47.0       39.0  40.0     Known Error -- rtofs_cice
+Mediterranean_Sea_-_Eastern_Basin SSS 35.0 41.0  37.0 38.0         Physical
+MS_Outflow            SSS       0.0  15.0        1.0  12.0         Physical
+N_equatorial_current  speed     0.1   3.0        0.5   1.5         Physical
+N_equatorial_current  SSU      -3.0  -1.50      -1.75 -1.5         Physical
+N_equatorial_current  SSV       1.50  2.5        1.80  2.5         Physical
+N_equatorial_current  uocn     -3.0  -1.50      -1.75 -1.5         Physical
+N_equatorial_current  vocn      1.50  2.5        1.80  2.5         Physical
+NileDelta_saline      sss      39.0  46.0       35.0  40.0    Known Error -- rtofs_cice
+NileDelta_saline      SSS      39.0  46.0       35.0  40.0    Known Error -- rtofs_cice
+North_Sea             SSS       0.0  15.0        1.0  12.0      ?
+Persian_fresh         SSS       0.0  15.0        1.0   4.0
+Persian_Gulf          sss      35.0  47.0       35.0  40.0         Physical
+Persian_Gulf          SSS      35.0  47.0       35.0  40.0         Physical
+Persian_Gulf          sst      25.0  39.0       30.0  35.0         Physical
+Persian_Gulf          SST      25.0  39.0       30.0  35.0         Physical
+Red_Sea               sss      35.0  41.0       37.0  38.0         Physical
+Red_Sea               SSS      35.0  41.0       37.0  38.0         Physical
+Red_Sea               sst      25.0  39.0       30.0  35.0         Physical
+Red_Sea               SST      25.0  39.0       30.0  35.0         Physical
+Rio_de_La_Plata       SSS       0.0  15.0        1.0  12.0
+Rio_de_La_Plata       SSS       0.0   5.0        1.0   4.0         Physical
+Sea_of_Azov_fresh     SSS       0.0  15.0        1.0   4.0
+Sea_of_Okhotsk        SSS       0.0  15.0        1.0  12.0      ?
+Shark_Bay             sss      40.0  47.0       20.0  37.0         Physical
+Shark_Bay             SSS      40.0  47.0       20.0  37.0         Physical
+Somali_Current        speed     0.1   3.50       0.5   2.0         Physical
+Somali_Current        SSU      -2.25  3.50      -1.5   1.5         Physical
+Somali_Current        SSV      -2.75  2.75      -1.5   1.5         Physical
+Somali_Current        uocn     -2.25  3.50      -1.5   1.5         Physical
+Somali_Current        vocn     -2.75  2.75      -1.5   1.5         Physical
+Southern_Ocean        Tsfc    -60.0   0.0      -21.0  -3.5         Physical
+Southern_Ocean        Tsfc_h  -60.0   0.0      -21.0  -3.5         Physical
+The_NWP_fresh         SSS       0.0  15.0        1.0  12.0      ?
+Trinidad_Tobago_fresh SSS       0.0  15.0        1.0   4.0
+Tropics               uocn     -3.0   3.0       -1.0   1.0     Known, may or may not be error
+Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs
+Weddell_Sea         MLD_0125  5.0  5100.0  500.0 1000.0        Known Error -- ufs
+Weddell_snow          hs        0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+Weddell_snow          hs_h      0.6   2.8    0.25  1.0         Known Error -- rtofs_cice
+White_Sea             SSS       0.0  15.0    1.0  12.0
+Yangtze_Outflow       SSS       0.0  15.0    1.0  12.0

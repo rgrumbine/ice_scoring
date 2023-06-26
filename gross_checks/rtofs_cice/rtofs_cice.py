@@ -54,9 +54,12 @@ for line in fin:
 #data file = argv[1] (input)
 #control dictionary = argv[2] (input)
 #bootstrapped dictionary = argv[3] (optional, may be written to if needed and present)
+#histogram output = fhistogram
 #---------------------------------------------------
 
 errcount = int(0)
+
+fhistogram = open("fhistogram","w")
 
 if (not os.path.exists(sys.argv[1]) ):
   print("failure to find ",sys.argv[1])
@@ -113,6 +116,10 @@ else:
 
     # find or bootstrap bounds -----------------
     tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
+
+    # print histogram to file
+    print("histogram for parameter: ",parm, file=fhistogram)
+    print(np.histogram(temporary_grid, bins = 100, range=(tmp.pmin,tmp.pmax) ), file = fhistogram)
 
     #Global tests -- test whether the test fails anywhere
     gfail = tmp.whether(temporary_grid)

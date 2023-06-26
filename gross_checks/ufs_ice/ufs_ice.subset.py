@@ -2,42 +2,12 @@ import os
 import sys
 import datetime
 from math import *
-#print("importing external modules",flush=True)
-
 import numpy as np
 import numpy.ma as ma
-#print("imported numpy",flush=True)
 
 import netCDF4
-#print("Finished importing external modules",flush=True)
 
 import bounders
-#print("Finished importing private  modules",flush=True)
-
-#---------------------------------------------------
-# new management of header variable names
-headers = {
-  'nx' : '',
-  'ny' : '',
-  'TLON' : '',
-  'TLAT' : '',
-  'tmask' : '',
-  'tarea' : ''
-}
-HOME="/ncrc/home1/Robert.Grumbine/rgdev/"
-fin = open(HOME+'/ice_scoring/model_definitions/cice.header','r')
-k = 0
-for line in fin:
-  #print(k, len(line))
-  if (len(line) < 3):
-      #print("zero length line",flush=True)
-      break
-  words = line.split()
-  #print(k, words[0])
-  headers[words[0]] = words[1]
-  k += 1
-
-#print(headers)
 
 #---------------------------------------------------
 #Gross bound checks on .nc files, developed primarily from the sea ice (CICE6) output
@@ -56,20 +26,20 @@ if (not os.path.exists(sys.argv[1]) ):
   exit(1)
 else:
   model = netCDF4.Dataset(sys.argv[1], 'r')
-  nx = len(model.dimensions[headers['nx']])
-  ny = len(model.dimensions[headers['ny']])
+  nx = len(model.dimensions['ni'])
+  ny = len(model.dimensions['nj'])
   
   #rg q: is this universal across UFS? -- no.
-  tlons = model.variables[headers["TLON"]][:,:]
-  tlats = model.variables[headers["TLAT"]][:,:]
+  tlons = model.variables["TLON"][:,:]
+  tlats = model.variables["TLAT"][:,:]
   
   #LAND = 0, #Ocean = 1
   try:
-    tmask = model.variables[headers["tmask"]][:,:]
+    tmask = model.variables["tmask"][:,:]
   except :
     tmask = np.zeros((ny, nx))
     tmask = 1.
-  tarea = model.variables[headers["tarea"]][:,:]
+  tarea = model.variables["tarea"][:,:]
 
   #Get the dictionary file, perhaps with bounds given
   try:
@@ -88,7 +58,6 @@ else:
   parmno = 0
   for line in fdic:
     words = line.split()
-    #print(len(words), words)
     parm = words[0]
     tmp = bounders.bounds(param=parm)
     try: 

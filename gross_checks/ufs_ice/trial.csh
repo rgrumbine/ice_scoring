@@ -18,11 +18,12 @@ module load anaconda/latest
 echo zzz module list
 module list
 
-set -x
+#set -x
 echo zzz HOME = $HOME
 setenv PYTHONPATH $HOME/rgdev/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/shared
 
-setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
+#setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
+setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p7/SeaIce/ 
 
 setenv OUTDIR $HOME/clim_data/prototype_evaluations
 

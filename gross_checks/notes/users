@@ -1,0 +1,10 @@
+Major variables of interest to users:
+
+frzmlt          --  freeze-melt
+ai              --  ice concentration
+Tsfc            --  ice surface temperature
+hi              --  ice thickness
+uvel, vvel      --  ice u,v velocity
+
+hs              --  snow thickness
+
