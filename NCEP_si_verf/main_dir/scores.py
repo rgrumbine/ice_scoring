@@ -10,6 +10,7 @@ from verf_files import *
 
 ##################### ------------- 
 #--------------- Environment Checks  --------------------------------
+# Check verf environment
 
 #debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
 for p in (exbase, exdir, fixdir):
@@ -101,7 +102,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
   if (not os.path.exists(valid_fname)):
-    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
+    print("scores.py cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
     retcode = int(1)
     return retcode
 

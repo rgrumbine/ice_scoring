@@ -274,7 +274,7 @@ def nsidc_edge(initial, toler, nsidcdir):
   print(fin, toler, fout, flush=True)
 
   if (not os.path.exists(fout)):
-    cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
+    cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-nh.nc" + ' > ' + fout
     #debug 
     print('north command: ',cmd , flush=True )
     x = os.system(cmd)
@@ -283,7 +283,7 @@ def nsidc_edge(initial, toler, nsidcdir):
   fout = 'nsidc_south_edge.'+str(initial)
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
-    cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
+    cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-sh.nc" + ' > ' + fout
     #debug 
     print('south command: ',cmd, flush=True  )
     x = os.system(cmd)
@@ -316,7 +316,7 @@ def fcst_name(valid, initial, fcst_dir):
   tinitial = tostr(initial)
   #debug: print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
 
-  #Some UFS prototype names:
+  #Some UFS prototype name formats:
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
@@ -327,10 +327,11 @@ def fcst_name(valid, initial, fcst_dir):
   #fdate = parse_8digits(int(tvalid))
   #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
-  #debug: print("fname, type", fname, type(fname),flush=True)
+  #debug: 
+  print("fname, type", fname, type(fname),flush=True)
   if (not os.path.exists(fname) ):
-    print("fcst_name: could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
-    print(fname)
+    print("fcst_name: verf_files.py could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
+    print(fname, flush=True)
     return 1
   else:
     return fname
@@ -360,6 +361,9 @@ def fcst_edge(initial, valid, fcst_dir):
   
   if (not os.path.exists(fname) ):
     fcstin = fcst_name(valid, initial, fcst_dir)
+    if (type(fcstin) == int):
+      print("verf_files.py fcst_edge Could not find forecast for ",valid, initial, fcst_dir)
+      return 1
     #RG: want something cleaner for selecting model format/version!
     #UFS
     #debug print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )

@@ -5,6 +5,8 @@ import datetime
 #run with argument 'trial' to get output for success v. failure
 
 #------------------------------------------------------------------
+# check evaluation environment
+
 try:
   exbase = os.environ['EXBASE']
 except:
