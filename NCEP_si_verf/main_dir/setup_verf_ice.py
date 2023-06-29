@@ -95,7 +95,8 @@ if (len(sys.argv) >= 3+1):
   #debug print("setup_verf Initial date and verification time", flush=True)
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
-  fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
+  #fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
+  fcst_dir     = sys.argv[3] 
   single = True
   #debug
   print("setup_verf initial_date", valid_date, flush=True)

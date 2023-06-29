@@ -1,8 +1,11 @@
 #!/bin/sh
 
-#Bootstrap for ice model verification -- retrieve the scripts and fixed files for a basic run of the system
+#Bootstrap for ice model verification -- 
+#    retrieve the scripts and fixed files for a basic run of the system
 #Robert Grumbine
 # 25 February 2020
+
+export model=ufs.s2s
 
 #hera export BASE=${BASE:-/home/Robert.Grumbine/rgdev/ice_scoring/}
 if [ -z $BASE ] ; then
@@ -17,7 +20,7 @@ export BASE=${BASE:-$HOME/rgdev/ice_scoring/}
 echo BASE = $BASE
 
 #Check the python environment -- assumes that path already references an appropriate interpreter 
-python3 ${BASE}/main_dir/checkenv.py
+. $HOME/rgdev/toolbox/misc/python_load.hera
 if [ $? -ne 0 ] ; then
   echo you are missing necessary elements of the python environment.
   echo please install the needed modules and retry
@@ -26,32 +29,40 @@ if [ $? -ne 0 ] ; then
   echo "    "   module load anaconda/latest
   exit 1
 fi
+python3 ${BASE}/NCEP_si_verf/main_dir/checkenv.py
 
 #Check the directory / data environment for needed directories
 export EXDIR=`pwd`
 export EXBASE=`pwd`
-python3 ${BASE}/main_dir/platforms.py trial
+python3 ${BASE}/NCEP_si_verf/main_dir/platforms.py trial
 if [ $? -ne 0 ] ; then
   echo you need to correct the machines list and directory references in platforms.py
   exit 1
 fi
 
 #Start copying elements over to carry out the evaluation
-for f in contingency_plots.py collate.py runtime.def 
+for f in contingency_plots.py collate.py 
 do
-  cp -p ${BASE}/concentration/$f .
+  if [ ! -f $f ] ; then
+    cp -p ${BASE}/NCEP_si_verf/concentration/$f .
+  fi
   if [ ! -f $f ] ; then
     echo could not find $f in $BASE, exiting
     exit 1
   fi
 done
+if [ ! -f runtime.def ] ; then
+  cp -p ${BASE}/model_definitions/${model}.def runtime.def
+fi
 
-for f in README verf_files.py setup_verf_ice.py platforms.py final.py all.csh year.csh 
+for f in README verf_files.py setup_verf_ice.py platforms.py final.py scores.py all.csh year.csh 
 do
-  cp -p ${BASE}/main_dir/$f .
   if [ ! -f $f ] ; then
-    if [ -f ${BASE}/main_dir/shells/$f ] ; then
-      cp -p ${BASE}/main_dir/shells/$f .
+    cp -p ${BASE}/NCEP_si_verf/main_dir/$f .
+  fi
+  if [ ! -f $f ] ; then
+    if [ -f ${BASE}/NCEP_si_verf/main_dir/shells/$f ] ; then
+      cp -p ${BASE}/NCEP_si_verf/main_dir/shells/$f .
     else
       echo could not find $f in $BASE
       exit 1

@@ -1,7 +1,7 @@
-#!/bin/csh -f
-#SBATCH -J p8_all
-#SBATCH -e p8_all.err
-#SBATCH -o p8_all.out
+#!/bin/csh 
+#SBATCH -J hr1_all
+#SBATCH -e hr1_all.err
+#SBATCH -o hr1_all.out
 #  #SBATCH -t 7:55:00
 #SBATCH -t 0:25:00
 #SBATCH -q batch
@@ -12,6 +12,7 @@
 #SBATCH --mail-user USER@system
 
 setenv USER $user
+setenv expt hr1
 
 #Orion
 #  tbd
@@ -20,8 +21,8 @@ setenv USER $user
 
 #Hera:
 source /etc/profile.d/modules.csh
-module load intel/2020.2
-module load impi/2020.2
+module load intel/2022.1.2
+module load impi/2022.1.2
 module load netcdf/4.7.0
 module load wgrib2/2.0.8
 
@@ -32,11 +33,10 @@ module load anaconda/latest
 setenv XDG_RUNTIME_DIR /scratch1/NCEPDEV/climate/${USER}/runtime
 setenv MPLCONFIGDIR    /scratch1/NCEPDEV/climate/${USER}/runtime
 
-setenv expt p8.0
-setenv EXDIR     /scratch1/NCEPDEV/climate/${USER}/prototype_evaluations/${expt}.verf
-setenv RUNBASE   /scratch1/NCEPDEV/stmp2/${USER}/prototype_evaluations/${expt}.verf
+setenv EXDIR     /scratch1/NCEPDEV/climate/${USER}/clim_data/${expt}
+setenv RUNBASE   /scratch1/NCEPDEV/stmp2/${USER}/${expt}
 
-setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
+setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/ 
 
 ##Gaea
 #setenv USER $LOGNAME
@@ -51,8 +51,8 @@ setenv FCST_BASE /scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIc
 #
 #setenv expt gaea_intel_smoke_gx1_2x1_gx1_run_std.beta2
 #setenv FCST_BASE /ncrc/home1/${USER}/scratch/CICE_RUNS/${expt}/history/
-#setenv RUNBASE   /ncrc/home1/${USER}/scratch/${USER}/evaluations/${expt}.verf
-#setenv EXDIR     /ncrc/home1/${USER}/rgdev/evaluations/${expt}.verf
+#setenv RUNBASE   /ncrc/home1/${USER}/scratch/${USER}/evaluations/${expt}
+#setenv EXDIR     /ncrc/home1/${USER}/rgdev/evaluations/${expt}
 
 #All systems:
 module list
@@ -69,6 +69,7 @@ if ( ! -d $EXDIR ) then
 endif
 cd     $EXDIR
 setenv base `pwd`
+setenv EXBASE $EXDIR
 
 
 echo env $FCST_BASE $EXDIR $base $RUNBASE
@@ -84,11 +85,21 @@ echo $XDG_RUNTIME_DIR for python graphic support
 
 setenv x `date`
 echo start of loop at dtime $x
-#setenv fcst_len 35
-setenv fcst_len 1
+setenv fcst_len 15
+#setenv fcst_len 1
+
+#For HR1:
+#start 20191203
+#every 3 days to 20200830
+setenv PDY 20191203
+setenv dt 3
+setenv end 20200830
+
+setenv yy `echo $PDY | cut -c1-4`
+setenv mm `echo $PDY | cut -c5-6`
+setenv dd `echo $PDY | cut -c7-8`
 
 #foreach yy ( 2011 2012 2013 2014 2015 2016 2017 2018 )
-foreach yy ( 2011 )
   setenv RUNDIR ${RUNBASE}/$yy
   if ( ! -d $RUNDIR ) then
     mkdir -p $RUNDIR
@@ -100,16 +111,16 @@ foreach yy ( 2011 )
   endif
 
   #foreach mm ( 01 02 03 04 05 06 07 08 09 10 11 12 )
-  foreach mm ( 04 )
-    foreach dd ( 01 )
-      setenv tag ${yy}${mm}${dd}
+  #  foreach dd ( 01 15 )
+      setenv tag     ${yy}${mm}${dd}
       setenv initial ${yy}${mm}${dd}
       setenv dashtag ${yy}-${mm}-${dd}
       setenv OUT $base/out.$initial
       if ( ! -d $OUT ) then
         mkdir $OUT
-      else
-        continue
+      #else
+        #continue
+        #exit 1
       endif
 
 #dirname
@@ -141,9 +152,9 @@ foreach yy ( 2011 )
         echo no experiment output for $initial yet
       endif
 
-    end
-  end
-end
+#    end
+#  end
+#end
 
 setenv x `date`
 echo end of $expt forecast verification at $x
