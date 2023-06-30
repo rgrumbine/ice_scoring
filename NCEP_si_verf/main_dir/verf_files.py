@@ -1,6 +1,7 @@
 import os
 import datetime
 
+from utility import *       #mmablib python utilities
 from platforms import *
 
 #-------------------------------------------
@@ -260,16 +261,17 @@ def get_nsidc(initial_date, valid_date, nsidcdir):
 
   return retcode
 
-def nsidc_edge(initial, toler, nsidcdir):
+def nsidc_edge(initial, toler, nsidcdir, exdir, fixdir):
   retcode = int(0)
   yearinitial = int(int(initial)/10000)
   initial_date = parse_8digits(initial)
+  edgedir = dirs['edgedir']
 
   fin = nsidc_name('north',initial_date, nsidcdir)
   #debug 
   print("nsidc edge fin name = ",fin, flush=True)
 
-  fout = 'nsidc_north_edge.'+str(initial)
+  fout = edgedir+'/nsidc_north_edge.'+str(initial)
   #debug 
   print(fin, toler, fout, flush=True)
 
@@ -280,7 +282,7 @@ def nsidc_edge(initial, toler, nsidcdir):
     x = os.system(cmd)
     if (x != 0): retcode += x
 
-  fout = 'nsidc_south_edge.'+str(initial)
+  fout = edgedir+'/nsidc_south_edge.'+str(initial)
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-sh.nc" + ' > ' + fout
@@ -307,6 +309,9 @@ def tostr(valid):
     tvalid = valid.strftime("%Y%m%d")
   return tvalid
 
+#-----------------------------------------------------------------===
+#    getting the forecast files
+
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
   #debug print("fcst_name valid, initial, fcstdir:",valid, initial,fcst_dir, flush=True)
@@ -330,13 +335,13 @@ def fcst_name(valid, initial, fcst_dir):
   #debug: 
   print("fname, type", fname, type(fname),flush=True)
   if (not os.path.exists(fname) ):
-    print("fcst_name: verf_files.py could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
+    print("fcst_name: verf_files.py could not find forecast for "+
+              fcst_dir, str(valid), str(initial), flush=True)
     print(fname, flush=True)
     return 1
   else:
     return fname
 
-#-----------------------------------------------------------------===
 def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))

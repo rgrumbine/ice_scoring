@@ -9,20 +9,13 @@ import datetime
 
 
 from platforms import *
+
 from verf_files import *
+from scores import *
+
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-#execs:
-# cscore_edge
-# find_edge_nsidc
-# find_edge_ncep
-# find_edge_ims
-# solo_ncep
 
 #------------------------------------------------------------------
 def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
@@ -35,8 +28,6 @@ def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf,
   yearinitial = int(initial_date.strftime("%Y"))
   yearvalid   = int(valid_date.strftime("%Y"))
   return retcode
-
-from scores import *
 
 def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)

@@ -5,40 +5,23 @@ import datetime
 #Arguments:
 #   start_date verification_date forecast_dir_path
 
+from utility import *    # python utilities in mmablib
+
 from platforms import *
 from verf_files import *
 
 ##################### ------------- 
 #--------------- Environment Checks  --------------------------------
 # Check verf environment
-
-#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
-for p in (exbase, exdir, fixdir):
-  if (not os.path.exists(p)):
-    print("could not find ",p)
-    exit(1)
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-for f in ( 'seaice_alldist.bin',  'seaice_gland5min'):
-  if (not os.path.exists(fixdir+f)):
-    print("could not find ",fixdir+f)
-    exit(1)
-
-#execs:
-for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims' ):
-  if (not os.path.exists(exdir+f)):
-    print("could not find ",exdir+f)
-    exit(1)
-
+# x = runtime_environment("","","")
 #------------------------------------------------------------------
+
 #--------------- Scoring Functions --------------------------------
 """
 Edges
 """
 
-def edge_score(fcst, fdate, obs, obsdate):
+def edge_score(fcst, fdate, obs, obsdate, exdir, fixdir):
   retcode = int(0)
   edgedir = dirs['edgedir']
   fname   = edgedir+fcst+"_edge."+fdate.strftime("%Y%m%d")
