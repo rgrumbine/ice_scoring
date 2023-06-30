@@ -61,7 +61,7 @@ while (start < end):
 
   valid = start + lead*dt
   imsverf   = False
-  ncepverf  = True
+  ncepverf  = False
   osiverf   = False
   nsidcverf = True
   fcstverf  = True

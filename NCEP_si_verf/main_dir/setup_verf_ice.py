@@ -35,8 +35,9 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
   #isolate forecast file name references to fcst_name:
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+
   #UFS style:
-  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+
   #CICE consortium name:
   #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 

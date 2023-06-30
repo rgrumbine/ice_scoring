@@ -224,6 +224,8 @@ def nsidc_name(pole, date, nsidcdir):
     else:
       print("nsidc_name: could not open ",fname_old, fname, flush=True)
       retcode = 1
+      #intolerant: 
+      exit(1)
       return retcode
 
 
@@ -319,7 +321,8 @@ def fcst_name(valid, initial, fcst_dir):
 
   tvalid = tostr(valid)
   tinitial = tostr(initial)
-  #debug: print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
+  #debug: 
+  print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
 
   #Some UFS prototype name formats:
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
@@ -338,7 +341,9 @@ def fcst_name(valid, initial, fcst_dir):
     print("fcst_name: verf_files.py could not find forecast for "+
               fcst_dir, str(valid), str(initial), flush=True)
     print(fname, flush=True)
-    return 1
+    #intolerant: 
+    exit(1)
+    #return 1
   else:
     return fname
 
@@ -371,7 +376,8 @@ def fcst_edge(initial, valid, fcst_dir):
       return 1
     #RG: want something cleaner for selecting model format/version!
     #UFS
-    #debug print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
+    #debug:
+     print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fcstin + ' 0.40 > ' + fname
 
     #CICE
