@@ -12,9 +12,9 @@
 #SBATCH --mail-user USER@system
 
 #Hera:
-source /etc/profile.d/modules.csh
-module load intel/2020.2
-module load impi/2020.2
+#source /etc/profile.d/modules.csh
+module load intel/2022.1.2
+module load impi/2022.1.2
 module load netcdf/4.7.0
 module load wgrib2/2.0.8
 
@@ -23,10 +23,12 @@ module load anaconda/latest
 
 module list
 
-set -x
+#set -x
+set -e
 
-export USER=$user
-echo HOME=$HOME
+#Hera:
+export USER=$USER
+#debug: echo zzz HOME=$HOME
 cd $HOME/clim_data/edges/
 
 #Orion
@@ -34,22 +36,21 @@ cd $HOME/clim_data/edges/
 #WCOSS
 #  tbd
 
-export EXBASE=$HOME/rgdev/ice_scoring/NCEP_si_verf
-
+export EXBASE=$HOME/rgdev/ice_scoring/
 export mmablib=$HOME/rgdev/mmablib/
 #
-echo pre-pythonpath $PYTHONPATH
+#debug: echo zzz pre-pythonpath $PYTHONPATH
 export PYTHONPATH=$PYTHONPATH:$mmablib/py:$HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir
-echo post-pythonpath $PYTHONPATH
+#debug: echo zzz post-pythonpath $PYTHONPATH
 
 export XDG_RUNTIME_DIR=/scratch1/NCEPDEV/climate/${USER}/runtime
 export MPLCONFIGDIR=/scratch1/NCEPDEV/climate/${USER}/runtime
 
 export expt=edges
 export EXDIR=$HOME/clim_data/edges
-export RUNBASE=/scratch1/NCEPDEV/stmp2/${USER}/prototype_evaluations/${expt}.verf
+export RUNBASE=/scratch1/NCEPDEV/stmp2/${USER}/hr1/${expt}
 
-export FCST_BASE=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_p8/SeaIce/ 
+export FCST_BASE=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/ 
 
 #All systems:
 
@@ -62,11 +63,10 @@ fi
 cd     $EXDIR
 export base=`pwd`
 
-
-echo env $FCST_BASE $EXDIR $base $RUNBASE
+#debug: echo zzz env $FCST_BASE $EXDIR $base $RUNBASE
 
 cp $HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir/obs_edges_verf.py .
-cp $HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir/statview.py .
+#cp $HOME/rgdev/ice_scoring/NCEP_si_verf/main_dir/statview.py .
 
 # Fewer changes below here -------------------------------------------------
 
@@ -77,12 +77,13 @@ fi
 echo $XDG_RUNTIME_DIR for python graphic support
 
 export x=`date`
-echo start of loop at dtime $x
+#debug: echo zzz start of loop at dtime $x
 export fcst_len=1
 
 #python3 -m cProfile -o statsout obs_edges_verf.py 20110401 20180331 $fcst_len 
-python3 -m cProfile -o statsout obs_edges_verf.py 20110401 20110402 $fcst_len 
-python3 statview.py statsout > stats.evaluation 
+#python3 statview.py statsout > stats.evaluation 
+
+python3 obs_edges_verf.py 20191203 20191204 $FCST_BASE 20191203 $fcst_len 
 
 export x=`date`
-echo end of $expt forecast verification at $x
+echo zzz end of $expt forecast verification at $x

@@ -1,4 +1,4 @@
-#!/bin/bash -login
+#!/bin/bash 
 #SBATCH -J edge_all
 #SBATCH -o edge_all.out
 #SBATCH -e edge_all.err
@@ -12,9 +12,9 @@
 #SBATCH --mail-user USER@system
 
 #Hera:
-source /etc/profile.d/modules.csh
-module load intel/2020.2
-module load impi/2020.2
+#source /etc/profile.d/modules.csh
+module load intel/2022.1.2
+module load impi/2022.1.2
 module load netcdf/4.7.0
 module load wgrib2/2.0.8
 

@@ -9,20 +9,13 @@ import datetime
 
 
 from platforms import *
+
 from verf_files import *
+from scores import *
+
 
 ##################### ------------- 
 #--------------- Utility Functions --------------------------------
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-#execs:
-# cscore_edge
-# find_edge_nsidc
-# find_edge_ncep
-# find_edge_ims
-# solo_ncep
 
 #------------------------------------------------------------------
 def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
@@ -36,21 +29,20 @@ def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf,
   yearvalid   = int(valid_date.strftime("%Y"))
   return retcode
 
-from scores import *
-
 def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
 
   #isolate forecast file name references to fcst_name:
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+
   #UFS style:
-  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+
   #CICE consortium name:
   #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
   if (not os.path.exists(valid_fname)):
-    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
+    print("setup_verf_ice.py cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
     retcode = int(1)
     return retcode
   
@@ -95,7 +87,8 @@ if (len(sys.argv) >= 3+1):
   #debug print("setup_verf Initial date and verification time", flush=True)
   initial_date = parse_8digits(sys.argv[1])
   valid_date   = parse_8digits(sys.argv[2])
-  fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
+  #fcst_dir     = sys.argv[3] + "/" + sys.argv[4]
+  fcst_dir     = sys.argv[3] 
   single = True
   #debug
   print("setup_verf initial_date", valid_date, flush=True)

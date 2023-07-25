@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
   x = (float*) malloc(sizeof(float)*NX*NY);
   dx = (double*) malloc(sizeof(double)*NX*NY);
 
-  retval = nc_open(argv[1], NC_NOWRITE, &ncid);
+// Get ancillary vars:
+  retval = nc_open(argv[3], NC_NOWRITE, &ncid);
   if (retval != 0) ERR(retval);
 
-// Get vars:
   retval = nc_inq_varid(ncid, "latitude", &varid);
   if (retval != 0) ERR2(retval, "latitude");
   retval = nc_get_var_double(ncid, varid, dx);
@@ -55,10 +55,16 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERR2(retval, "longitude");fflush(stdout);
   enter(lon, dx);
 
-  retval = nc_inq_varid(ncid, "seaice_conc_cdr", &varid);
-  if (retval != 0) ERR2(retval, "seaice_conc_cdr");
+// Get concentration vars
+  retval = nc_open(argv[1], NC_NOWRITE, &ncid);
+  if (retval != 0) ERR(retval);
+
+// v3: seaice_conc_cdr
+// v4: cdr_seaice_conc
+  retval = nc_inq_varid(ncid, "cdr_seaice_conc", &varid);
+  if (retval != 0) ERR2(retval, "cdr_seaice_conc");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "seaice_conc_cdr");fflush(stdout);
+  if (retval != 0) ERR2(retval, "cdr_seaice_conc");fflush(stdout);
   enter(conc, x);
 
 /////////////////////////////////////////////////////////////////////////////

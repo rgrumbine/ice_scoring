@@ -5,21 +5,17 @@ import datetime
 #run with argument 'trial' to get output for success v. failure
 
 #------------------------------------------------------------------
-try:
-  exbase = os.environ['EXBASE']
-except:
-  exbase = "."
+# check evaluation environment
+from eval_env import *
 
-exdir  = exbase+"/exec/"
-fixdir = exbase+"/fix/"
-#debug print("platforms.py exbase, exdir, fixdir = ","\n",exbase,"\n", exdir,"\n", fixdir, flush=True)
+x = runtime_environment("", "", "")
+if (x.ok_env() != 0 ):
+  print("something wrong in unix environment",flush=True)
+  exit(1)
+#debug: print("exbase, exdir, fixdir:",x.exbase, flush=True)
+del x
 
-#--------------- Utility Functions --------------------------------
-def parse_8digits(tag):
-  tmp = int(tag)
-  (yy,mm,dd) = (int(int(tmp)/10000),int((int(tmp)%10000)/100),int(tmp)%100)
-  tag_out = datetime.date(int(yy), int(mm), int(dd))
-  return tag_out
+#------------------------------------------------------------------
 
 #----------------- High level declarations -----------------------------
 # Directories w. verification data
@@ -34,12 +30,12 @@ dirs = {
 
 # Known machines:
 machines = {
-  'RG_Home'       : '/Volumes/ncep',
   'HERA'          : '/scratch1',
   'WCOSS_C'       : '/etc/SuSE-release',
   'WCOSS_DELL_P3' : '/gpfs/dell2',
   'Orion'         : '/home/rgrumbin',
-  'Gaea'          : '/lustre/f2/scratch'
+  'Gaea'          : '/lustre/f2/scratch',
+  'RG_Home'       : '/Volumes/ncep'
 }
 #----------------- Identify our machines -----------------------------
 
@@ -65,7 +61,6 @@ if (machine == 'HERA'):
   dirs['edgedir']   = dirs['verf_head']+'/edges/'
   dirs['imsdir']    = dirs['verf_head']+'/ims/'
   dirs['ncepdir']   = dirs['verf_head']+'/ice5min/'
-  #dirs['nsidcdir'] = dirs['verf_head']+'/nsidc.nc/'
   dirs['nsidcdir']  = dirs['verf_head']+'/G02202_V4/'
   dirs['osisafdir'] = dirs['verf_head']+'/osisaf/'
   dirs['fixdir']   = '/home/Robert.Grumbine/rgdev/fix'

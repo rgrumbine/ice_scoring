@@ -1,6 +1,7 @@
 import os
 import datetime
 
+from utility import *       #mmablib python utilities
 from platforms import *
 
 #-------------------------------------------
@@ -223,6 +224,8 @@ def nsidc_name(pole, date, nsidcdir):
     else:
       print("nsidc_name: could not open ",fname_old, fname, flush=True)
       retcode = 1
+      #intolerant: 
+      exit(1)
       return retcode
 
 
@@ -260,30 +263,31 @@ def get_nsidc(initial_date, valid_date, nsidcdir):
 
   return retcode
 
-def nsidc_edge(initial, toler, nsidcdir):
+def nsidc_edge(initial, toler, nsidcdir, exdir, fixdir):
   retcode = int(0)
   yearinitial = int(int(initial)/10000)
   initial_date = parse_8digits(initial)
+  edgedir = dirs['edgedir']
 
   fin = nsidc_name('north',initial_date, nsidcdir)
   #debug 
   print("nsidc edge fin name = ",fin, flush=True)
 
-  fout = 'nsidc_north_edge.'+str(initial)
+  fout = edgedir+'/nsidc_north_edge.'+str(initial)
   #debug 
   print(fin, toler, fout, flush=True)
 
   if (not os.path.exists(fout)):
-    cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + ' > ' + fout
+    cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-nh.nc" + ' > ' + fout
     #debug 
     print('north command: ',cmd , flush=True )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
-  fout = 'nsidc_south_edge.'+str(initial)
+  fout = edgedir+'/nsidc_south_edge.'+str(initial)
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
-    cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + ' > ' + fout
+    cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-sh.nc" + ' > ' + fout
     #debug 
     print('south command: ',cmd, flush=True  )
     x = os.system(cmd)
@@ -307,6 +311,9 @@ def tostr(valid):
     tvalid = valid.strftime("%Y%m%d")
   return tvalid
 
+#-----------------------------------------------------------------===
+#    getting the forecast files
+
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
   #debug print("fcst_name valid, initial, fcstdir:",valid, initial,fcst_dir, flush=True)
@@ -314,9 +321,10 @@ def fcst_name(valid, initial, fcst_dir):
 
   tvalid = tostr(valid)
   tinitial = tostr(initial)
-  #debug: print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
+  #debug: 
+  print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
 
-  #Some UFS prototype names:
+  #Some UFS prototype name formats:
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.nc'
   #fname = fcst_dir + '/ice' + tvalid +   '.01.' + tinitial + '00.subset.nc'
@@ -327,15 +335,18 @@ def fcst_name(valid, initial, fcst_dir):
   #fdate = parse_8digits(int(tvalid))
   #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
-  #debug: print("fname, type", fname, type(fname),flush=True)
+  #debug: 
+  print("fname, type", fname, type(fname),flush=True)
   if (not os.path.exists(fname) ):
-    print("fcst_name: could not find forecast for "+fcst_dir,str(valid),str(initial), flush=True)
-    print(fname)
-    return 1
+    print("fcst_name: verf_files.py could not find forecast for "+
+              fcst_dir, str(valid), str(initial), flush=True)
+    print(fname, flush=True)
+    #intolerant: 
+    exit(1)
+    #return 1
   else:
     return fname
 
-#-----------------------------------------------------------------===
 def get_fcst(initial_date, valid_date, fcst_dir):
   retcode = int(0)
   initial = int(initial_date.strftime("%Y%m%d"))
@@ -360,9 +371,13 @@ def fcst_edge(initial, valid, fcst_dir):
   
   if (not os.path.exists(fname) ):
     fcstin = fcst_name(valid, initial, fcst_dir)
+    if (type(fcstin) == int):
+      print("verf_files.py fcst_edge Could not find forecast for ",valid, initial, fcst_dir)
+      return 1
     #RG: want something cleaner for selecting model format/version!
     #UFS
-    #debug print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
+    #debug:
+     print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fcstin + ' 0.40 > ' + fname
 
     #CICE

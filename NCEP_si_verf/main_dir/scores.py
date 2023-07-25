@@ -5,39 +5,23 @@ import datetime
 #Arguments:
 #   start_date verification_date forecast_dir_path
 
+from utility import *    # python utilities in mmablib
+
 from platforms import *
 from verf_files import *
 
 ##################### ------------- 
 #--------------- Environment Checks  --------------------------------
-
-#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
-for p in (exbase, exdir, fixdir):
-  if (not os.path.exists(p)):
-    print("could not find ",p)
-    exit(1)
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-for f in ( 'seaice_alldist.bin',  'seaice_gland5min'):
-  if (not os.path.exists(fixdir+f)):
-    print("could not find ",fixdir+f)
-    exit(1)
-
-#execs:
-for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims' ):
-  if (not os.path.exists(exdir+f)):
-    print("could not find ",exdir+f)
-    exit(1)
-
+# Check verf environment
+# x = runtime_environment("","","")
 #------------------------------------------------------------------
+
 #--------------- Scoring Functions --------------------------------
 """
 Edges
 """
 
-def edge_score(fcst, fdate, obs, obsdate):
+def edge_score(fcst, fdate, obs, obsdate, exdir, fixdir):
   retcode = int(0)
   edgedir = dirs['edgedir']
   fname   = edgedir+fcst+"_edge."+fdate.strftime("%Y%m%d")
@@ -95,25 +79,23 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
   #isolate forecast file name references to fcst_name:
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+
   #UFS style:
-  #valid_fname = fcst_dir+'ice'+obsdate.strftime("%Y%m%d")+'00.01.'+fdate.strftime("%Y%m%d")+'00.subset.nc'
+
   #CICE consortium name:
   #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
 
   if (not os.path.exists(valid_fname)):
-    print("cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
+    print("scores.py cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
     retcode = int(1)
     return retcode
 
-  #exname = 'generic'
   exname = 'score_nsidc'
   if (os.path.exists(exdir + exname)):
     #debug print("setup_verf Have the fcst vs. nsidc scoring executable", flush=True)
     sys.stdout.flush()
     pole="north"
     ptag="n"
-    #obsname = (nsidcdir + pole + str(vyear) + "/seaice_conc_daily_"+ptag+"h_f17_"+
-    #                    obsdate.strftime("%Y%m%d")+"_v03r01.nc" )
     obsname = nsidc_name(pole, obsdate, nsidcdir)
 
     cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " +

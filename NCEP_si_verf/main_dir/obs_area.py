@@ -11,29 +11,8 @@ from verf_files import *
 
 ##################### ------------- 
 #--------------- Environment Checks  --------------------------------
-
-#debug print("setup_verf: exbase, exdir, fixdir = ","\n",exbase,"\n", exdir, "\n",fixdir, flush=True)
-for p in (exbase, exdir, fixdir):
-  if (not os.path.exists(p)):
-    print("could not find ",p,flush=True)
-    exit(1)
-
-#fixed files:
-#  seaice_alldist.bin
-#  seaice_gland5min
-for f in ( 'seaice_alldist.bin',  'seaice_gland5min'):
-  if (not os.path.exists(fixdir+f)):
-    print("could not find ",fixdir+f,flush=True)
-    exit(1)
-
-#execs:
-for f in ('cscore_edge', 'find_edge_nsidc_north', 'find_edge_ncep', 'find_edge_ims', 'solo_ncep'):
-  if (not os.path.exists(exdir+f)):
-    print("could not find ",exdir+f,flush=True)
-    exit(1)
-
-#debug exit(0)
-#------------------------------------------------------------------
+#x = runtime_environment("", "", "")
+#del x
 #--------------- Utility Functions --------------------------------
 from scores import *
 
