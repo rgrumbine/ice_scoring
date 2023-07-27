@@ -7,8 +7,8 @@ cd $DCOM
 
 . $HOME/rgdev/ice_scoring/NCEP_si_verf/ice_edge/vs_nichr/bootstrap.sh
 
-yy=2022
-ddd=250
+yy=2023
+ddd=001
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned

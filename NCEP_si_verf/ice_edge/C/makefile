@@ -44,4 +44,8 @@ find_edge_consortium : find_edge_consortium.C
 	$(CC) -Dbenchmark $< $(opts) $(ncopts) -o $(@)
 
 find_edge_cice : find_edge_cice.C
-	$(CC) -Dbenchmark $< $(opts) $(ncopts) -limf -lirc -o $(@)
+	$(CC) $< $(opts) $(ncopts) -limf -lirc -o $(@)
+
+
+install :
+	mv cscore_edge find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_ims find_edge_ncep find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south ../../../exec 
