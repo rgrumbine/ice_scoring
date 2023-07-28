@@ -9,9 +9,12 @@ if (not os.path.exists(fixdir+"/skip_hr") ):
   print("fixdir = ",fixdir)
   exit(1)
 
-start = datetime.datetime(2022,10,1)
-end   = datetime.datetime(2023,2,28)
 dt    = datetime.timedelta(1)
+start = datetime.datetime(2023,1,1)
+#end   = datetime.datetime(2023,6,30)
+end   = datetime.datetime.today()
+end  -= dt
+end  -= dt
 
 
 dbase="/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs."
