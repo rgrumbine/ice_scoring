@@ -23,8 +23,8 @@ module load anaconda/latest
 
 module list
 
-#set -x
-set -e
+set -x
+#set -e
 
 #Hera:
 export USER=$USER
@@ -78,7 +78,7 @@ echo $XDG_RUNTIME_DIR for python graphic support
 
 export x=`date`
 #debug: echo zzz start of loop at dtime $x
-export fcst_len=1
+export fcst_len=15
 
 #python3 -m cProfile -o statsout obs_edges_verf.py 20110401 20180331 $fcst_len 
 #python3 statview.py statsout > stats.evaluation 
