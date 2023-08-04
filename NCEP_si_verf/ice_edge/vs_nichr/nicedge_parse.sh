@@ -13,9 +13,9 @@ ddd=001
 if [ ! -d cleaned ] ; then
   mkdir cleaned
 fi
-if [ ! -d first ] ; then
-  mkdir first
-fi
+#if [ ! -d first ] ; then
+#  mkdir first
+#fi
 
 export tag=${yy}${ddd}
 
@@ -60,4 +60,4 @@ do
 done
 
 mv [ns].*.beta cleaned
-mv [ns].${yy}??? first
+#mv [ns].${yy}??? first

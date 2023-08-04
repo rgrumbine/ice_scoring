@@ -21,4 +21,6 @@ do
 
 done
 
+time python3 rtofs.py
+
 ./this_year.sh
