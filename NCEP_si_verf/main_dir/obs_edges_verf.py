@@ -46,23 +46,24 @@ from scores import *
 #---------------------------- Begin program -------------------------
 #If a single verification, then one thing, else, create many single verifications:
 dt = datetime.timedelta(1)
-start = parse_8digits(sys.argv[1])
-end   = parse_8digits(sys.argv[2])
-fcst_dir = sys.argv[3] + "/" + sys.argv[4] + "/"
+#start = parse_8digits(sys.argv[1])
+#end   = parse_8digits(sys.argv[2])
+fcst_dir = sys.argv[1] + "/" + sys.argv[2] + "/"
+start = parse_8digits(sys.argv[2])
+fcst_len = int(sys.argv[3])
 
 #debug: print("exdir, edgedir, fixdir",exdir, edgedir, fixdir, flush=True)
-
 #debug: print(start, end, fcst_dir, flush=True)
 
 lead = 1
-if (int(sys.argv[5]) > 1):
-  end = start + int(sys.argv[5])*dt
+if (fcst_len > 1):
+  end = start + fcst_len*dt
   print("new end = ",end)
 else:
   print("end = ",end)
 
 #while (start < end):
-while (lead <= int(sys.argv[5]) ):
+while (lead <= fcst_len ):
 
   valid = start + lead*dt
   imsverf   = False
