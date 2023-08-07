@@ -73,7 +73,7 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
 """
 Evaluating the ice concentrations
 """
-def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
+def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate, exdir, fixdir):
   #debug: print("py entered score_nsidc",flush=True)
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
