@@ -270,17 +270,14 @@ def nsidc_edge(initial, toler, nsidcdir, exdir, fixdir):
   edgedir = dirs['edgedir']
 
   fin = nsidc_name('north',initial_date, nsidcdir)
-  #debug 
-  print("nsidc edge fin name = ",fin, flush=True)
+  #debug print("nsidc edge fin name = ",fin, flush=True)
 
   fout = edgedir+'/nsidc_north_edge.'+str(initial)
-  #debug 
-  print(fin, toler, fout, flush=True)
+  #debug print(fin, toler, fout, flush=True)
 
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_north ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-nh.nc" + ' > ' + fout
-    #debug 
-    print('north command: ',cmd , flush=True )
+    #debug print('north command: ',cmd , flush=True )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
@@ -288,8 +285,7 @@ def nsidc_edge(initial, toler, nsidcdir, exdir, fixdir):
   fin = nsidc_name('south',initial_date, nsidcdir)
   if (not os.path.exists(fout)):
     cmd = exdir + 'find_edge_nsidc_south ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-sh.nc" + ' > ' + fout
-    #debug 
-    print('south command: ',cmd, flush=True  )
+    #debug print('south command: ',cmd, flush=True  )
     x = os.system(cmd)
     if (x != 0): retcode += x
 
@@ -316,13 +312,12 @@ def tostr(valid):
 
 def fcst_name(valid, initial, fcst_dir):
 #n.b.: assumes that valid and initial are same type
-  #debug print("fcst_name valid, initial, fcstdir:",valid, initial,fcst_dir, flush=True)
-  #debug print("types ",type(valid), type(initial), type(fcst_dir), flush=True )
+  #debug print("fcst_name values: valid, initial, fcstdir:",valid, initial,fcst_dir, flush=True)
+  #debug print("types valid, initial, fcstdir: ",type(valid), type(initial), type(fcst_dir), flush=True )
 
   tvalid = tostr(valid)
   tinitial = tostr(initial)
-  #debug: 
-  print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
+  #debug: print(tvalid, tinitial, type(tvalid), type(tinitial) , flush=True )
 
   #Some UFS prototype name formats:
   #fname = fcst_dir + '/ice' + tvalid + '00.01.' + tinitial + '00.nc'
@@ -335,8 +330,7 @@ def fcst_name(valid, initial, fcst_dir):
   #fdate = parse_8digits(int(tvalid))
   #fname = fcst_dir+'iceh.'+fdate.strftime("%Y")+'-'+fdate.strftime("%m")+'-'+fdate.strftime("%d")+".nc"
 
-  #debug: 
-  print("fname, type", fname, type(fname),flush=True)
+  #debug: print("\nfname, type\n", fname, type(fname),flush=True)
   if (not os.path.exists(fname) ):
     print("fcst_name: verf_files.py could not find forecast for "+
               fcst_dir, str(valid), str(initial), flush=True)
@@ -354,6 +348,7 @@ def get_fcst(initial_date, valid_date, fcst_dir):
   #debug print('get fcst ',initial, valid, flush=True)
   #debug print('get fcst ', initial, type(initial), initial_date, type(initial_date))
 
+  #debug: print("get_fcst calling fcst_name", flush=True)
   fname = fcst_name(valid, initial, fcst_dir)
   #debug print("fname = ",fname, flush=True)
 
@@ -364,20 +359,26 @@ def get_fcst(initial_date, valid_date, fcst_dir):
 
 
 #pass 8digit dates:
-def fcst_edge(initial, valid, fcst_dir):
+def fcst_edge(initial, valid, fcst_dir, fixdir, exdir):
   retcode = int(0)
   edgedir = dirs['edgedir']
   fname = edgedir + 'fcst_edge.' + str(valid)
-  
-  if (not os.path.exists(fname) ):
+  #debug: print("edgedir, fname ",edgedir, fname, flush=True)
+ 
+  #if (not os.path.exists(fname) ):
+  if (os.path.exists(fname) ):
+    print("already have ",fname," skipping", flush=True)
+
+  else:
+    #debug: print("fcst_edge calling fcst_name", flush=True)
+
     fcstin = fcst_name(valid, initial, fcst_dir)
     if (type(fcstin) == int):
       print("verf_files.py fcst_edge Could not find forecast for ",valid, initial, fcst_dir)
       return 1
     #RG: want something cleaner for selecting model format/version!
     #UFS
-    #debug:
-     print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
+    #debug: print("cmd", type(exdir), type(fixdir), type(fcstin), type(valid), flush=True )
     cmd = exdir + 'find_edge_cice '+fixdir+'skip_hr ' + fcstin + ' 0.40 > ' + fname
 
     #CICE

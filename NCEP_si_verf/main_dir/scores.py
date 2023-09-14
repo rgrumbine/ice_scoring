@@ -30,8 +30,7 @@ def edge_score(fcst, fdate, obs, obsdate, exdir, fixdir):
   outfile = (edgedir + "edge." + fcst + "." + obs + "." +fdate.strftime("%Y%m%d") 
                 + "."+obsdate.strftime("%Y%m%d") )
 
-  #debug 
-  print('scores: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
+  #debug print('scores: edge_score ',fname,' ',obsname,' ',outfile, flush=True)
 
   if (os.path.exists(fname) and os.path.exists(obsname) and not 
       os.path.exists(outfile) ):
@@ -43,6 +42,8 @@ def edge_score(fcst, fdate, obs, obsdate, exdir, fixdir):
     if (x != 0):
       print("command ",cmd," returned error code ",x, flush=True)
       retcode += x
+  else :
+    print("edge score skipping ",fname, obsname, outfile, flush=True)
 
   return retcode
 
@@ -72,12 +73,17 @@ def solo_score(fcst, fdate, fout = sys.stdout ):
 """
 Evaluating the ice concentrations
 """
-def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
+def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate, exdir, fixdir):
   #debug: print("py entered score_nsidc",flush=True)
   retcode = int(0)
   vyear = int(obsdate.strftime("%Y"))
 
+  if (vyear < 2010):
+    print("Invalid verification year in obsdate, score_nsidc",obsdate, vyear, fdate)
+    exit(1)
+
   #isolate forecast file name references to fcst_name:
+  #debug: print("score_nsidc calling fcst_name",flush=True)
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
 
   #UFS style:

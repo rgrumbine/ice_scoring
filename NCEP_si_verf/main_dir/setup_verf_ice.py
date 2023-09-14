@@ -34,6 +34,7 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
   vyear = int(obsdate.strftime("%Y"))
 
   #isolate forecast file name references to fcst_name:
+  #debug: print("score_nsidc calling fcst_name with obsdate = ",obsdate, flush=True)
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
 
   #UFS style:

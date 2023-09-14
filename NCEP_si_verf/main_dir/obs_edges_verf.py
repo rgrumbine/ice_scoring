@@ -26,6 +26,7 @@ else:
 exbase = x.exbase
 exdir  = x.exdir
 fixdir = x.fixdir
+#debug: print("exbase, exdir, fixdir: ",exbase, exdir, fixdir)
 
 del x
 
@@ -45,19 +46,24 @@ from scores import *
 #---------------------------- Begin program -------------------------
 #If a single verification, then one thing, else, create many single verifications:
 dt = datetime.timedelta(1)
-start = parse_8digits(sys.argv[1])
-end   = parse_8digits(sys.argv[2])
-fcst_dir = sys.argv[3] + "/" + sys.argv[4] + "/"
+#start = parse_8digits(sys.argv[1])
+#end   = parse_8digits(sys.argv[2])
+fcst_dir = sys.argv[1] + "/" + sys.argv[2] + "/"
+start = parse_8digits(sys.argv[2])
+fcst_len = int(sys.argv[3])
 
-#debug: 
-print("exdir, edgedir, fixdir",exdir, edgedir, fixdir)
-
-#debug: 
-print(start, end, fcst_dir, flush=True)
+#debug: print("exdir, edgedir, fixdir",exdir, edgedir, fixdir, flush=True)
+#debug: print(start, end, fcst_dir, flush=True)
 
 lead = 1
+if (fcst_len > 1):
+  end = start + fcst_len*dt
+  print("new end = ",end)
+else:
+  print("end = ",end)
 
-while (start < end):
+#while (start < end):
+while (lead <= fcst_len ):
 
   valid = start + lead*dt
   imsverf   = False
@@ -138,12 +144,19 @@ while (start < end):
   #  if (ncepverf):
 
   if (fcstverf):
-    fcst_edge(start.strftime("%Y%m%d"), 0.40, fcst_dir)
-    fcst_edge(valid.strftime("%Y%m%d"), 0.40, fcst_dir)
+    #fcst_edge(start.strftime("%Y%m%d"), 0.40, fcst_dir)
+    #fcst_edge(valid.strftime("%Y%m%d"), 0.40, fcst_dir)
+
+    #debug: print("calling fcst_edge",start.strftime("%Y%m%d"), valid.strftime("%Y%m%d"), fcst_dir, fixdir, exdir, flush=True)
+    fcst_edge(start.strftime("%Y%m%d"), valid.strftime("%Y%m%d"), fcst_dir, fixdir, exdir)
+
+    #debug: print("calling fcst edge_score ","fcst", start, "fcst", valid, exdir, fixdir, flush=True)
     edge_score("fcst", start, "fcst", valid, exdir, fixdir)
+
     if (nsidcverf):
-      edge_score("fcst",valid, "nsidc",valid, exdir, fixdir)
-      edge_score("nsidc",valid, "fcst",valid, exdir, fixdir)
+      #debug: print("calling edge score for nsidc_north v. fcst",flush=True)
+      edge_score("fcst",valid, "nsidc_north",valid, exdir, fixdir)
+      edge_score("nsidc_north",valid, "fcst",valid, exdir, fixdir)
     if (imsverf):
       edge_score("fcst",valid, "ims",valid, exdir, fixdir)
       edge_score("ims",valid, "fcst",valid, exdir, fixdir)
@@ -153,5 +166,6 @@ while (start < end):
 
 
   print("\n", flush=True)
-  start += dt
+  #start += dt
+  lead += 1
 
