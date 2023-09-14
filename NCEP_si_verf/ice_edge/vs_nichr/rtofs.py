@@ -2,19 +2,49 @@ import os
 import sys
 import datetime
 
+#------------------------------------------------------------
+"""
+Requires environment to provide:
+    variables FIXDIR, EXDIR
+    data files  skip_hr, seaice_alldist.bin 
+    executables cscore_edge, find_edge_cice
+
+Currently hard codes (dbase) path to rtofs cice output directories
+
+Robert Grumbine
+27 July 2023
+"""
+#------------------------------------------------------------
+
 fixdir = os.getenv('FIXDIR')
+if (type(fixdir) == str ):
+    print("fixdir = ",fixdir)
+else:
+    print("Could not find environment variable FIXDIR")
+    exit(1)
+
 exdir  = os.getenv('EXDIR')
+if (type(exdir) == str):
+    print("exdir = ",exdir)
+else:
+    print("Could not find environment variable EXDIR")
+    exit(1)
+
 if (not os.path.exists(fixdir+"/skip_hr") ):
   print("could not find the required skip file")
   print("fixdir = ",fixdir)
   exit(1)
 
-start = datetime.datetime(2022,10,1)
-end   = datetime.datetime(2023,2,28)
-dt    = datetime.timedelta(1)
-
-
 dbase="/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs."
+
+dt    = datetime.timedelta(1)
+start = datetime.datetime(2023,1,1)
+end   = datetime.datetime.today()
+end  -= 8*dt
+#end = datetime.datetime(2023,7,1)
+
+#------------------------------------------------------------
+
 
 while (start <= end):
   dy  = start.strftime("%03j")
@@ -33,14 +63,17 @@ while (start <= end):
     for crit in (0.01, 0.03, 0.05, 0.10, 0.15 ):
       if (os.path.exists(fname)): 
         critstring="{:3.2f}".format(crit)
-        #debug print("critstring = ",critstring,lead, flush=True)
+        #debug: print("critstring = ",critstring,lead, flush=True)
         outname = "rtofs_edges/rtofs.edge."+lead+"."+start.strftime("%Y%m%d")+critstring
-        #debug print("outname=",outname, flush=True)
+        #debug: print("outname=",outname, flush=True)
         if ( not os.path.exists(outname)):
           #find the edge:
           cmd=exdir+'/find_edge_cice '+fixdir+"/skip_hr "+ fname +" "+critstring+" > "+outname
-          #debug print(cmd, flush=True)
-          os.system(cmd)
+          #debug: print(cmd, flush=True)
+          retval = os.system(cmd)
+          if (retval != 0 ):
+              print("Error ",retval,"in trying to run ",cmd)
+              exit(2)
     
         #score it:
         snamer = "rtofs_scores/nr."+"{:1d}".format(nlead)+"."+start.strftime("%Y%m%d")+critstring

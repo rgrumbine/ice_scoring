@@ -10,7 +10,7 @@ matplotlib.use('Agg') #for batch mode
 #matplotlib.use('Qt5Agg') #for interactive mode
 import matplotlib.pyplot as plt
 
-lead = int(sys.argv[1]) - 1
+lead = int(sys.argv[1]) 
 idate = int(sys.argv[2])
 level_score = float(sys.argv[3]) #might be good to verify that this is integer multiple of 0.05
 title_base = sys.argv[4]
@@ -45,7 +45,7 @@ threat_index = np.zeros((20))
 
 valid_date = start_date
 for i in range (0,lead):
-  valid_date = valid_date + dt 
+  valid_date = start_date + i*dt 
   fname = ("score.n."+valid_date.strftime("%Y%m%d")+"f"+start_date.strftime("%Y%m%d")+".csv")
   print(fname,flush=True)
   flead = (valid_date - start_date).days

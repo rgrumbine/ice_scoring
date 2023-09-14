@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
   global_12th<unsigned char> skip;
 // rtofs:
   grid2<float> lat(NX, NY), lon(NX, NY);
-  grid2<float> conc(NX, NY), ice_thickness(NX, NY), tarea(NX, NY);
+  grid2<float> conc(NX, NY), ice_thickness(NX, NY);
+  // ufs prototypes tarea(NX, NY);
 
   FILE *fin;
 
@@ -66,33 +67,37 @@ int main(int argc, char *argv[]) {
   enter(lat, x);
 
   retval = nc_inq_varid(ncid, "TLON", &varid);
-  if (retval != 0) ERR2(retval, "TLAT");
+  if (retval != 0) ERR2(retval, "TLON");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "TLAT");fflush(stdout);
+  if (retval != 0) ERR2(retval, "TLON");fflush(stdout);
   enter(lon, x);
 
-  retval = nc_inq_varid(ncid, "tarea", &varid);
-  if (retval != 0) ERR(retval);
+  // ufs prototype/benchmarks
+  // retval = nc_inq_varid(ncid, "hi_h", &varid);
+  //consortium, rtofs:
+  retval = nc_inq_varid(ncid, "hi", &varid);
+  if (retval != 0) ERR2(retval, "hi");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR(retval);fflush(stdout);
-  enter(tarea, x);
-
-  retval = nc_inq_varid(ncid, "hi_h", &varid);
-  //consortium retval = nc_inq_varid(ncid, "hi", &varid);
-  if (retval != 0) ERR2(retval, "hi_h");
-  retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "hi_h");fflush(stdout);
+  if (retval != 0) ERR2(retval, "hi");fflush(stdout);
   enter(ice_thickness, x);
 
-  retval = nc_inq_varid(ncid, "aice_h", &varid);
-  //consortium retval = nc_inq_varid(ncid, "aice", &varid);
-  if (retval != 0) ERR2(retval, "aice_h");
+  // ufs prototypes:  retval = nc_inq_varid(ncid, "aice_h", &varid);
+  //consortium, rtofs:
+  retval = nc_inq_varid(ncid, "aice", &varid);
+  if (retval != 0) ERR2(retval, "aice");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "aice_h");fflush(stdout);
+  if (retval != 0) ERR2(retval, "aice");fflush(stdout);
   enter(conc, x);
   #ifdef DEBUG
   printf("conc stats in find_edge %f %f\n",conc.gridmax(), conc.gridmin() );
   #endif
+
+  //ufs prototypes:
+  //retval = nc_inq_varid(ncid, "tarea", &varid);
+  //if (retval != 0) ERR(retval);
+  //retval = nc_get_var_float(ncid, varid, x);
+  //if (retval != 0) ERR(retval);fflush(stdout);
+  //enter(tarea, x);
 
 /////////////////////////////////////////////////////////////////////////////
 // Look for ice edge, defined by a concentration tolerance / critical value
