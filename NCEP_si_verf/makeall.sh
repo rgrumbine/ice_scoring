@@ -5,12 +5,12 @@ export base=`pwd`
 
 # --------------  System-dependent modules/paths/... here --------
 ##netcdf -- WCOSS 3.0
-module load PrgEnv-intel/8.3.3
-module load intel-classic/2022.2.0.262
-module load netcdf/4.7.4
-module load geos
-module load proj
-module load python/3.8.6
+#module load PrgEnv-intel/8.3.3
+#module load intel-classic/2022.2.0.262
+#module load netcdf/4.7.4
+#module load geos
+#module load proj
+#module load python/3.8.6
 
 ##netcdf -- orion
 #module load intel/2020   #, 2020
@@ -26,13 +26,13 @@ module load python/3.8.6
 #module load anaconda/latest
 
 #netcdf -- Gaea
-#module purge
-#module load intel
-#module load cray-mpich
-#module load cray-netcdf
-#module load PrgEnv-intel
-#export NETCDF=$NETCDF_DIR
-#export PATH=/ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
+module load intel
+module load PrgEnv-intel
+module load cray-mpich
+module load cray-hdf5
+module load cray-netcdf
+export NETCDF=$NETCDF_DIR
+export PATH=/ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
 
 # --------------  Should need no changes below here --------
 module list
