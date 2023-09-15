@@ -7,7 +7,7 @@
 
 #opts = -Wall -O2 -DLINUX -DDEBUG
 ccopts = -Wall -O2 -DLINUX
-mmabopts = -I ../../../formats -I ../../../mmablib/include ../../../mmablib/libombf_4.a 
+mmabopts = -I ../../formats -I ../../../mmablib/include ../../../mmablib/libombf_4.a 
 opts = $(ccopts) $(mmabopts)
 
 finds = find_edge_ncep find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
@@ -29,7 +29,6 @@ find_edge_cfsv2 : find_edge_cfsv2.C
 
 find_edge_nrl : find_edge_nrl.C
 	$(CC) $< $(opts) $(ncopts) -o $(@)
-
 
 find_edge_ncep : find_edge.C
 	$(CC) -DGRIDTYPE=global_12th $< $(opts) -o $(@)
