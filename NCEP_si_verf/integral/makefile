@@ -7,7 +7,10 @@ mmabopts = -I ../formats -I ../../mmablib/include ../../mmablib/libombf_4.a
 opts = $(ccopts) $(mmabopts) $(ncopts)
 
 
-all : solo_ncep solo_ims solo_nsidc binary
+all : cice_solo solo_ncep solo_ims solo_nsidc binary
+
+cice_solo : cice_solo.C readers.C
+	$(CC) $< -DCICE $(opts) -o $(@)
 
 solo_nsidc : solo.C readers.C
 	$(CC) $< -DNSIDC $(opts) -o $(@)

@@ -18,21 +18,21 @@ export base=`pwd`
 #module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
 #python
 
-##netcdf -- Hera -- update 20221006
-#module load intel/2022.1.2
-#module load impi/2022.1.2
-#module load netcdf/4.7.0
-#module use -a /contrib/anaconda/modulefiles
-#module load anaconda/latest
+#netcdf -- Hera -- update 20221006
+module load intel/2022.1.2
+module load impi/2022.1.2
+module load netcdf/4.7.0
+module use -a /contrib/anaconda/modulefiles
+module load anaconda/latest
 
-#netcdf -- Gaea
-module load intel
-module load PrgEnv-intel
-module load cray-mpich
-module load cray-hdf5
-module load cray-netcdf
-export NETCDF=$NETCDF_DIR
-export PATH=/ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
+##netcdf -- Gaea
+#module load intel
+#module load PrgEnv-intel
+#module load cray-mpich
+#module load cray-hdf5
+#module load cray-netcdf
+#export NETCDF=$NETCDF_DIR
+#export PATH=/ncrc/home1/Robert.Grumbine/anaconda3/bin:$PATH
 
 # --------------  Should need no changes below here --------
 module list
@@ -61,7 +61,7 @@ mv cscore_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium
 #integrals:
 cd ${base}/integral
 make
-mv solo_ncep solo_ims solo_nsidc binary ${EXDIR}
+mv cice_solo solo_ncep solo_ims solo_nsidc binary ${EXDIR}
 
 #Concentration:
 cd ${base}/concentration
