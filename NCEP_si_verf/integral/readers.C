@@ -11,6 +11,8 @@ int reader(grid2<float> &lat, grid2<float> &lon, grid2<float> &conc,
 int reader(mvector<float> &lat, mvector<float> &lon, grid2<float> &conc, 
            grid2<float> &thick, int ncid) ;
 
+int cice_reader(grid2<float> &conc, grid2<float> &tmask, grid2<float> &tarea, grid2<float> &tlat, FILE *fin ) ;
+
 // IMS or NCEP analysis
 template <class T>
 int reader(metricgrid<T> &conc, FILE *fin) {
@@ -115,6 +117,64 @@ int reader(mvector<float> &lat, mvector<float> &lon, grid2<float> &conc, grid2<f
   retval = nc_get_var_float(ncid, varid, x);
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(thick, x, 1.e-3);
+
+  return 0;
+}
+// CICE6 reading:
+
+int cice_reader(grid2<float> &conc, grid2<float> &tmask, grid2<float> &tarea, grid2<float> &tlat, char *fname ) {
+  int ncid, varid, idni, idnj;
+  int retval;
+  size_t ni, nj;
+  float *x;
+
+  retval = nc_open(fname, NC_NOWRITE, &ncid);
+  if (retval != 0) ERR(retval);
+
+// dimensions:
+  retval = nc_inq_dimid(ncid, "ni", &idni);
+  if (retval != 0) ERR(retval);
+  retval = nc_inq_dimlen(ncid, idni, &ni);
+  if (retval != 0) ERR(retval);
+
+  retval = nc_inq_dimid(ncid, "nj", &idnj);
+  if (retval != 0) ERR(retval);
+  retval = nc_inq_dimlen(ncid, idnj, &nj);
+  if (retval != 0) ERR(retval);
+  //debug: printf("ncid, ni nj = %d %d %d\n",ncid, ni, nj); fflush(stdout);
+
+  // allocate space for the variables now that we know grid size:
+  x = (float*) malloc(sizeof(float)*ni*nj);
+  tmask.resize(nj, ni);
+  tarea.resize(nj, ni);
+  conc.resize(nj, ni);
+  tlat.resize(nj, ni);
+
+// Start looking at variables:
+
+  retval = nc_inq_varid(ncid, "tmask", &varid);
+  if (retval != 0) ERR(retval);
+  retval = nc_get_var_float(ncid, varid, x);
+  enter(tmask, x);
+  //debug: printf("tmask stats: %f %f %f\n",tmask.gridmax(), tmask.gridmin(), tmask.average() ); fflush(stdout);
+
+  retval = nc_inq_varid(ncid, "aice", &varid);
+  if (retval != 0) ERR(retval);
+  retval = nc_get_var_float(ncid, varid, x);
+  enter(conc, x);
+  //debug: printf("conc stats: %f %f %f\n",conc.gridmax(), conc.gridmin(), conc.average() ); fflush(stdout);
+
+  retval = nc_inq_varid(ncid, "tarea", &varid);
+  if (retval != 0) ERR(retval);
+  retval = nc_get_var_float(ncid, varid, x);
+  enter(tarea, x);
+  //debug: printf("tarea stats: %f %f %f\n",tarea.gridmax()/1.e6, tarea.gridmin()/1.e6, tarea.average()/1.e6 ); fflush(stdout);
+
+  retval = nc_inq_varid(ncid, "TLAT", &varid);
+  if (retval != 0) ERR(retval);
+  retval = nc_get_var_float(ncid, varid, x);
+  enter(tlat, x);
+  //debug: printf("tlat stats: %f %f %f\n",tlat.gridmax(), tlat.gridmin(), tlat.average() ); fflush(stdout);
 
   return 0;
 }

@@ -1,14 +1,15 @@
 #!/bin/sh
 
+. $HOME/rgdev/ice_scoring/NCEP_si_verf/ice_edge/vs_nichr/bootstrap.sh
+
 set -x
 
 export DCOM=~/rgdev/edges
 cd $DCOM
 
-. $HOME/rgdev/ice_scoring/NCEP_si_verf/ice_edge/vs_nichr/bootstrap.sh
-
+#Drop back date
 yy=2023
-ddd=001
+ddd=100
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned
@@ -60,4 +61,4 @@ do
 done
 
 mv [ns].*.beta cleaned
-#mv [ns].${yy}??? first
+rm [ns].${yy}??? 
