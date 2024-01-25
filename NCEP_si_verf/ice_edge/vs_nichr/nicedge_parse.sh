@@ -9,7 +9,7 @@ cd $DCOM
 
 #Drop back date
 yy=2023
-ddd=100
+ddd=200
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned

@@ -4,13 +4,14 @@ SH=/bin/bash
 export base=`pwd`
 
 # --------------  System-dependent modules/paths/... here --------
-##netcdf -- WCOSS 3.0
-#module load PrgEnv-intel/8.3.3
-#module load intel-classic/2022.2.0.262
-#module load netcdf/4.7.4
-#module load geos
-#module load proj
-#module load python/3.8.6
+# Wcoss2
+module load PrgEnv-intel
+module load intel-classic
+module load netcdf
+module load geos
+module load proj
+module load python
+source ~/env3.10/bin/activate
 
 ##netcdf -- orion
 #module load intel/2020   #, 2020
@@ -19,11 +20,11 @@ export base=`pwd`
 #python
 
 #netcdf -- Hera -- update 20221006
-module load intel/2022.1.2
-module load impi/2022.1.2
-module load netcdf/4.7.0
-module use -a /contrib/anaconda/modulefiles
-module load anaconda/latest
+#module load intel/2022.1.2
+#module load impi/2022.1.2
+#module load netcdf/4.7.0
+#module use -a /contrib/anaconda/modulefiles
+#module load anaconda/latest
 
 ##netcdf -- Gaea
 #module load intel
