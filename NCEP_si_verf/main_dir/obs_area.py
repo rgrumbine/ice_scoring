@@ -68,7 +68,7 @@ while (start < end):
 
   #OSI-SAF -- netcdf
   if (osiverf):
-    x = get_nsidc(start, valid, dirs['osisafdir'])
+    x = get_osisaf(start, valid, dirs['osisafdir'])
     if (x != 0):
       print("could not get files for osisaf verification, turning off osisaf\n",flush=True)
       osiverf = False

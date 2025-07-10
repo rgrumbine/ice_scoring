@@ -126,3 +126,56 @@ def score_nsidc(fcst, nsidc, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
   return retcode
 
 
+def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
+  #debug: print("py entered score_osisaf",flush=True)
+  retcode = int(0)
+  vyear = int(valid.strftime("%Y"))
+
+  if (vyear < 2007):
+    print("Invalid verification year in valid, score_osisaf",valid, vyear, tag)
+    exit(1)
+
+  #isolate forecast file name references to fcst_name:
+  #debug: print("score_nsidc calling fcst_name",flush=True)
+  valid_fname = fcst.get_filename(hr, fcst_dir)
+
+  if (not os.path.exists(valid_fname)):
+    print("scores.py cannot find forecast file for "+tag.strftime("%Y%m%d"),valid.strftime("%Y%m%d"), flush=True )
+    retcode = int(1)
+    return retcode
+
+  exname = 'score_osisaf'
+  if (os.path.exists(exdir + exname)):
+    #debug 
+    print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
+    pole="north"
+    ptag="nh"
+    obsname = osisaf.get_filename(valid, nsidcdir)
+
+    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " +
+           fixdir + "G02202-cdr-ancillary-nh.nc" +
+           " > score."+ ptag+"."+valid.strftime("%Y%m%d")+"f"+
+                                 tag.strftime("%Y%m%d")+".csv"  )
+    x = os.system(cmd)
+    if (x != 0):
+      print("\n\n command ",cmd,"\n returned error code ",x, flush=True)
+      print("\n")
+      print(exdir+exname, os.path.exists(exdir+exname))
+      print(valid_fname, os.path.exists(valid_fname))
+      print(obsname , os.path.exists(obsname))
+      print(fixdir, os.path.exists(fixdir))
+      print(fixdir+ "G02202-cdr-ancillary-nh.nc", os.path.exists(fixdir+ "G02202-cdr-ancillary-nh.nc"))
+      print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
+      retcode += x
+
+#    pole="south"
+#    ptag="s"
+#    obsname = osisaf_name(pole, valid, osisafdir)
+
+  else:
+    print("No executable to score vs. osisaf", flush=True)
+    retcode += 1
+
+  return retcode
+
+

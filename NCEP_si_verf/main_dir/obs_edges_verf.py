@@ -68,8 +68,8 @@ while (lead <= fcst_len ):
   valid = start + lead*dt
   imsverf   = False
   ncepverf  = False
-  osiverf   = False
-  nsidcverf = True
+  osiverf   = True
+  nsidcverf = False
   fcstverf  = True
 
   #IMS:
@@ -105,6 +105,14 @@ while (lead <= fcst_len ):
       exit(1)
 
   #OSI-SAF -- netcdf
+  if (osiverf):
+    x = get_osisaf(start, valid, dirs['osisafdir'])
+    if (x != 0):
+      print("could not get files for osisaf verification, turning off osisafverf\n",flush=True)
+      osisafverf = False
+    if (not osisafverf):
+      print("osisaf fail: ",dirs['osisafdir'], start, valid)
+      exit(1)
 
   # Model Forecast:
   if (fcstverf):
@@ -136,10 +144,10 @@ while (lead <= fcst_len ):
     edge_score("nsidc_north", start, "nsidc_north", valid, exdir, fixdir)
     if(imsverf): edge_score("nsidc_north", valid, "ims", valid, exdir, fixdir)
     if(ncepverf): edge_score("nsidc_north", valid, "ncep", valid, exdir, fixdir)
-  #if (osiverf):
-  #  osi_edge(start.strftime("%Y%m%d"))
-  #  osi_edge(valid.strftime("%Y%m%d"))
-  #  edge_score("osi", start, "osi", valid, exdir, fixdir)
+  if (osiverf):
+    osi_edge(start.strftime("%Y%m%d"))
+    osi_edge(valid.strftime("%Y%m%d"))
+    edge_score("osi", start, "osi", valid, exdir, fixdir)
   #  if (imsverf):
   #  if (ncepverf):
 
@@ -153,10 +161,12 @@ while (lead <= fcst_len ):
     #debug: print("calling fcst edge_score ","fcst", start, "fcst", valid, exdir, fixdir, flush=True)
     edge_score("fcst", start, "fcst", valid, exdir, fixdir)
 
-    if (nsidcverf):
-      #debug: print("calling edge score for nsidc_north v. fcst",flush=True)
-      edge_score("fcst",valid, "nsidc_north",valid, exdir, fixdir)
-      edge_score("nsidc_north",valid, "fcst",valid, exdir, fixdir)
+    #if (nsidcverf):
+    if (osiverf):
+      #debug: print("calling edge score for osisaf_north v. fcst",flush=True)
+      edge_score("fcst",valid, "osisaf_north",valid, exdir, fixdir)
+      edge_score("osisaf_north",valid, "fcst",valid, exdir, fixdir)
+
     if (imsverf):
       edge_score("fcst",valid, "ims",valid, exdir, fixdir)
       edge_score("ims",valid, "fcst",valid, exdir, fixdir)
