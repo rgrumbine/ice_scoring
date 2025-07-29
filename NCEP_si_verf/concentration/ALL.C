@@ -180,6 +180,8 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
   a21 = 0;
   a22 = 0;
   for (loc = 0; loc < obs.xpoints(); loc++) {
+    // Skip if obs is a flag (negative) value:
+    if (obs[loc] < 0) continue;
     // only score if point is water of interest
     if ( skip[loc] == 0 ) {
     
@@ -228,6 +230,8 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
   a21 = 0;
   a22 = 0;
   for (loc = 0; loc < obs.xpoints(); loc++) {
+    // Skip if obs is a flag (negative) value:
+    if (obs[loc] < 0) continue;
     // only score if point is water of interest
     if ( skip[loc] == 0 ) {
     
@@ -255,7 +259,6 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 
   }
 
-  //area = (double) count;
   a11 /= area;
   a12 /= area;
   a21 /= area;

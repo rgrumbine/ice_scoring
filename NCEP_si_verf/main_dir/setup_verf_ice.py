@@ -85,18 +85,13 @@ def score_osisaf(fcst_dir, osisaf, fdate, obsdate):
   #debug: print("score_nsidc calling fcst_name with obsdate = ",obsdate, flush=True)
   valid_fname = fcst_name(obsdate, fdate, fcst_dir)
 
-  #UFS style:
-
-  #CICE consortium name:
-  #valid_fname = fcst_dir+'iceh.'+obsdate.strftime("%Y")+'-'+obsdate.strftime("%m")+'-'+obsdate.strftime("%d")+".nc"
-
   if (not os.path.exists(valid_fname)):
     print("setup_verf_ice.py cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
     retcode = int(1)
     return retcode
   
   exname = 'generic_osisaf'
-  exname = 'score_osisaf'
+  #exname = 'score_osisaf'
   if (os.path.exists(exdir + exname)):
     #debug print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
     sys.stdout.flush()
@@ -118,6 +113,7 @@ def score_osisaf(fcst_dir, osisaf, fdate, obsdate):
 
   else:
     print("No executable to score vs. osisaf", flush=True)
+    print("exdir: ",exdir,"exname: ",exname, flush=True)
     sys.stdout.flush()
     retcode += 1
 

@@ -2,6 +2,8 @@ nx X
 ny Y
 TLAT Latitude
 TLON Longitude
+tarea tarea
+conc  ice_coverage
+thick ice_thickness
 ULAT Latitude
 ULON Longitude
-tarea tarea

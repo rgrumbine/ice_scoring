@@ -112,7 +112,8 @@ if (not os.path.exists(machine.dirs['fixdir'])):
 #debug: print (machine.dirs, flush=True)
 
 #Do we have verification data directories?
-nsidcverf = os.path.exists(machine.dirs['nsidcdir'])
+#nsidcverf = os.path.exists(machine.dirs['nsidcdir'])
+nsidcverf = False # trying to check times too recent for the nsidc archive. 
 ncepverf  = os.path.exists(machine.dirs['ncepdir'])
 imsverf   = os.path.exists(machine.dirs['imsdir'])
 osisafverf   = os.path.exists(machine.dirs['osisafdir'])

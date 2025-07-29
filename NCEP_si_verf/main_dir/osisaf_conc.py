@@ -20,7 +20,7 @@ import platforms
 x = platforms.machine.dirs
 #debug: print(x['imsdir'], flush=True)
 #debug: print(platforms.imsverf, flush=True)
-if not (platforms.imsverf or platforms.nsidcverf or platforms.ncepverf or platforms.osiverf) : 
+if not (platforms.imsverf or platforms.nsidcverf or platforms.ncepverf or platforms.osisafverf) : 
   raise Exception ("no valid verification sources, exiting")
 
   
@@ -28,7 +28,7 @@ if not (platforms.imsverf or platforms.nsidcverf or platforms.ncepverf or platfo
 import verf_files
 
 ims   = verf_files.ims()
-nsidc = verf_files.nsidc_nh()
+#nsidc = verf_files.nsidc_nh()
 osisaf = verf_files.osisaf()
 ncep   = verf_files.ncep()
 
@@ -36,7 +36,8 @@ ncep   = verf_files.ncep()
 
 import forecast_files
 
-fcst = forecast_files.hr3b()
+#fcst = forecast_files.hr3b()
+fcst = forecast_files.rtofs()
 
 #----------------------------------------------------------------------
 # Import scoring tools
@@ -50,8 +51,9 @@ from scores import *
 #start = datetime.datetime(2019,12,3)
 #end   = datetime.datetime(2020,2,25)
 #Summer
-start = datetime.datetime(2020,6,1)
-end   = datetime.datetime(2020,8,30)
+start = datetime.datetime(2025,6,1)
+#end   = datetime.datetime(2025,6,30)
+end   = datetime.datetime(2025,6,1)
 dt = datetime.timedelta(3)
 dt1 = datetime.timedelta(1)
 
@@ -63,9 +65,10 @@ while (tag <= end):
   print(tag)
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr3b/gfs." + tag.strftime("%Y%m%d") + "/00/model_data/ice/history/"
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr4/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
-  fcstdir = "/home/Robert.Grumbine/clim_data/hr5/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
+  #fcstdir = "/home/Robert.Grumbine/clim_data/hr5/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
+  fcstdir = "/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs." + tag.strftime("%Y%m%d") + "/"
   valid = tag
-  for hr in range(6,384,24):
+  for hr in range(0,24,24):
     #debug: print(hr, valid, flush=True)
 
     tmp = fcst.get_grid(hr, fcstdir) 
@@ -76,31 +79,32 @@ while (tag <= end):
     obs = 0
 #    if (platforms.ncepverf):
 #      obs += ncep.get_grid(tag, x['ncepdir'])
-
+#
 #    if (platforms.imsverf):
 #      obs += imsverf.get_grid(tag, x['imsdir'])
+#
+#   if (platforms.nsidcverf):
+#     obs += nsidc.get_grid(tag, x['nsidcdir'])
 
-    if (platforms.nsidcverf):
-      obs += nsidc.get_grid(tag, x['nsidcdir'])
-
-    if (platforms.osiverf):
+    if (platforms.osisafverf):
       obs += osisaf.get_grid(tag, x['osisafdir'])
 
     #debug: 
     print("obs retcode sum", obs, flush=True)
 
 # Now tailor to concentration verification:
-    if (platforms.nsidcverf):
-      score_nsidc(fcst, nsidc, fcstdir, x['nsidcdir'], tag, valid, hr, exdir, fixdir)
-    else:
-      print("could not score concentration for ",fcst_dir,
-             x['nsidcdir'], initial_date, valid_date, flush=True)
+    #if (platforms.nsidcverf):
+    #  score_nsidc(fcst, nsidc, fcstdir, x['nsidcdir'], tag, valid, hr, exdir, fixdir)
+    #else:
+    #  print("could not score concentration for ",fcstdir,
+    #         x['nsidcdir'], tag, flush=True)
 
-    if (platforms.osiverf):
+    if (platforms.osisafverf):
+      print("osisaf_conc calling score_osisaf")
       score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir)
     else:
-      print("could not score concentration for ",fcst_dir,
-             x['osisafdir'], initial_date, valid_date, flush=True)
+      print("could not score concentration for ",fcstdir,
+             x['osisafdir'], tag, flush=True)
 
     
 # For edges  RG: tripole cice currently bonkers

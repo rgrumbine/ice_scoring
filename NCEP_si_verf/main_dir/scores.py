@@ -126,7 +126,7 @@ def score_nsidc(fcst, nsidc, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
   return retcode
 
 
-def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
+def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdir):
   #debug: print("py entered score_osisaf",flush=True)
   retcode = int(0)
   vyear = int(valid.strftime("%Y"))
@@ -136,7 +136,7 @@ def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir
     exit(1)
 
   #isolate forecast file name references to fcst_name:
-  #debug: print("score_nsidc calling fcst_name",flush=True)
+  #debug: print("score_osisaf calling fcst_name",flush=True)
   valid_fname = fcst.get_filename(hr, fcst_dir)
 
   if (not os.path.exists(valid_fname)):
@@ -144,19 +144,34 @@ def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir
     retcode = int(1)
     return retcode
 
-  exname = 'score_osisaf'
+  exname = 'generic_osisaf'
   if (os.path.exists(exdir + exname)):
-    #debug 
-    print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
+    #debug print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
     pole="north"
     ptag="nh"
-    obsname = osisaf.get_filename(valid, nsidcdir)
+    obsname = osisaf.get_filename(valid, osisafdir)
+    #debug: print(obsname, " = obsname", flush=True)
 
-    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " +
-           fixdir + "G02202-cdr-ancillary-nh.nc" +
-           " > score."+ ptag+"."+valid.strftime("%Y%m%d")+"f"+
-                                 tag.strftime("%Y%m%d")+".csv"  )
+    try:
+      cmd = exdir+exname+" " + valid_fname+ " "+obsname
+      cmd += " "+fixdir+"skip_hr " 
+      cmd += exdir+"runtime.def"
+      cmd += " > score."+ ptag+"."+valid.strftime("%Y%m%d")+"f"+ tag.strftime("%Y%m%d")+".csv"  
+      #debug: print("cmd = ",cmd)
+    except:
+      print("\nscores:score_osisaf")
+      print(exdir+exname, os.path.exists(exdir+exname))
+      print(valid_fname, os.path.exists(valid_fname))
+      print(obsname , os.path.exists(obsname))
+      print(fixdir, os.path.exists(fixdir))
+      print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
+      print("cmd = ",cmd)
+      return 1
+
+    print("calling cmd",flush=True)
     x = os.system(cmd)
+    print("back from cmd",flush=True)
+
     if (x != 0):
       print("\n\n command ",cmd,"\n returned error code ",x, flush=True)
       print("\n")
@@ -164,7 +179,6 @@ def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir
       print(valid_fname, os.path.exists(valid_fname))
       print(obsname , os.path.exists(obsname))
       print(fixdir, os.path.exists(fixdir))
-      print(fixdir+ "G02202-cdr-ancillary-nh.nc", os.path.exists(fixdir+ "G02202-cdr-ancillary-nh.nc"))
       print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
       retcode += x
 
@@ -177,5 +191,4 @@ def score_osisaf(fcst, osisaf, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir
     retcode += 1
 
   return retcode
-
 

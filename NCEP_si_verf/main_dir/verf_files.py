@@ -1,6 +1,7 @@
 import os
 import datetime
 
+
 #-----------------------------------------------------------------===
 # utility here to help work with date strings -- int vs. string
 def tostr(valid):
@@ -48,7 +49,7 @@ from abc import ABC, abstractmethod
 class gridded(ABC):
 
     @abstractmethod
-    def get_grid(fname, date, basedir):
+    def get_grid(date, basedir):
       pass
       #return 0 if successful
 
@@ -73,27 +74,32 @@ class dummy(ABC):
       return 0
 
 #-------------- osisaf ----------------------------
-class osisaf(ABC):
+class osisaf(gridded):
 
-    def get_grid(fname, date, basedir):
-      return 0
+    def get_grid(date, basedir):
+      fname = osisaf.get_filename(date, basedir)
+      if (os.path.exists(fname)):
+        return 0
+      else:
+        print(fname, "does not exist osisaf:get_grid")
+        return 1
 
     def make_edge(name, date):
       return 0
 
     def get_filename(date, basedir):
-      return 0
+      ptag = "nh"
+      tmp = basedir + "archive/ice/conc/" + date.strftime("%Y") + "/" + date.strftime("%m") + "/" + "ice_conc_"+ptag+"_polstere-100_multi_"+date.strftime("%Y%m%d")+"1200.nc"
+      return tmp
 
 #---------- NCEP obs -----------------------------------
 class ncep(gridded):
 
     def get_grid(self, tag, ncepdir):
       retcode = int(0)
-      #debug: print("get_grid ncep ",tag,ncepdir, flush=True)
 
       monthfile = ncepdir + "ice5min.grib2." + tag.strftime("%Y%m") 
       index_file = ncepdir + "ice5min.grib2." + tag.strftime("%Y%m") + '.idx'
-      #debug: print("monthfile and index ",monthfile, index_file, flush=True)
       if (not os.path.exists(index_file)):
         cmd = ( 'wgrib2 ' + monthfile + " > "+index_file )
         x = os.system(cmd)
@@ -319,7 +325,6 @@ class nsidc_nh(gridded):
 class ims(gridded):
 
   def get_grid(self, tag, imsdir):
-    #debug: print("get_grid ",tag, imsdir, flush=True)
 
     retcode = int(0)
     initial = int(tag.strftime("%Y%m%d"))
