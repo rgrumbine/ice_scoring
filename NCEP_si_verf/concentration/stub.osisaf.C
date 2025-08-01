@@ -24,29 +24,29 @@
   xd = (float*) malloc(sizeof(float)*obs.xpoints()*obs.ypoints() );
 
 ////////////////// Sea ice analysis ///////////////////////////////
-  printf("opening osisaf\n"); fflush(stdout);
+  //debug: printf("opening osisaf\n"); fflush(stdout);
   retval = nc_open(fname, NC_NOWRITE, &ncid);
   if (retval != 0) {
     printf("failed to open %s\n",fname);
     ERR(retval);
   }
-  printf("retval = %d\n",retval);
+  //debug: printf("retval = %d\n",retval);
 
-  //printf("trying to read lat\n"); fflush(stdout);
+  //debug: printf("trying to read lat\n"); fflush(stdout);
   retval = nc_inq_varid(ncid, "lat", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, xd);
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(obslat, xd);
 
-  //printf("trying to read lon\n"); fflush(stdout);
+  //debug: printf("trying to read lon\n"); fflush(stdout);
   retval = nc_inq_varid(ncid, "lon", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_float(ncid, varid, xd);
   if (retval != 0) ERR(retval);fflush(stdout);
   enter(obslon, xd);
 
-  printf("trying to read ice_conc\n"); fflush(stdout);
+  //debug: printf("trying to read ice_conc\n"); fflush(stdout);
   retval = nc_inq_varid(ncid, "ice_conc", &varid);
   if (retval != 0) ERR(retval);
   retval = nc_get_var_short(ncid, varid, xb);

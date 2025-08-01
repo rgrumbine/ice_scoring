@@ -33,7 +33,7 @@ For these two, it's more involved and less predictable
 Shouldn't be needed by user, but may need updates
 
 """
-# RG: Add osisaf, nsidc_sh
+# RG: Add nsidc_sh
 
 #-----------------------------------------------------------
 '''

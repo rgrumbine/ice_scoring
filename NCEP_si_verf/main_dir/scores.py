@@ -144,9 +144,10 @@ def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdi
     retcode = int(1)
     return retcode
 
-  exname = 'generic_osisaf'
+  #exname = 'generic_osisaf'
+  exname = 'ufs_osisaf'
   if (os.path.exists(exdir + exname)):
-    #debug print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
+    #debug print("scores:score_osisaf Have the fcst vs. osisaf scoring executable", flush=True)
     pole="north"
     ptag="nh"
     obsname = osisaf.get_filename(valid, osisafdir)
@@ -168,9 +169,9 @@ def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdi
       print("cmd = ",cmd)
       return 1
 
-    print("calling cmd",flush=True)
+    #debug: print("calling cmd",flush=True)
     x = os.system(cmd)
-    print("back from cmd",flush=True)
+    #debug: print("back from cmd",flush=True)
 
     if (x != 0):
       print("\n\n command ",cmd,"\n returned error code ",x, flush=True)
@@ -187,7 +188,7 @@ def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdi
 #    obsname = osisaf_name(pole, valid, osisafdir)
 
   else:
-    print("No executable to score vs. osisaf", flush=True)
+    print("scores:No executable to score vs. osisaf", flush=True)
     retcode += 1
 
   return retcode

@@ -91,9 +91,9 @@ def score_osisaf(fcst_dir, osisaf, fdate, obsdate):
     return retcode
   
   exname = 'generic_osisaf'
-  #exname = 'score_osisaf'
+  exname = 'ufs_osisaf'
   if (os.path.exists(exdir + exname)):
-    #debug print("setup_verf Have the fcst vs. osisaf scoring executable", flush=True)
+    #debug print("setup_verf_ice:score_osisaf Have the fcst vs. osisaf scoring executable", flush=True)
     sys.stdout.flush()
     pole="north"
     ptag="n"
@@ -112,7 +112,7 @@ def score_osisaf(fcst_dir, osisaf, fdate, obsdate):
 #    obsname = osisaf_name(pole, obsdate, osisafdir)
 
   else:
-    print("No executable to score vs. osisaf", flush=True)
+    print("setup_verf_ice:No executable to score vs. osisaf", flush=True)
     print("exdir: ",exdir,"exname: ",exname, flush=True)
     sys.stdout.flush()
     retcode += 1

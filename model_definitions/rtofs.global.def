@@ -1,9 +1,6 @@
-nx X
-ny Y
-TLAT Latitude
-TLON Longitude
-tarea tarea
-conc  ice_coverage
-thick ice_thickness
-ULAT Latitude
-ULON Longitude
+4500
+3298
+Latitude
+Longitude
+ice_coverage
+ice_thickness

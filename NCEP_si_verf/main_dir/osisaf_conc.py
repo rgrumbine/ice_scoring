@@ -37,7 +37,9 @@ ncep   = verf_files.ncep()
 import forecast_files
 
 #fcst = forecast_files.hr3b()
-fcst = forecast_files.rtofs()
+#fcst = forecast_files.rtofs()
+fcst = forecast_files.ufs_gdas()
+#fcst = forecast_files.ufs_gfs()
 
 #----------------------------------------------------------------------
 # Import scoring tools
@@ -50,11 +52,10 @@ from scores import *
 #Winter
 #start = datetime.datetime(2019,12,3)
 #end   = datetime.datetime(2020,2,25)
-#Summer
-start = datetime.datetime(2025,6,1)
-#end   = datetime.datetime(2025,6,30)
-end   = datetime.datetime(2025,6,1)
-dt = datetime.timedelta(3)
+#Retros:
+start = datetime.datetime(2024,12,10)
+end   = datetime.datetime(2024,12,30)
+dt = datetime.timedelta(1)
 dt1 = datetime.timedelta(1)
 
 tag = start
@@ -66,9 +67,12 @@ while (tag <= end):
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr3b/gfs." + tag.strftime("%Y%m%d") + "/00/model_data/ice/history/"
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr4/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr5/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
-  fcstdir = "/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs." + tag.strftime("%Y%m%d") + "/"
+  #fcstdir = "/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs." + tag.strftime("%Y%m%d") + "/"
+  fcstdir = "/u/robert.grumbine/noscrub/retros/gdas."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
+
   valid = tag
-  for hr in range(0,24,24):
+  #for hr in range(0,192+1,24): # rtofs
+  for hr in range(3,3+1,3): # gdas
     #debug: print(hr, valid, flush=True)
 
     tmp = fcst.get_grid(hr, fcstdir) 
@@ -100,7 +104,7 @@ while (tag <= end):
     #         x['nsidcdir'], tag, flush=True)
 
     if (platforms.osisafverf):
-      print("osisaf_conc calling score_osisaf")
+      #debug: print("osisaf_conc calling score_osisaf")
       score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir)
     else:
       print("could not score concentration for ",fcstdir,
