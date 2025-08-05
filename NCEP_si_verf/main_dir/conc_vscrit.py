@@ -35,6 +35,9 @@ fcr = 8
 correct = 9
 threat = 10
 bias = 11 #area over crit in model vs. in obs
+iiee = 12
+
+param = iiee
 
 #For score vs. forecast lead through all leads, for a given critical level:
 days = np.zeros((lead))
@@ -62,13 +65,15 @@ for i in range (0,lead):
         k += 1
         #print("k = ",k,line)
         critical_level[k] = float(line[level])
-        threat_index[k] = float(line[threat])
+        threat_index[k] = float(line[param])
         if (float(critical_level[k]) == level_score):
           score[i] = threat_index[k]
     #Now have this lead in hand, plot the curve:
     fig, ax = plt.subplots()
-    ax.set(xlabel = "Critical Concentration", ylabel = 'threat score [0:1]')
-    ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\nNH threat score')
+    #ax.set(xlabel = "Critical Concentration", ylabel = 'threat score [0:1]')
+    #ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\nNH threat score')
+    ax.set(xlabel = "Critical Concentration", ylabel = 'iiee ')
+    ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\n iiee')
     plt.ylim(0.5,1.0)
     ax.plot(critical_level, threat_index)
     ax.grid()
@@ -78,8 +83,8 @@ for i in range (0,lead):
 
 #done with day by day, now plot summary vs. cutoff:
 fig,ax = plt.subplots()
-ax.set(xlabel = "Forecast lead, days", ylabel = 'threat score [0:1]')
-ax.set(title = title_base + " Threat score for critical = "+str(level_score)+" \nfrom "+start_date.strftime("%Y%m%d"))
+ax.set(xlabel = "Forecast lead, days", ylabel = 'iiee ')
+ax.set(title = title_base + " score for critical = "+str(level_score)+" \nfrom "+start_date.strftime("%Y%m%d"))
 ax.plot(days,score)
 ax.grid()
 #fig.show()

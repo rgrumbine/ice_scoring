@@ -162,15 +162,15 @@ void contingency(mvector<float> &obs, mvector<float> &model,
 
 void contingency(mvector<float> &obs, mvector<float> &model, 
                  mvector<unsigned char> &skip, float &level, 
-                 double &a11, double &a12, double &a21, double &a22) ;
+                 double &a11, double &a12, double &a21, double &a22, double &iiee) ;
 void contingency(mvector<float> &obs, mvector<float> &model, 
                  mvector<unsigned char> &skip, mvector<float> &cellareas,
                  float &level, 
-                 double &a11, double &a12, double &a21, double &a22) ;
+                 double &a11, double &a12, double &a21, double &a22, double &iiee) ;
 
 // Pointwise/mvector scoring for contingency table:
 void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned char> &skip, 
-              float &level, double &a11, double &a12, double &a21, double &a22) {
+              float &level, double &a11, double &a12, double &a21, double &a22, double &iiee) {
   double area = 0;
   int count = 0;
   int loc;
@@ -208,6 +208,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 
   }
 
+  iiee = a12 + a21;
   area = (double) count;
   a11 /= area;
   a12 /= area;
@@ -220,7 +221,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 // Scoring for contingency table:
 void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned char> &skip, 
               mvector<float> &cellarea,
-              float &level, double &a11, double &a12, double &a21, double &a22) {
+              float &level, double &a11, double &a12, double &a21, double &a22, double &iiee) {
   double area = 0;
   int count = 0;
   int loc;
@@ -259,6 +260,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 
   }
 
+  iiee = a12 + a21;
   a11 /= area;
   a12 /= area;
   a21 /= area;

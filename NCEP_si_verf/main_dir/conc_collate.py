@@ -32,11 +32,13 @@ fcr = 8
 correct = 9
 threat = 10
 bias = 11 #area over crit in model vs. in obs
+iiee = 12 #m^2, divide by 1e12 for millions of km^2
+param = threat
 
-ptag="nh"
+ptag="sh"
 lead = 10
 tag = datetime.datetime(2024,12,10)
-end = datetime.datetime(2024,12,29)
+end = datetime.datetime(2025,1,1)
 counts = np.zeros((20,lead))
 sums   = np.zeros((20,lead))
 sumsq  = np.zeros((20,lead))
@@ -57,14 +59,18 @@ while (tag <= end):
               for line in sreader:
                 k += 1
                 counts[int(k), flead] += 1
-                sums[int(k), flead]   += float(line[bias])
-                sumsq[int(k), flead]  += float(line[bias])*float(line[bias])
+                sums[int(k), flead]   += float(line[param])
+                sumsq[int(k), flead]  += float(line[param])*float(line[param])
           #except: (nothing, move on to next)
 
     else:
       print("no directory ",dirname)
 
     tag += dt
+
+if (param == iiee):
+    sums /= 1e12
+    sumsq /= 1e24
 
 print("done_"+tag.strftime("%Y%m%d"),counts.max(), flush=True )
 sums  /= counts
@@ -90,9 +96,9 @@ with (open('summary_'+tag.strftime("%Y%m%d")+'.csv', 'w', newline='') ) as csvfi
 #Now ready to plot:
 fig,ax = plt.subplots()
 #ax.set(xlabel = "Forecast lead, days", ylabel = "threat score [0:1]")
-ax.set(xlabel = "Forecast lead, days", ylabel = "bias score ")
+ax.set(xlabel = "Forecast lead, days", ylabel = "iiee ")
 ax.set(title = figtitle +" Summary for "+tag.strftime("%Y%m%d")+" critical level = "+"{:4.2f}".format(crit))
-plt.ylim(min(0.5,mean.min()),1.0)
+plt.ylim(min(0.5,mean.min()),max(1.0,mean.max() ))
 ax.plot(days, mean, color="blue", label = "mean")
 #ax.plot(days, rmse, color="green", label = "rms")
 ax.legend()

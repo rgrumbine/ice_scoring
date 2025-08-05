@@ -8,7 +8,8 @@
   OSISAF_POLE<float> obs_cdr, obs_nt, obs_bt;
 
   grid2<float> tmp(obs.ypoints(), obs.xpoints());
-  grid2<float> obslat(obs.ypoints(), obs.xpoints()), obslon(obs.ypoints(), obs.xpoints());
+  grid2<float> obslat(obs.ypoints(), obs.xpoints());
+  grid2<float> obslon(obs.ypoints(), obs.xpoints());
 
   grid2<float> tmp_cdr(obs_cdr.ypoints(), obs_cdr.xpoints());
   grid2<float> tmp_nt(obs_cdr.ypoints(), obs_cdr.xpoints());

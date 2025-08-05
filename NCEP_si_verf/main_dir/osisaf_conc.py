@@ -48,13 +48,12 @@ from scores import *
 #----------------------------------------------------------------------
 # Now ready to loop over forecasts
 
-# HR3b, HR4, HR5 all using a winter and a summer season's forecasts
-#Winter
-#start = datetime.datetime(2019,12,3)
-#end   = datetime.datetime(2020,2,25)
 #Retros:
 start = datetime.datetime(2024,12,10)
-end   = datetime.datetime(2024,12,30)
+end   = datetime.datetime(2025,1,1)
+#end   = datetime.datetime(2024,12,10)
+ptag="sh"
+
 dt = datetime.timedelta(1)
 dt1 = datetime.timedelta(1)
 
@@ -65,13 +64,10 @@ fixdir = env.fixdir
 while (tag <= end):
   print(tag)
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr3b/gfs." + tag.strftime("%Y%m%d") + "/00/model_data/ice/history/"
-  #fcstdir = "/home/Robert.Grumbine/clim_data/hr4/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr5/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
   #fcstdir = "/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs." + tag.strftime("%Y%m%d") + "/"
   #fcstdir = "/u/robert.grumbine/noscrub/retros/gdas."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
   fcstdir = "/u/robert.grumbine/noscrub/retros/gfs."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
-
-  ptag="nh"
 
   valid = tag
   valid += dt1 # for gfs, where no 000 file

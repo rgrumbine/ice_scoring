@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
 // High res sea ice analysis from netcdf:
   char *fname;
   fname = argv[2];
-#ifdef DEBUG
-  FILE *verbout;
-  verbout = fopen("verbout","w");
-#endif
+  #ifdef DEBUG
+    FILE *verbout;
+    verbout = fopen("verbout","w");
+  #endif
 
   #include "stub.osisaf.C"
 
@@ -182,12 +182,14 @@ int main(int argc, char *argv[]) {
     floc = obs.locate(ll);
     sloc = skip.locate(ll);
 
-    #ifdef VERBOSE
+    #ifdef DEBUG
       if (floc.i <= -0.5 || floc.j <= -0.5) {
         printf("floc %f %f\n", floc.i, floc.j);
+	continue;
       }
       if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
         printf("floc %f %f\n", floc.i, floc.j);
+	continue;
       }
     #endif
     #ifdef DEBUG2
@@ -196,7 +198,7 @@ int main(int argc, char *argv[]) {
           ice_coverage[loc], obs[floc], (int) skip[sloc] );
       fflush(verbout);
     #endif
-    if (obs[floc] > 1.0) continue;
+    if (obs[floc] > 1.0 || obs[floc] < 0.) continue;
 
     observed[count] = obs[floc];
     skipped[count]  = skip[sloc];
@@ -226,13 +228,13 @@ int main(int argc, char *argv[]) {
 
 // At last, start scoring ----------------------------------------------------------------
   float level;
-  double a11, a12, a21, a22;
+  double a11, a12, a21, a22, iiee;
   float pod, far, fcr, pct, ts, bias;
 
   for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(observed, model, skipped, cellarea, level, a11, a12, a21, a22);
+    contingency(observed, model, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("level,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("level,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias, iiee);
   }
 
 //  for (level = 0.0; level < 1.; level += 0.05) {
