@@ -52,7 +52,7 @@ from scores import *
 start = datetime.datetime(2024,12,10)
 end   = datetime.datetime(2025,1,1)
 #end   = datetime.datetime(2024,12,10)
-ptag="sh"
+ptag="nh"
 
 dt = datetime.timedelta(1)
 dt1 = datetime.timedelta(1)

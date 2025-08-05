@@ -182,16 +182,18 @@ int main(int argc, char *argv[]) {
     floc = obs.locate(ll);
     sloc = skip.locate(ll);
 
-    #ifdef DEBUG
       if (floc.i <= -0.5 || floc.j <= -0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
+    #endif
 	continue;
       }
       if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
+    #endif
 	continue;
       }
-    #endif
     #ifdef DEBUG2
       fprintf(verbout, "model %d %d  %.3f %.3f %f vs. %f w. skip %d\n",
           loc.i, loc.j, ll.lat, ll.lon,
