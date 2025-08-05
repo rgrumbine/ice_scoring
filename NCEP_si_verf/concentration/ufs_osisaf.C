@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
 ////////////////// skip grid ///////////////////////////////
   fin = fopen(argv[3], "r");
   #include "stub.skip.C"
+  fclose(fin);
 
 ////////////////// Latlon check and transfer ///////////////////////////////
   obs.set((float) 157.0);
