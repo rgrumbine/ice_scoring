@@ -38,8 +38,8 @@ import forecast_files
 
 #fcst = forecast_files.hr3b()
 #fcst = forecast_files.rtofs()
-fcst = forecast_files.ufs_gdas()
-#fcst = forecast_files.ufs_gfs()
+#fcst = forecast_files.ufs_gdas()
+fcst = forecast_files.ufs_gfs()
 
 #----------------------------------------------------------------------
 # Import scoring tools
@@ -68,14 +68,19 @@ while (tag <= end):
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr4/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
   #fcstdir = "/home/Robert.Grumbine/clim_data/hr5/gfs." + tag.strftime("%Y%m%d") + "/00/model/ice/history/"
   #fcstdir = "/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs." + tag.strftime("%Y%m%d") + "/"
-  fcstdir = "/u/robert.grumbine/noscrub/retros/gdas."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
+  #fcstdir = "/u/robert.grumbine/noscrub/retros/gdas."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
+  fcstdir = "/u/robert.grumbine/noscrub/retros/gfs."+tag.strftime("%Y%m%d")+"/00/model/ice/history/"
+
+  ptag="nh"
 
   valid = tag
+  valid += dt1 # for gfs, where no 000 file
   #for hr in range(0,192+1,24): # rtofs
-  for hr in range(3,3+1,3): # gdas
+  #for hr in range(3,3+1,3): # gdas
+  for hr in range(24,240+1,24): # gfs
     #debug: print(hr, valid, flush=True)
 
-    tmp = fcst.get_grid(hr, fcstdir) 
+    tmp = fcst.get_grid(hr, fcstdir)
     if (tmp != 0):
       valid += dt1
       continue
@@ -91,10 +96,9 @@ while (tag <= end):
 #     obs += nsidc.get_grid(tag, x['nsidcdir'])
 
     if (platforms.osisafverf):
-      obs += osisaf.get_grid(tag, x['osisafdir'])
+      obs += osisaf.get_grid(tag, x['osisafdir'], ptag=ptag)
 
-    #debug: 
-    print("obs retcode sum", obs, flush=True)
+    #debug: print("obs retcode sum", obs, flush=True)
 
 # Now tailor to concentration verification:
     #if (platforms.nsidcverf):
@@ -105,7 +109,8 @@ while (tag <= end):
 
     if (platforms.osisafverf):
       #debug: print("osisaf_conc calling score_osisaf")
-      score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir)
+      #score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir)
+      score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir, ptag=ptag)
     else:
       print("could not score concentration for ",fcstdir,
              x['osisafdir'], tag, flush=True)

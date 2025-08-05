@@ -126,7 +126,7 @@ def score_nsidc(fcst, nsidc, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
   return retcode
 
 
-def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdir):
+def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdir, ptag="nh"):
   #debug: print("py entered score_osisaf",flush=True)
   retcode = int(0)
   vyear = int(valid.strftime("%Y"))
@@ -145,12 +145,17 @@ def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdi
     return retcode
 
   #exname = 'generic_osisaf'
-  exname = 'ufs_osisaf'
+  if (ptag == "nh"):
+    exname = 'ufs_osisaf_north'
+  elif (ptag == "sh"):
+    exname = 'ufs_osisaf_south'
+  else:
+    print('unknown ptag in scores:score_osisaf: ',ptag)
+    exit(1)
+
   if (os.path.exists(exdir + exname)):
     #debug print("scores:score_osisaf Have the fcst vs. osisaf scoring executable", flush=True)
-    pole="north"
-    ptag="nh"
-    obsname = osisaf.get_filename(valid, osisafdir)
+    obsname = osisaf.get_filename(valid, osisafdir, ptag)
     #debug: print(obsname, " = obsname", flush=True)
 
     try:
@@ -182,10 +187,6 @@ def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdi
       print(fixdir, os.path.exists(fixdir))
       print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
       retcode += x
-
-#    pole="south"
-#    ptag="s"
-#    obsname = osisaf_name(pole, valid, osisafdir)
 
   else:
     print("scores:No executable to score vs. osisaf", flush=True)

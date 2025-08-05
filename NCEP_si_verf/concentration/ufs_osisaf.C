@@ -232,13 +232,14 @@ int main(int argc, char *argv[]) {
   for (level = 0.0; level < 1.; level += 0.05) {
     contingency(observed, model, skipped, cellarea, level, a11, a12, a21, a22);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("gllevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("level,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
   }
-  for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
-    contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("nhlevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  }
+
+//  for (level = 0.0; level < 1.; level += 0.05) {
+//    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
+//    contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+//    printf("nhlevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+//  }
 
   return 0;
 }

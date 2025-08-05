@@ -76,8 +76,8 @@ class dummy(ABC):
 #-------------- osisaf ----------------------------
 class osisaf(gridded):
 
-    def get_grid(date, basedir):
-      fname = osisaf.get_filename(date, basedir)
+    def get_grid(date, basedir, ptag="nh"):
+      fname = osisaf.get_filename(date, basedir, ptag)
       if (os.path.exists(fname)):
         return 0
       else:
@@ -87,8 +87,7 @@ class osisaf(gridded):
     def make_edge(name, date):
       return 0
 
-    def get_filename(date, basedir):
-      ptag = "nh"
+    def get_filename(date, basedir, ptag="nh"):
       tmp = basedir + "archive/ice/conc/" + date.strftime("%Y") + "/" + date.strftime("%m") + "/" + "ice_conc_"+ptag+"_polstere-100_multi_"+date.strftime("%Y%m%d")+"1200.nc"
       return tmp
 
