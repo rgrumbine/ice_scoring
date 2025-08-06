@@ -38,10 +38,10 @@ if (not os.path.exists(fixdir+"/skip_hr") ):
 dbase="/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs."
 
 dt    = datetime.timedelta(1)
-start = datetime.datetime(2025,5,1)
+start = datetime.datetime(2025,7,1)
 end   = datetime.datetime.today()
 end  -= 8*dt
-#end = datetime.datetime(2023,7,1)
+#end = datetime.datetime(2023,8,1)
 
 #------------------------------------------------------------
 

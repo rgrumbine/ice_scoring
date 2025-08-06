@@ -69,7 +69,7 @@ void contingency_derived(double a11, double a12, double a21, double a22, float &
   pct = ((double) a11 + (double) a22) / ( (double) (a11+a12+a21+a22)); //percent correct
   ts  = (double) a11 / ( (double) (a11+a12+a21) ); // threat score, aka
                                                    // csi - critical success index
-  bias = (double) (a11+a12) / ((double)(a11+a21));
+  bias = (double) (a11+a12) / ((double)(a11+a21)); // model / obsd
 
   return;
 }

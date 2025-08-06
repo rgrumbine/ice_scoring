@@ -33,10 +33,10 @@ correct = 9
 threat = 10
 bias = 11 #area over crit in model vs. in obs
 iiee = 12 #m^2, divide by 1e12 for millions of km^2
-param = iiee
+param = threat
 
-ptag="nh"
-lead = 10
+ptag="sh"
+lead = 16
 tag = datetime.datetime(2024,12,10)
 end = datetime.datetime(2025,1,1)
 counts = np.zeros((20,lead))

@@ -50,9 +50,9 @@ from scores import *
 
 #Retros:
 start = datetime.datetime(2024,12,10)
-end   = datetime.datetime(2025,1,1)
+end   = datetime.datetime(2025,1,2)
 #end   = datetime.datetime(2024,12,10)
-ptag="nh"
+ptag="sh"
 
 dt = datetime.timedelta(1)
 dt1 = datetime.timedelta(1)
@@ -73,7 +73,7 @@ while (tag <= end):
   valid += dt1 # for gfs, where no 000 file
   #for hr in range(0,192+1,24): # rtofs
   #for hr in range(3,3+1,3): # gdas
-  for hr in range(24,240+1,24): # gfs
+  for hr in range(24,384+1,24): # gfs
     #debug: print(hr, valid, flush=True)
 
     tmp = fcst.get_grid(hr, fcstdir)

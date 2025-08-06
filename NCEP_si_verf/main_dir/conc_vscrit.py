@@ -14,7 +14,7 @@ lead = int(sys.argv[1])
 idate = int(sys.argv[2])
 level_score = float(sys.argv[3]) #might be good to verify that this is integer multiple of 0.05
 title_base = sys.argv[4]
-ptag = "nh"
+ptag = "sh"
 
 
 (yy,mm,dd) = (int(int(idate)/10000), int(int(idate)%10000)/100, int(idate)%100)
@@ -37,7 +37,8 @@ threat = 10
 bias = 11 #area over crit in model vs. in obs
 iiee = 12
 
-param = iiee
+param = bias
+label = "bias"
 
 #For score vs. forecast lead through all leads, for a given critical level:
 days = np.zeros((lead))
@@ -72,13 +73,13 @@ for i in range (0,lead):
     fig, ax = plt.subplots()
     #ax.set(xlabel = "Critical Concentration", ylabel = 'threat score [0:1]')
     #ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\nNH threat score')
-    ax.set(xlabel = "Critical Concentration", ylabel = 'iiee ')
+    ax.set(xlabel = "Critical Concentration", ylabel = label)
     ax.set(title = title_base + ' Forecast lead '+str(flead)+' days\n iiee')
-    plt.ylim(0.5,1.0)
+    plt.ylim(min(threat_index.min(),0.5),max(1.0,threat_index.max() ) )
     ax.plot(critical_level, threat_index)
     ax.grid()
     #fig.show()
-    plt.savefig("threat_"+str(flead)+"_dy_"+"from_"+start_date.strftime("%Y%m%d")+".png")
+    plt.savefig(label+"_"+str(flead)+"_dy_"+"from_"+start_date.strftime("%Y%m%d")+".png")
     plt.close()
 
 #done with day by day, now plot summary vs. cutoff:
@@ -88,5 +89,5 @@ ax.set(title = title_base + " score for critical = "+str(level_score)+" \nfrom "
 ax.plot(days,score)
 ax.grid()
 #fig.show()
-plt.savefig("threat_"+str(level_score)+"_f"+start_date.strftime("%Y%m%d")+".png")
+plt.savefig(label+"_"+str(level_score)+"_f"+start_date.strftime("%Y%m%d")+".png")
 plt.close()
