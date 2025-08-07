@@ -33,12 +33,15 @@ correct = 9
 threat = 10
 bias = 11 #area over crit in model vs. in obs
 iiee = 12 #m^2, divide by 1e12 for millions of km^2
-param = threat
 
-ptag="sh"
+param = threat
+label = "threat"
+
+ptag="ps"
 lead = 16
 tag = datetime.datetime(2024,12,10)
-end = datetime.datetime(2025,1,1)
+end = datetime.datetime(2025,1,6)
+
 counts = np.zeros((20,lead))
 sums   = np.zeros((20,lead))
 sumsq  = np.zeros((20,lead))
@@ -50,8 +53,7 @@ while (tag <= end):
         for flead in range (int(0),int(lead)):
           valid_date = start_date + (flead+1)*dt
           fname = dirname + "/score."+ptag+"."+valid_date.strftime("%Y%m%d") + "f" + start_date.strftime("%Y%m%d") + ".csv" 
-          #debug: 
-          print(str(flead)+" "+ fname, flush=True)
+          #debug: print(str(flead)+" "+ fname, flush=True)
           if (os.path.exists(fname)):
             with (open(fname)) as csvfile:
               sreader = csv.reader(csvfile, delimiter = ',')
@@ -79,8 +81,8 @@ days = np.zeros((lead))
 mean = np.zeros((lead))
 rmse = np.zeros((lead))
 var = np.zeros((lead))
-with (open('summary_'+tag.strftime("%Y%m%d")+'.csv', 'w', newline='') ) as csvfile:
-  fieldnames = ['lead', 'mean', 'rms', 'var'];
+with (open(ptag+label+'_summary_'+tag.strftime("%Y%m%d")+'.csv', 'w', newline='') ) as csvfile:
+  fieldnames = ['lead', label, 'rms', 'var'];
   writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
   writer.writeheader()
 
@@ -90,20 +92,20 @@ with (open('summary_'+tag.strftime("%Y%m%d")+'.csv', 'w', newline='') ) as csvfi
     rmse[i] = sqrt(sumsq[ncrit,i])
     var[i]  = sqrt(sumsq[ncrit,i]-sums[ncrit,i]*sums[ncrit,i])
     print("{:4.2f}".format(crit),"{0:5.3f}".format(sums[ncrit,i]), " ","{0:5.3f}".format(sqrt(sumsq[ncrit,i])), " ", "{0:6.4f}".format(sqrt(sumsq[ncrit,i]-sums[ncrit,i]*sums[ncrit,i]))  )
-    writer.writerow({'lead': days[i], 'mean': mean[i], 'rms': rmse[i], 'var':var[i]})
+    writer.writerow({'lead': days[i], label : mean[i], 'rms': rmse[i], 'var':var[i]})
 
 
 #Now ready to plot:
 fig,ax = plt.subplots()
 #ax.set(xlabel = "Forecast lead, days", ylabel = "threat score [0:1]")
-ax.set(xlabel = "Forecast lead, days", ylabel = "iiee ")
+ax.set(xlabel = "Forecast lead, days", ylabel = label)
 ax.set(title = figtitle +" Summary for "+tag.strftime("%Y%m%d")+" critical level = "+"{:4.2f}".format(crit))
 plt.ylim(min(0.5,mean.min()),max(1.0,mean.max() ))
-ax.plot(days, mean, color="blue", label = "mean")
+ax.plot(days, mean, color="blue", label = label)
 #ax.plot(days, rmse, color="green", label = "rms")
 ax.legend()
 ax.grid()
-plt.savefig("summary_"+tag.strftime("%Y%m%d")+".png")
+plt.savefig(ptag+label+"_"+tag.strftime("%Y%m%d")+".png")
 plt.close()
 
 fig,ax = plt.subplots()
@@ -113,5 +115,5 @@ plt.ylim(0,0.075)
 ax.plot(days, var, color="blue", label = "sqrt(variance)")
 ax.legend()
 ax.grid()
-plt.savefig("summary_var_"+tag.strftime("%Y%m%d")+".png")
+plt.savefig(ptag+label+"_var_"+tag.strftime("%Y%m%d")+".png")
 plt.close()

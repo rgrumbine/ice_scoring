@@ -30,17 +30,17 @@ int main(int argc, char *argv[]) {
     verbout = fopen("verbout","w");
   #endif
 
-  printf("opening osisaf %s\n",fname); fflush(stdout);
+  //debug: printf("opening osisaf %s\n",fname); fflush(stdout);
   #include "stub.osisaf.C"
 
 ////////////////// skip grid ///////////////////////////////
-  printf("opening skip\n"); fflush(stdout);
+  //debug: printf("opening skip\n"); fflush(stdout);
   fin = fopen(argv[3], "r");
   #include "stub.skip.C"
   fclose(fin);
 
 ////////////////// Latlon check and transfer ///////////////////////////////
-  printf("latlon check and transfer\n"); fflush(stdout);
+  //debug: printf("latlon check and transfer\n"); fflush(stdout);
   obs.set((float) 157.0);
   for (int i = 0; i < tmp.xpoints()*tmp.ypoints(); i++) {
     ll.lat = obslat[i];
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
   global_12th<float> ice_coverage;
   global_12th<float> lat, lon, tarea;
 
-  printf("opening ice binary file\n"); fflush(stdout);
+  //debug: printf("opening ice binary file\n"); fflush(stdout);
   fin = fopen(argv[1],"r");
   ice_coverage.ftnin(fin);
   fclose(fin);

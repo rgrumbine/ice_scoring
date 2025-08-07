@@ -50,7 +50,7 @@ from scores import *
 
 #Retros:
 start = datetime.datetime(2024,12,10)
-end   = datetime.datetime(2025,1,2)
+end   = datetime.datetime(2025,1,6)
 #end   = datetime.datetime(2024,12,10)
 ptag="sh"
 
