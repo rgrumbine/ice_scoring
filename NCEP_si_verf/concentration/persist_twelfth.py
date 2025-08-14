@@ -3,8 +3,10 @@ import os
 import datetime
 
 
-ptag="sh"
-pole="south"
+#ptag="sh"
+#pole="south"
+ptag="nh"
+pole="north"
 lead = 16
 start = datetime.datetime(2025,1,2)
 
