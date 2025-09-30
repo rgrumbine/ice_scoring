@@ -20,10 +20,9 @@ Additional support:
 
 * exec    -- executables (not on git)
 * fix     -- fixed files of use at least in NCEP verification (not on git) 
-**  WCOSS: /u/Robert.Grumbine/rgdev/fix
-**  Hera: /home/Robert.Grumbine/rgdev/fix
-**  Gaea: /home/Robert.Grumbine/rg/fix
-**  Orion: /home/rgrumbin/rgdev/fix
+* *  WCOSS: /u/Robert.Grumbine/rgdev/fix
+* *  Ursa: /home/Robert.Grumbine/rgdev/fix
+* *  Gaea: /home/Robert.Grumbine/rg/fix
 
 
 Robert Grumbine
