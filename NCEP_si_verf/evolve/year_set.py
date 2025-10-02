@@ -3,9 +3,9 @@ import datetime
 
 
 # -- universal environmental settings
-FIXDIR='/ncrc/home1/Robert.Grumbine/rgref/fix/'
-EXDIR='/ncrc/home1/Robert.Grumbine/rgdev/ice_scoring/NCEP_si_verf/exec/'
-OUTDIR='/ncrc/home1/Robert.Grumbine/scratch/CICE_RUNS/'
+FIXDIR=os.environ['HOME']+'/rg/fix/'
+EXDIR=os.environ['HOME']+'/rgdev/ice_scoring/NCEP_si_verf/exec/'
+OUTDIR=os.environ['HOME']+'/scratch/CICE_RUNS/'
 
 acrit = 0.0
 

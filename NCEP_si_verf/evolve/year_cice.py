@@ -4,9 +4,9 @@ import datetime
 
 
 # -- ~universal environmental settings
-FIXDIR='/ncrc/home1/Robert.Grumbine/rgref/fix/'
-EXDIR='/ncrc/home1/Robert.Grumbine/rgdev/ice_scoring/NCEP_si_verf/exec/'
-OUTDIR='/ncrc/home1/Robert.Grumbine/scratch/CICE_RUNS/'
+FIXDIR=os.environ['HOME']+'/rg/fix/'
+EXDIR=os.environ['HOME']+'/rgdev/ice_scoring/NCEP_si_verf/exec/'
+OUTDIR=os.environ['HOME']+'/scratch/CICE_RUNS/'
 #OUTDIR='/ncrc/home1/Robert.Grumbine/scratch/CICE_RUNS/generation1/'
 
 # specific to given experiments
@@ -23,9 +23,8 @@ dt = datetime.timedelta(1)
 for evo in range(0,nexpt):
   sno="{:d}".format(evo)
   tag   = start
-  #debug: print("trying experiment ",evo, flush=True)
 
-  EXPT='/gaea_intel_smoke_gx3_1x1_evo'+sno+'_med3_yr_out.'+GEN
+  EXPT='/wcoss2_intel_smoke_gx3_1x1_evo'+sno+'_med3_yr_out.'+GEN
   if (not os.path.exists(OUTDIR+EXPT)):
       print("directory doesn't exist? ",OUTDIR+EXPT)
       exit(1)
