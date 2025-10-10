@@ -26,8 +26,8 @@ for evo in range(0,nexpt):
 
   EXPT='/wcoss2_intel_smoke_gx3_1x1_evo'+sno+'_med3_yr_out.'+GEN
   if (not os.path.exists(OUTDIR+EXPT)):
-      print("directory doesn't exist? ",OUTDIR+EXPT)
-      exit(1)
+      print("directory doesn't exist ",OUTDIR+EXPT)
+      continue
   
   fname = 'fout'+sno
 
