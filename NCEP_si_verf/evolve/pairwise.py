@@ -65,7 +65,7 @@ k = 0
 use = [4,7]
 for line in fin:
   words = line.split()
-  print(words[0],flush=True)
+  #print(words[0],flush=True)
   expt = words[0].split(':')
   if ('g' in expt[0]):
     d2 = expt[0].split('/')
@@ -100,8 +100,7 @@ candidates.append(pset)
 
 dominated = numpy.zeros((nexpt),dtype='bool')
 nparam = len(pset[1])
-#debug: 
-print("original pset: ",pset, dominated[k], flush=True)
+#debug: print("original pset: ",pset, dominated[k], flush=True)
 best_expt = pset[0]
 
 newbest = False
@@ -121,8 +120,7 @@ for k in range(1,nexpt):
     pset = copy.deepcopy(pset2)
     best_expt = pset[0]
     newbest = True
-    #debug: 
-    print("new best ",pset)
+    #debug: print("new best ",pset)
     # recursive check? of everything up to previous -- looking for dominated sets
     #domchck(candidates, ref, 1:best_expt
   else: 
@@ -156,7 +154,7 @@ if (newbest and passno < 10):
       pset = copy.deepcopy(pset2)
       best_expt = pset[0]
       newbest = True
-      print("new best ",pset)
+      #debug: print("new best ",pset)
     else: 
       print("error -- should not be here", flush=True)
   passno += 1
