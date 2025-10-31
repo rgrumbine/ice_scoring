@@ -24,7 +24,8 @@ for evo in range(0,nexpt):
   sno="{:d}".format(evo)
   tag   = start
 
-  EXPT='/wcoss2_intel_smoke_gx3_1x1_evo'+sno+'_med3_yr_out.'+GEN
+  #EXPT='/wcoss2_intel_smoke_gx3_1x1_evo'+sno+'_med3_yr_out.'+GEN
+  EXPT='/wcoss2_intel_smoke_gx1_1x1_evo'+sno+'_long_yr_out.'+GEN
   if (not os.path.exists(OUTDIR+EXPT)):
       print("directory doesn't exist ",OUTDIR+EXPT)
       continue

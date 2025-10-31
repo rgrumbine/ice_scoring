@@ -29,4 +29,4 @@ source ~/env3.12/bin/activate
 module load intel netcdf imagemagick
 
 # args are CICE testid, number of experiments, and concentration cutoff
-time python3 year_cice.py gens2 120 0.15
+time python3 year_cice.py gx1_5 30 0.15
