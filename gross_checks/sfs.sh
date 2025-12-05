@@ -29,7 +29,7 @@ source $HOME/env3.12/bin/activate
 
 #export modelout=$HOME/clim_data/rtofs_gross
 #export modelout=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/
-export modelout=$HOME/scratch6/COMROOT/icein1/sfs.20231101/00/mem000/products/ice/netcdf/native
+export modelout=$HOME/scratch6/COMROOT/icein2/sfs.20231101/00/mem000/products/ice/netcdf/native
 
 export modeltag=ufs
 export MODEL=sfs_ice

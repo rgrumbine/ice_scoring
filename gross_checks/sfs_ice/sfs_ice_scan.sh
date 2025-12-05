@@ -1,8 +1,8 @@
 #!/bin/sh 
 
 # ursa, WCOSS2
-export PYTHONPATH=$HOME/rgdev/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/
-export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
+#export PYTHONPATH=$HOME/rgdev/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/
+#export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 # gaea c6
 export PYTHONPATH=$HOME/rg6/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/
 export MODDEF=$HOME/rg6/ice_scoring/model_definitions
@@ -29,8 +29,8 @@ if [ -d $modelout ] ; then
     time python3 $GDIR/universal2d.py \
            $modelout/sfs.t${cyc}z.tripolar.f${fhr}.nc \
            cice.header \
-           $GDIR/sfs.199611 redone \
-           > gfs.cice.${f}.$level.$fhr.results
+           $GDIR/ctl/sfs.20231101 redone \
+           > gfs.cice.$level.$fhr.results
     fhr=`expr $fhr + 24`
     if [ $fhr -le 100 ] ; then
       fhr=0$fhr
@@ -38,5 +38,5 @@ if [ -d $modelout ] ; then
   done
 fi
 
-cat gfs.cice.*.results > all.gfs
+cat gfs.cice.*.results > all
 

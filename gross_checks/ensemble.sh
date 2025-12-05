@@ -31,8 +31,8 @@ do
   for mm in 11 
   do
     tag=${yy}${mm}01
-    #time python3 ensemble.py $HOME/clim_data/sfs/gefs.${tag}/ cice.header sfs.199611 gamma > bout.$yy.$mm
-    time python3 ensemble.py $HOME/clim_data/ep6/gefs.${tag}/ cice.header sfs.199611 gamma > bout.$yy.$mm
+    #time python3 ensemble.py $HOME/clim_data/sfs/gefs.${tag}/ cice.header ctl/sfs.199611 gamma > bout.$yy.$mm
+    time python3 ensemble.py $HOME/clim_data/ep6/gefs.${tag}/ cice.header ctl/sfs.199611 gamma > bout.$yy.$mm
   done
   yy=`expr $yy + 1`
 done

@@ -26,7 +26,7 @@ do
         time python3 $GDIR/universal2d.py \
                $modelout/gdas.$tag/$cyc/model/ice/history/gdas.ice.t${cyc}z.inst.f${fhr}.nc \
                cice.header \
-               $GDIR/sfs.199611 redone \
+               $GDIR/ctl/sfs.199611 redone \
                > gdas.cice.${f}.$level.$fhr.results
     done
   fi
@@ -38,7 +38,7 @@ do
   #    time python3 $GDIR/universal2d.py \
   #           $modelout/gfs.$tag/${cyc}/model/ice/history/gfs.ice.t${cyc}z.6hr_avg.f${fhr}.nc \
   #           cice.header \
-  #           $GDIR/sfs.199611 redone \
+  #           $GDIR/ctl/sfs.199611 redone \
   #           > gfs.cice.${f}.$level.$fhr.results
   #    fhr=`expr $fhr + 6`
   #    if [ $fhr -le 100 ] ; then
