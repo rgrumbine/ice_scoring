@@ -5,7 +5,7 @@
 #PBS -j oe
 #PBS -q "dev"
 #PBS -A ICE-DEV
-#PBS -l walltime=3:00:00
+#PBS -l walltime=2:00:00
 #PBS -l select=1:ncpus=1
 
 # gaeac5
@@ -29,4 +29,4 @@ source ~/env3.12/bin/activate
 module load intel netcdf imagemagick
 
 # args are CICE testid, number of experiments, and concentration cutoff
-time python3 year_cice.py gx1_5 30 0.15
+time python3 year_cice.py gen4 120 0.15
