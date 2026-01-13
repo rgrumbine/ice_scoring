@@ -1,14 +1,3 @@
-import os
-import sys
-import datetime
-from math import *
-import numpy as np
-import numpy.ma as ma
-
-import netCDF4
-
-from gross import bounders
-
 '''
 Redefined as a function
 Gross bound checks on .nc files, developed primarily from the sea ice (CICE6) output
@@ -22,22 +11,29 @@ control dictionary = argv[3] (input)
 bootstrapped dictionary = argv[4] (optional, may be written to if needed and present)
 '''
 
+import os
+import sys
+import numpy as np
+
+import netCDF4
+
+#-----------------------------------------------------------------------------
 
 def core_check(fname, moddef, ctl_dictionary, flying, fout = sys.stdout ):
   errcount = int(0)
   # Get model output file
   if (not os.path.exists(fname) ):
     print("failure to find ",fname)
-    exit(1)
+    sys.exit(1)
   else:
     model = netCDF4.Dataset(fname, 'r')
-  
+
   # Read in header definition file:
   if (os.path.exists(moddef)):
-    fin = open(moddef)
+    fin = open(moddef, encoding='utf-8')
   else:
     print("could not open definition file ",moddef)
-    exit(1)
+    sys.exit(1)
   headers = {
     'nx' : '',
     'ny' : '',
@@ -59,7 +55,7 @@ def core_check(fname, moddef, ctl_dictionary, flying, fout = sys.stdout ):
     headers[words[0]] = words[1]
     #debug: print(words[0] , words[1], flush=True)
     k += 1
-  
+
   # Acquire descriptive (e.g. nx, tlons) or support (e.g. tmask) variables
   nx = len(model.dimensions[headers['nx']])
   ny = len(model.dimensions[headers['ny']])
@@ -82,61 +78,58 @@ def core_check(fname, moddef, ctl_dictionary, flying, fout = sys.stdout ):
     for tmpindex in range(0,nx):
       tlats[:,tmpindex] = tmp[:]
     print("tried to work with 1d",tlats[ny-1, nx-1], tlats[1,1])
-    
+
   #LAND = 0, #Ocean = 1
   try:
     tmask = model.variables[headers['tmask']][:,:]
   except :
     tmask = np.zeros((ny, nx))
     tmask = 1.
-  
+
   try:
     tarea = model.variables["tarea"][:,:]
   except:
     tarea = np.zeros((ny, nx))
     tarea = 1.
-  
-  
+
   #Get the dictionary file, perhaps with bounds given
   try:
-    fdic = open(ctl_dictionary)
+    fdic = open(ctl_dictionary, encoding='utf-8')
   except:
     print("could not find a dictionary file ",ctl_dictionary)
-    exit(1)
-  
-  try: 
-    flying_dictionary = open(flying,"w")
+    sys.exit(1)
+
+  try:
+    flying_dictionary = open(flying,"w", encoding='utf-8')
     flyout = True
   except:
-    #debug 
+    #debug
     print("cannot write out to bootstrap dictionary file", flush=True)
     flyout = False
-  
-  
+
   # Now loop over all variables in the dictionary file looking for out of bounds values
   parmno = 0
   for line in fdic:
     words = line.split()
     parm = words[0]
     tmp = bounders.bounds(param=parm)
-    try: 
+    try:
       temporary_grid = model.variables[parm][0,:,:]
     except:
       print(parm," not in data file")
       continue
-  
+
     # find or bootstrap bounds -----------------
     tmp.set_bounds(temporary_grid, words, flyout, flying_dictionary)
-  
+
     #Global tests -- test whether the test fails anywhere
     gfail = tmp.whether(temporary_grid, fout = fout)
-  
+
     #Pointwise checks -- Show where (and which) test failed:
     if (gfail):
       errcount += tmp.where(temporary_grid, tlats, tlons, tmask, tarea, fout = fout)
-  
+
     parmno += 1
-  
-    
+
   # Done with checking
   return errcount

@@ -1,6 +1,9 @@
+'''
+Check speeds from dataset with u,v components
+Robert Grumbine
+'''
 import sys
 import numpy as np
-import numpy.ma as ma
 import netCDF4 as nc
 
 ny = 3298

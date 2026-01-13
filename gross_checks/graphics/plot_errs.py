@@ -1,9 +1,17 @@
-import os
+'''
+Plot output from gross error check
+Robert Grumbine
+'''
+
 import sys
 
-import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
-fin = open(sys.argv[1],"r")
+#----------------------------------------------------------
+fin = open(sys.argv[1],"r", encoding='utf-8')
 
 try:
   title_tag = sys.argv[2]
@@ -34,7 +42,7 @@ for line in fin:
 
 print("found ",len(i)," error points")
 if (len(i) == 0):
-    exit(0)
+    sys.exit(0)
 
 #debug print(max(lat), min(lat), max(lon), min(lon) )
 latmax = max(lat)
@@ -44,8 +52,6 @@ lonmin = min(lon)
 
 
 # i-j plot of error points ----------------------------------
-import matplotlib
-import matplotlib.pyplot as plt
 matplotlib.use('Agg') #batch mode
 
 
@@ -64,8 +70,6 @@ plt.close()
 
 
 # lat-lon plot of error points ---------------------------------
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 
 #proj = ccrs.LambertConformal(central_longitude=-170., central_latitude = 60., cutoff=25.)
 proj = ccrs.PlateCarree()
