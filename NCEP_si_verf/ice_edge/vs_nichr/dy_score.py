@@ -15,11 +15,12 @@ def parse_8digits(tag):
 
 obsdir = os.environ['OBSDIR']
 fixdir = os.environ['FIXDIR']
-exdir  = os.environ['EXDIR']
+#debug: print("obs, fix dirs:",obsdir, fixdir, flush=True)
 
-day   = datetime.timedelta(1)
 start = parse_8digits(sys.argv[1])
 end   = datetime.date.today()
+day   = datetime.timedelta(1)
+end -= day
 lead  = int(sys.argv[2])
 dt    = day*lead
 
@@ -28,30 +29,32 @@ for i in range(0,4*365+1):
   if (fdate >= end):
       break
 
+  # Southern Hemisphere
   sname = obsdir+"/cleaned/s."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/s."+fdate.strftime("%Y%j")+".beta"
   oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.s."+start.strftime("%Y%j") 
-  if (os.path.exists(sname) and os.path.exists(fname) ):
+  if (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
-    if (not os.path.exists(sname)):
+    if (not os.path.getsize(sname) > 1024):
       print("missing ",sname)
-    if (not os.path.exists(fname)):
+    if (not os.path.getsize(fname) > 1024):
       print("missing ", fname)
     print(flush=True)
 
+  # Northern Hemisphere
   sname = obsdir+"/cleaned/n."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/n."+fdate.strftime("%Y%j")+".beta"
   #oname = "score.n."+start.strftime("%Y%j") 
   oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.n."+start.strftime("%Y%j") 
-  if (os.path.exists(sname) and os.path.exists(fname) ):
+  if (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
-    if (not os.path.exists(sname)):
-      print("missing ",sname)
-    if (not os.path.exists(fname)):
+    if (not os.path.getsize(sname) > 1024):
+      print("missing ", sname)
+    if (not os.path.getsize(fname) > 1024):
       print("missing ", fname)
     print(flush=True)
 

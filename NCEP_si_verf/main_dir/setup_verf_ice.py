@@ -18,8 +18,8 @@ from scores import *
 #--------------- Utility Functions --------------------------------
 
 #------------------------------------------------------------------
-def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, 
-             imsdir, ncepdir, nsidcdir):
+def get_obs(initial_date, valid_date, imsverf, ncepverf, nsidcverf, osisafverf,  
+             imsdir, ncepdir, nsidcdir, osisafdir):
   retcode = int(0)
   initial    = int(initial_date.strftime("%Y%m%d"))
   valid      = int(valid_date.strftime("%Y%m%d"))
@@ -72,6 +72,48 @@ def score_nsidc(fcst_dir, nsidcdir, fdate, obsdate):
 
   else:
     print("No executable to score vs. nsidc", flush=True)
+    sys.stdout.flush()
+    retcode += 1
+
+  return retcode
+#------------------------------------------------------------------
+def score_osisaf(fcst_dir, osisaf, fdate, obsdate):
+  retcode = int(0)
+  vyear = int(obsdate.strftime("%Y"))
+
+  #isolate forecast file name references to fcst_name:
+  #debug: print("score_nsidc calling fcst_name with obsdate = ",obsdate, flush=True)
+  valid_fname = fcst_name(obsdate, fdate, fcst_dir)
+
+  if (not os.path.exists(valid_fname)):
+    print("setup_verf_ice.py cannot find forecast file for "+fdate.strftime("%Y%m%d"),obsdate.strftime("%Y%m%d"), flush=True )
+    retcode = int(1)
+    return retcode
+  
+  exname = 'generic_osisaf'
+  exname = 'ufs_osisaf'
+  if (os.path.exists(exdir + exname)):
+    #debug print("setup_verf_ice:score_osisaf Have the fcst vs. osisaf scoring executable", flush=True)
+    sys.stdout.flush()
+    pole="north"
+    ptag="n"
+    obsname = osisaf_name(pole, obsdate, osisafdir)
+
+    cmd = (exdir+exname+" "+valid_fname+" "+obsname+ " "+fixdir+"skip_hr " + 
+                exdir+"runtime.def "+ " > score."+
+                ptag+"."+obsdate.strftime("%Y%m%d")+"f"+fdate.strftime("%Y%m%d")+".csv")
+    x = os.system(cmd)
+    if (x != 0):
+      print("command ",cmd," returned error code ",x, flush=True)
+      retcode += x
+
+#    pole="south"
+#    ptag="s"
+#    obsname = osisaf_name(pole, obsdate, osisafdir)
+
+  else:
+    print("setup_verf_ice:No executable to score vs. osisaf", flush=True)
+    print("exdir: ",exdir,"exname: ",exname, flush=True)
     sys.stdout.flush()
     retcode += 1
 
@@ -129,6 +171,21 @@ if (single):
     obs = False
   else:
     obs = True
+#OSISAF -- netcdf
+  if (osisafverf):
+    x = get_osisaf(initial_date, valid_date, dirs['osisafdir'])
+    if (x != 0):
+      print("could not get file for osisaf verification, turning off osisafverf\n",flush=True)
+      osisafverf = False
+
+  x = get_obs(initial_date, valid_date,
+         imsverf, ncepverf, osisafverf, dirs['imsdir'], dirs['ncepdir'], 
+               dirs['osisafdir'])
+  if (x != 0):
+    print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ", valid_date.strftime("%Y%m%d")," ",x, flush=True)
+    obs = False
+  else:
+    obs = True
 
 #Model Forecast
   x = get_fcst(initial_date, valid_date, fcst_dir)
@@ -163,6 +220,13 @@ if (single):
     edge_score("nsidc_north", initial_date, "nsidc_north", valid_date)
     if(imsverf): edge_score("nsidc_north", valid_date, "ims", valid_date)
     if(ncepverf): edge_score("nsidc_north", valid_date, "ncep", valid_date)
+  if (osisafverf):
+    solo_score("osisaf", valid_date) #-- still to work out NH/SH vs. single input
+    osisaf_edge(initial_date.strftime("%Y%m%d"), 0.40, dirs['osisafdir'] )
+    osisaf_edge(valid_date.strftime("%Y%m%d"), 0.40, dirs['osisafdir'] )
+    edge_score("osisaf_north", initial_date, "osisaf_north", valid_date)
+    if(imsverf): edge_score("osisaf_north", valid_date, "ims", valid_date)
+    if(ncepverf): edge_score("osisaf_north", valid_date, "ncep", valid_date)
   if (fcst):
     #solo_score("fcst", valid_date) -- to be developed
 
@@ -170,11 +234,17 @@ if (single):
     if (imsverf):   edge_score("fcst", valid_date, "ims", valid_date)
     if (ncepverf):  edge_score("fcst", valid_date, "ncep", valid_date)
     if (nsidcverf): edge_score("fcst", valid_date, "nsidc_north", valid_date)
+    if (osisafverf): edge_score("fcst", valid_date, "osisaf_north", valid_date)
 
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
     else:
       print("could not score concentration for ",fcst_dir, dirs['nsidcdir'], initial_date, valid_date, flush=True)
+    
+    if (osisafverf): 
+      score_osisaf(fcst_dir, dirs['osisafdir'], initial_date, valid_date)
+    else:
+      print("could not score concentration for ",fcst_dir, dirs['osisafdir'], initial_date, valid_date, flush=True)
     
 
     print("\n")
@@ -185,7 +255,7 @@ else:
   for d in range (1,lead+1):
     valid_date = initial_date + d*dt
     x = get_obs(initial_date, valid_date,
-           imsverf, ncepverf, nsidcverf, dirs['imsdir'], dirs['ncepdir'], dirs['nsidcdir'])
+           imsverf, ncepverf, nsidcverf, osisafverf, dirs['imsdir'], dirs['ncepdir'], dirs['nsidcdir'], dirs['osisafdir'])
     if (x != 0):
       print("get_obs failed for ",initial_date.strftime("%Y%m%d")," ",
              valid_date.strftime("%Y%m%d")," ",x)
@@ -212,6 +282,9 @@ else:
     if (nsidcverf):
       nsidc_edge(initial_date.strftime("%Y%m%d"))
       nsidc_edge(valid_date.strftime("%Y%m%d"))
+    if (osisafverf):
+      osisaf_edge(initial_date.strftime("%Y%m%d"))
+      osisaf_edge(valid_date.strftime("%Y%m%d"))
     if (fcst):
       print("\n")
 

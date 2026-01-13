@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
 // High res sea ice analysis from netcdf:
   char *fname;
   fname = argv[2];
-#ifdef DEBUG
-  FILE *verbout;
-  verbout = fopen("verbout","w");
-#endif
+  #ifdef DEBUG
+    FILE *verbout;
+    verbout = fopen("verbout","w");
+  #endif
 
   #include "stub.osisaf.C"
 
@@ -91,8 +91,9 @@ int main(int argc, char *argv[]) {
   fscanf(fin, "%s", lonname);
   fscanf(fin, "%s", concname);
   fscanf(fin, "%s", thickname);
+  fscanf(fin, "%s", areaname);
   #ifdef DEBUG
-    fprintf(verbout, "%d %d %s %s %s %s \n",nx, ny, latname, lonname, concname, thickname);
+    fprintf(verbout, "%d %d %s %s %s %s %s\n",nx, ny, latname, lonname, concname, thickname, areaname);
     fflush(stdout);
   #endif
 
@@ -130,12 +131,12 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERV(retval,lonname);fflush(stdout);
   enter(lon, x);
 
-  //retval = nc_inq_varid(ncid, areaname, &varid);
-  //if (retval != 0) ERV(retval,areaname);
-  //retval = nc_get_var_float(ncid, varid, x); 
-  //if (retval != 0) ERV(retval,areaname);fflush(stdout);
-  //enter(tarea, x);
-  tarea.set(1.); // rtofs glo 2ds files don't include tarea
+  retval = nc_inq_varid(ncid, areaname, &varid);
+  if (retval != 0) ERV(retval,areaname);
+  retval = nc_get_var_float(ncid, varid, x); 
+  if (retval != 0) ERV(retval,areaname);fflush(stdout);
+  enter(tarea, x);
+  //tarea.set(1.); // rtofs glo 2ds files don't include tarea
 
   retval = nc_inq_varid(ncid, concname, &varid);
   if (retval != 0) ERV(retval,concname);
@@ -143,7 +144,7 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERV(retval,concname);fflush(stdout);
   enter(ice_coverage, x);
   
-  printf("about to open and read thickness: %s\n",thickname); fflush(stdout);
+  //debug: printf("about to open and read thickness: %s\n",thickname); fflush(stdout);
   retval = nc_inq_varid(ncid, thickname, &varid);
   if (retval != 0) ERV(retval,thickname);
   retval = nc_get_var_float(ncid, varid, x); 
@@ -182,21 +183,25 @@ int main(int argc, char *argv[]) {
     floc = obs.locate(ll);
     sloc = skip.locate(ll);
 
-    #ifdef VERBOSE
       if (floc.i <= -0.5 || floc.j <= -0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
+    #endif
+	continue;
       }
       if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
-      }
     #endif
+	continue;
+      }
     #ifdef DEBUG2
       fprintf(verbout, "model %d %d  %.3f %.3f %f vs. %f w. skip %d\n",
           loc.i, loc.j, ll.lat, ll.lon,
           ice_coverage[loc], obs[floc], (int) skip[sloc] );
       fflush(verbout);
     #endif
-    if (obs[floc] > 1.0) continue;
+    if (obs[floc] > 1.0 || obs[floc] < 0.) continue;
 
     observed[count] = obs[floc];
     skipped[count]  = skip[sloc];
@@ -232,8 +237,9 @@ int main(int argc, char *argv[]) {
   for (level = 0.0; level < 1.; level += 0.05) {
     contingency(observed, model, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("gllevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias, iiee);
+    printf("level,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias, iiee);
   }
+
 //  for (level = 0.0; level < 1.; level += 0.05) {
 //    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
 //    contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);

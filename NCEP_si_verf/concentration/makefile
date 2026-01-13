@@ -19,11 +19,31 @@ settings = -I /u/robert.grumbine/rgops/mmablib/include -L /u/robert.grumbine/rgo
 #settings=-I $(BASE)/include -L $(BASE) 
 #NETCDF=/Users/rmg3/usrlocal/
 
-all : generic_osisaf
+all : twelfth_osisaf_north twelfth_osisaf_south ufs_osisaf_north ufs_osisaf_south generic_osisaf
 #all : generic score_diag score_nsidc nsidc_nsidc score_cfsv2 persistence score_cice_inst
 
-generic_osisaf : generic_osisaf.C 
-	g++ $(opt) -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
+ufs_osisaf_north : ufs_osisaf.C
+	g++ $(opt) -DOSISAF_POLE=osisaf_north -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
+
+ufs_osisaf_south : ufs_osisaf.C
+	g++ $(opt) -DOSISAF_POLE=osisaf_south -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
+
+twelfth_osisaf_north : twelfth_osisaf.C
+	g++ $(opt) -DOSISAF_POLE=osisaf_north -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
+
+twelfth_osisaf_south : twelfth_osisaf.C
+	g++ $(opt) -DOSISAF_POLE=osisaf_south -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
+        $(settings) \
+        -lombf_4 -lnetcdf -o $(@)
+
+generic_osisaf : generic_osisaf.C
+	g++ $(opt) -DOSISAF_POLE=osisaf_north -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \
         $(settings) \
         -lombf_4 -lnetcdf -o $(@)
 

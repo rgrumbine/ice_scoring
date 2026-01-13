@@ -25,19 +25,22 @@ int main(int argc, char *argv[]) {
 // High res sea ice analysis from netcdf:
   char *fname;
   fname = argv[2];
-#ifdef DEBUG
-  FILE *verbout;
-  verbout = fopen("verbout","w");
-#endif
+  #ifdef DEBUG
+    FILE *verbout;
+    verbout = fopen("verbout","w");
+  #endif
 
+  //debug: printf("opening osisaf %s\n",fname); fflush(stdout);
   #include "stub.osisaf.C"
 
 ////////////////// skip grid ///////////////////////////////
+  //debug: printf("opening skip\n"); fflush(stdout);
   fin = fopen(argv[3], "r");
   #include "stub.skip.C"
   fclose(fin);
 
 ////////////////// Latlon check and transfer ///////////////////////////////
+  //debug: printf("latlon check and transfer\n"); fflush(stdout);
   obs.set((float) 157.0);
   for (int i = 0; i < tmp.xpoints()*tmp.ypoints(); i++) {
     ll.lat = obslat[i];
@@ -76,93 +79,25 @@ int main(int argc, char *argv[]) {
 
 
 ////////////////// Model variables ///////////////////////////////
-  fin = fopen(argv[4],"r");
-  if (fin == (FILE*) NULL) {
-    printf("failed to open model variable definition file %s\n",argv[4]);
-    exit(1);
+/// 12th degree lat-lon sea ice analysis grid
+
+  global_12th<float> ice_coverage;
+  global_12th<float> lat, lon, tarea;
+
+  //debug: printf("opening ice binary file\n"); fflush(stdout);
+  fin = fopen(argv[1],"r");
+  ice_coverage.ftnin(fin);
+  fclose(fin);
+
+  for (loc.j = 0; loc.j < lat.ypoints() ; loc.j++) {
+  for (loc.i = 0; loc.i < lat.xpoints() ; loc.i++) {
+    ll = lat.locate(loc);
+    lat[loc] = ll.lat;
+    lon[loc] = ll.lon;
+    tarea[loc] = lat.cellarea(loc);
   }
-  int nx, ny;
-  char latname[900], lonname[900], areaname[900], concname[900], thickname[900];
-  float *x;
-
-  fscanf(fin, "%d", &nx);
-  fscanf(fin, "%d", &ny);
-  fscanf(fin, "%s", latname);
-  fscanf(fin, "%s", lonname);
-  fscanf(fin, "%s", concname);
-  fscanf(fin, "%s", thickname);
-  #ifdef DEBUG
-    fprintf(verbout, "%d %d %s %s %s %s \n",nx, ny, latname, lonname, concname, thickname);
-    fflush(stdout);
-  #endif
-
-  grid2<float> lat(nx, ny), lon(nx, ny), tarea(nx, ny);
-  grid2<float> ice_coverage(nx, ny), ice_thickness(nx, ny);
-
-  x = (float*) malloc(sizeof(float)*nx*ny);
-
-  retval = nc_open(argv[1], NC_NOWRITE, &ncid);
-  if (retval != 0) {
-  #ifdef DEBUG
-    fprintf(verbout, "some problem in nc_open of %s\n",argv[1]);
-    fflush(verbout);
-  #endif
-    printf("some problem in nc_open of %s\n",argv[1]);
-    fflush(stdout);
-    ERR(retval);
-    fflush(stdout);
   }
-  #ifdef DEBUG
-    fprintf(verbout, "passed nc_open of %s\n",argv[1]);
-    fflush(verbout);
-  #endif
 
-// go over all variables:
-  retval = nc_inq_varid(ncid, latname, &varid);
-  if (retval != 0) ERV(retval,latname);
-  retval = nc_get_var_float(ncid, varid, x); 
-  if (retval != 0) ERV(retval,latname);fflush(stdout);
-  enter(lat, x);
-  
-  retval = nc_inq_varid(ncid, lonname, &varid);
-  if (retval != 0) ERV(retval,lonname);
-  retval = nc_get_var_float(ncid, varid, x); 
-  if (retval != 0) ERV(retval,lonname);fflush(stdout);
-  enter(lon, x);
-
-  //retval = nc_inq_varid(ncid, areaname, &varid);
-  //if (retval != 0) ERV(retval,areaname);
-  //retval = nc_get_var_float(ncid, varid, x); 
-  //if (retval != 0) ERV(retval,areaname);fflush(stdout);
-  //enter(tarea, x);
-  tarea.set(1.); // rtofs glo 2ds files don't include tarea
-
-  retval = nc_inq_varid(ncid, concname, &varid);
-  if (retval != 0) ERV(retval,concname);
-  retval = nc_get_var_float(ncid, varid, x); 
-  if (retval != 0) ERV(retval,concname);fflush(stdout);
-  enter(ice_coverage, x);
-  
-  printf("about to open and read thickness: %s\n",thickname); fflush(stdout);
-  retval = nc_inq_varid(ncid, thickname, &varid);
-  if (retval != 0) ERV(retval,thickname);
-  retval = nc_get_var_float(ncid, varid, x); 
-  if (retval != 0) ERV(retval,thickname);fflush(stdout);
-  enter(ice_thickness, x);
-
-  #ifdef DEBUG
-    printf("ice thickness max %f\n",ice_thickness.gridmax() ); fflush(stdout);
-    fprintf(verbout, "ice thickness max %f\n",ice_thickness.gridmax() ); fflush(verbout);
-  #endif
-
-  retval = nc_close(ncid);
-  if (retval != 0) ERR(retval); fflush(stdout);
-
-  #ifdef DEBUG
-    fprintf(verbout,"done with reading in netcdf of model\n");
-    printf("done with reading in netcdf of model\n");
-    fflush(verbout);
-  #endif
 
 ///////////////// End of Netcdf portion ////////////////////////////////////////////
 //
@@ -182,21 +117,25 @@ int main(int argc, char *argv[]) {
     floc = obs.locate(ll);
     sloc = skip.locate(ll);
 
-    #ifdef VERBOSE
       if (floc.i <= -0.5 || floc.j <= -0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
+    #endif
+	continue;
       }
       if (floc.i > obs.xpoints()-0.5 || floc.j > obs.ypoints()-0.5) {
+    #ifdef DEBUG
         printf("floc %f %f\n", floc.i, floc.j);
-      }
     #endif
+	continue;
+      }
     #ifdef DEBUG2
       fprintf(verbout, "model %d %d  %.3f %.3f %f vs. %f w. skip %d\n",
           loc.i, loc.j, ll.lat, ll.lon,
           ice_coverage[loc], obs[floc], (int) skip[sloc] );
       fflush(verbout);
     #endif
-    if (obs[floc] > 1.0) continue;
+    if (obs[floc] > 1.0 || obs[floc] < 0.) continue;
 
     observed[count] = obs[floc];
     skipped[count]  = skip[sloc];
@@ -232,13 +171,8 @@ int main(int argc, char *argv[]) {
   for (level = 0.0; level < 1.; level += 0.05) {
     contingency(observed, model, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("gllevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias, iiee);
+    printf("level,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias, iiee);
   }
-//  for (level = 0.0; level < 1.; level += 0.05) {
-//    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
-//    contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-//    printf("nhlevel,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-//  }
 
   return 0;
 }
