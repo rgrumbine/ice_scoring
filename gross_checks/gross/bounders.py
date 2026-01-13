@@ -1,17 +1,18 @@
-import os
-import sys
-from math import *
-import numpy as np
-import numpy.ma as ma
-
-import netCDF4
-
-#---------------------------------------------------
+'''
+---------------------------------------------------
 #Develop a class for bounds checking
 #Robert Grumbine
 #30 January 2020
+'''
+import sys
+import numpy as np
+from numpy import ma
+
+import netCDF4
+
 
 class bounds:
+  ''' class bounds: class to hold bounds and apply them '''
 
   def __init__(self, param = "", pmin=0., pmax = 0., pmaxmin = 0., pminmax = 0.):
     self.param = param
@@ -21,6 +22,7 @@ class bounds:
     self.pminmax = float(pminmax)
 
   def scan(self, fname, fout = sys.stdout ):
+    ''' bounds.scan(fname, fout=sys.stdout) -- scan input netcdf file and write results to fout '''
     orig  = netCDF4.Dataset(fname, "r")
 
     #After https://stackoverflow.com/questions/13936563/copy-netcdf-file-using-python
@@ -30,7 +32,8 @@ class bounds:
 
     print("Variables, assumed gridded", file = fout)
     for name, var in orig.variables.items():
-      print("{:14s}".format(name), orig.variables[name][:].max(), orig.variables[name][:].min(), var.shape, len(var.shape), file=fout )
+      print("{:14s}".format(name), orig.variables[name][:].max(), \
+              orig.variables[name][:].min(), var.shape, len(var.shape), file=fout )
     fout.close()
     orig.close()
 
@@ -40,13 +43,13 @@ class bounds:
     #debug print("in bootstrap, filenames = ",dictionary_file, " and ",bootstrap_file)
 
     try:
-      fdic = open(dictionary_file)
+      fdic = open(dictionary_file, encoding='utf-8')
     except:
       print("could not find a dictionary file ",dictionary_file, file = sys.stderr )
-      exit(1)
-  
+      sys.exit(1)
+
     try:
-      flying_dictionary = open(bootstrap_file, "w")
+      flying_dictionary = open(bootstrap_file, "w", encoding='utf-8')
       flyout = True
     except:
       print("cannot write out to bootstrap dictionary file", file = sys.stderr )
@@ -79,10 +82,10 @@ class bounds:
 
   def readin(self, dictionary_file):
     try:
-      fdic = open(dictionary_file)
+      fdic = open(dictionary_file, encoding='utf-8')
     except:
       print("could not find a dictionary file ",dictionary_file, file = sys.stderr )
-      exit(1)
+      sys.exit(1)
 
     parmno = 0
     for line in fdic:
@@ -127,14 +130,15 @@ class bounds:
     if (self.pmax < 0):
        self.pmax *= 0.999
     else:
-       self.pmax *= 1.001    
+       self.pmax *= 1.001
     self.pmaxmin = self.pmin + 0.1*(self.pmax - self.pmin)
     self.pminmax = self.pmax - 0.1*(self.pmax - self.pmin)
-    print("{:14s}".format(self.param), strprec(self.pmin), strprec(self.pmax), strprec(self.pmaxmin), strprec(self.pminmax), file=flying_dictionary )
+    print("{:14s}".format(self.param), strprec(self.pmin), strprec(self.pmax), \
+            strprec(self.pmaxmin), strprec(self.pminmax), file=flying_dictionary )
 
   def show(self, flying_out_file = sys.stdout):
     #RG: need to do something different in formatting small numbers (fsalt, for ex)
-    strpmin   = strprec(self.pmin) 
+    strpmin   = strprec(self.pmin)
     strpmax   = strprec(self.pmax)
     strpmaxmin = strprec(self.pmaxmin)
     strpminmax = strprec(self.pminmax)
@@ -152,17 +156,21 @@ class bounds:
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:14s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low minimum ", gmin, \
+              " versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:14s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high minimum ", gmin, \
+              " versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:14s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high maximum ", gmax, \
+              " versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:14s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
-      gfail = True    
+      print("{:14s}".format(self.param)," excessively low maximum ", gmax, \
+              " versus ",self.pminmax," allowed", file=fout)
+      gfail = True
     return gfail
 
   def whether(self, grid, fout = sys.stdout):
@@ -173,19 +181,22 @@ class bounds:
     gmax = grid.max()
     gfail = False
     if (gmin < self.pmin):
-      print("{:14s}".format(self.param)," excessively low minimum ", gmin," versus ",self.pmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low minimum ", gmin, \
+              " versus ",self.pmin," allowed", file=fout)
       gfail = True
     if (gmin > self.pmaxmin):
-      print("{:14s}".format(self.param)," excessively high minimum ", gmin," versus ",self.pmaxmin," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high minimum ", gmin, \
+              " versus ",self.pmaxmin," allowed", file=fout)
       gfail = True
     if (gmax > self.pmax):
-      print("{:14s}".format(self.param)," excessively high maximum ", gmax," versus ",self.pmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively high maximum ", gmax, \
+              " versus ",self.pmax," allowed", file=fout)
       gfail = True
     if (gmax < self.pminmax ):
-      print("{:14s}".format(self.param)," excessively low maximum ", gmax," versus ",self.pminmax," allowed", file=fout)
+      print("{:14s}".format(self.param)," excessively low maximum ", gmax, \
+              " versus ",self.pminmax," allowed", file=fout)
       gfail = True
     return gfail
-
 
 
   def where(self, grid, lats, lons, mask, area, level = 1013.25, fout=sys.stdout):
@@ -193,30 +204,33 @@ class bounds:
     #debug print("in where ", file=fout,flush=True)
     errcount = 0
     #Show where (and which) test failed.  self is the bounds data
-    if (grid.min() < self.pmin): 
+    if (grid.min() < self.pmin):
       if (level == 1013.25):
         print("parameter i j longitude latitude model_value test_checked test_value", file=fout)
       else:
-        print("parameter i j level longitude latitude model_value test_checked test_value", file=fout)
+        print("parameter i j level longitude latitude model_value test_checked test_value", \
+                file=fout)
 
       mask = ma.masked_array(grid < self.pmin)
       indices = mask.nonzero()
       errcount += len(indices[0])
-      
+
       for k in range(0,len(indices[0])):
         i = indices[1][k]
         j = indices[0][k]
         if (level == 1013.25):
           print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmin ", self.pmin,file=fout)
         else:
-          print(self.param,i,j,level, lons[j,i], lats[j,i], grid[j,i], " vs pmin ", self.pmin,file=fout)
+          print(self.param,i,j,level, lons[j,i], lats[j,i], grid[j,i], " vs pmin ", self.pmin,\
+                  file=fout)
 
 
     if (grid.max() > self.pmax):
       if (level == 1013.25):
         print("parameter i j longitude latitude model_value test_checked test_value", file=fout)
       else:
-        print("parameter i j level longitude latitude model_value test_checked test_value", file=fout)
+        print("parameter i j level longitude latitude model_value test_checked test_value", \
+                file=fout)
       mask = ma.masked_array(grid > self.pmax)
       indices = mask.nonzero()
       errcount += len(indices[0])
@@ -227,14 +241,15 @@ class bounds:
         if (level == 1013.25):
           print(self.param,i,j,lons[j,i], lats[j,i], grid[j,i], " vs pmax ", self.pmax,file=fout)
         else:
-          print(self.param,i,j,level, lons[j,i], lats[j,i], grid[j,i], " vs pmax ", self.pmax,file=fout)
+          print(self.param,i,j,level, lons[j,i], lats[j,i], grid[j,i], " vs pmax ", self.pmax,\
+                  file=fout)
 
     fout.flush()
     return errcount
 
 
   def where_manual(self, grid, lats, lons, mask, area):
-    #Show where (and which) test failed:
+    ''' where_manual: Show where (and which) test failed '''
     ny = grid.shape[0]
     nx = grid.shape[1]
     xslice = np.array(nx)
@@ -247,7 +262,7 @@ class bounds:
       xslice = self.pmin
       for j in range (0,ny):
         if ( (grid[j,:] >= xslice).all() ):
-          continue 
+          continue
         #print("scanning along j = ",j, "slice test = ", (grid[j,:] >= xslice).all() )
         for i in range (0,nx):
           if (grid[j,i] < self.pmin):
@@ -266,9 +281,9 @@ class bounds:
       sys.stdout.flush()
 
 def strprec(x):
+  ''' strprec(x) -- scientific format for numbers < 1.e-3, else fixed point '''
   if (abs(x) < 1.e-3):
     strpmin = "{:.5e}".format(x)
   else:
     strpmin = "{:.5f}".format(x)
   return strpmin
-  

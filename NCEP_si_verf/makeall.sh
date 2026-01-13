@@ -19,6 +19,13 @@ source ~/env3.12/bin/activate
 #module load netcdf/4.7.4 #4.7.2-parallel, pnetcdf/1.12.0
 #python
 
+#netcdf -- ursa -- update 20221006
+module load hpc-x/2.18.1-icc
+module load netcdf-c/4.9.2
+module load netcdf-fortran/4.6.1
+export NETCDF=$NETCDF_C_ROOT
+source $HOME/env3.11/bin/activate
+
 #netcdf -- Hera -- update 20221006
 #module load intel/2022.1.2
 #module load impi/2022.1.2
@@ -59,6 +66,7 @@ fi
 set -xe
 #ice_edge : 
 cd ${base}/ice_edge/C
+export CXX=icpx
 make
 mv cscore_edge find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_ncep find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south ${EXDIR}
 

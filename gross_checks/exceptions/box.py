@@ -1,4 +1,9 @@
-import os
+'''
+Read a gross check file and extract points inside a lat-lon box
+Arguments are filename, longitude bounds, latitude bounds (min, max)
+Robert Grumbine
+'''
+#import os
 import sys
 
 # Multiple inheritance from both bounds (value limits) and curves (domains)
@@ -6,10 +11,6 @@ import sys
 #from curves import *
 #from regions import *
 
-'''
-Read a gross check file and extract points inside a lat-lon box
-Arguments are filename, longitude bounds, latitude bounds (min, max)
-'''
 
 #in box -------------------------------------------------
 f = open(sys.argv[1])
@@ -37,7 +38,6 @@ for line in f:
   value = float(words[5])
   ok = False
 
-  if (tlat >= latmin and tlat <= latmax and 
+  if (tlat >= latmin and tlat <= latmax and
       tlon >= lonmin and tlon <= lonmax ):
     print(line,end="")
-  

@@ -1,14 +1,3 @@
-import os
-import sys
-import datetime
-from math import *
-import numpy as np
-import numpy.ma as ma
-
-import netCDF4
-
-from gross import bounders
-
 '''
 Gross bound checks on .nc files, developed primarily from the sea ice (CICE6) output
 Robert Grumbine
@@ -22,21 +11,30 @@ bootstrapped dictionary = argv[4] (optional, may be written to if needed and pre
 Requires environment to have MODDEF defined
 '''
 
+import os
+import sys
+import numpy as np
+
+import netCDF4
+
+from gross import bounders
+
+#--------------------------------------------------------------------
 errcount = int(0)
 
 # Get model output file
 if (not os.path.exists(sys.argv[1]) ):
   print("failure to find ",sys.argv[1])
-  exit(1)
+  sys.exit(1)
 else:
   model = netCDF4.Dataset(sys.argv[1], 'r')
 
 # Read in header definition file:
 if (os.path.exists(os.environ['MODDEF']+'/'+sys.argv[2])):
-  fin = open(os.environ['MODDEF']+'/'+sys.argv[2],'r')
+  fin = open(os.environ['MODDEF']+'/'+sys.argv[2],'r', encoding='utf-8')
 else:
   print("could not open definition file ",os.environ['MODDEF']+'/'+sys.argv[2])
-  exit(1)
+  sys.exit(1)
 headers = {
   'nx' : '',
   'ny' : '',
@@ -64,7 +62,7 @@ nx = len(model.dimensions[headers['nx']])
 ny = len(model.dimensions[headers['ny']])
 tlons = model.variables[headers['TLON']][:,:]
 tlats = model.variables[headers['TLAT']][:,:]
-  
+
 #LAND = 0, #Ocean = 1
 try:
   tmask = model.variables[headers['tmask']][:,:]
@@ -81,13 +79,13 @@ except:
 
 #Get the dictionary file, perhaps with bounds given
 try:
-  fdic = open(sys.argv[3])
+  fdic = open(sys.argv[3], encoding='utf-8')
 except:
   print("could not find a dictionary file ",sys.argv[3])
-  exit(1)
+  sys.exit(1)
 
-try: 
-  flying_dictionary = open(sys.argv[4],"w")
+try:
+  flying_dictionary = open(sys.argv[4],"w", encoding='utf-8')
   flyout = True
 except:
   #debug print("cannot write out to bootstrap dictionary file", flush=True)
@@ -100,7 +98,7 @@ for line in fdic:
   words = line.split()
   parm = words[0]
   tmp = bounders.bounds(param=parm)
-  try: 
+  try:
     temporary_grid = model.variables[parm][0,:,:]
   except:
     print(parm," not in data file")

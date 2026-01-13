@@ -10,16 +10,16 @@ opts = $(ccopts) $(mmabopts) $(ncopts)
 all : cice_solo solo_ncep solo_ims solo_nsidc binary
 
 cice_solo : cice_solo.C readers.C
-	$(CC) $< -DCICE $(opts) -o $(@)
+	$(CXX) $< -DCICE $(opts) -o $(@)
 
 solo_nsidc : solo.C readers.C
-	$(CC) $< -DNSIDC $(opts) -o $(@)
+	$(CXX) $< -DNSIDC $(opts) -o $(@)
 
 solo_ncep : solo.C readers.C
-	$(CC) $< -DNCEP $(opts) -o $(@)
+	$(CXX) $< -DNCEP $(opts) -o $(@)
 
 solo_ims : solo.C readers.C
-	$(CC) $< -DIMS $(opts) -o $(@)
+	$(CXX) $< -DIMS $(opts) -o $(@)
 
 binary : binary.C readers.C
-	$(CC) $< $(opts) -o $(@)
+	$(CXX) $< $(opts) -o $(@)

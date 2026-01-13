@@ -11,9 +11,9 @@ set -x
 export level=extreme
 export cyc=00
 
-for f in 20241210 20241211 20241212
-#f=20241116
-#while [ $f -le 20241207 ]
+#for f in 20241210 20241211 20241212
+f=20250701
+while [ $f -le 20250825 ]
 do
   tag=$f
   yy=`echo $f | cut -c1-4`
@@ -26,26 +26,26 @@ do
         time python3 $GDIR/universal2d.py \
                $modelout/gdas.$tag/$cyc/model/ice/history/gdas.ice.t${cyc}z.inst.f${fhr}.nc \
                cice.header \
-               $GDIR/sfs.199611 redone \
+               $GDIR/ctl/sfs.199611 redone \
                > gdas.cice.${f}.$level.$fhr.results
     done
   fi
-  if [ -d $modelout/gfs.$tag ] ; then
-    #for fhr in 006 012 
-    fhr=006
-    while [ $fhr -le 240 ]
-    do
-      time python3 $GDIR/universal2d.py \
-             $modelout/gfs.$tag/${cyc}/model/ice/history/gfs.ice.t${cyc}z.6hr_avg.f${fhr}.nc \
-             cice.header \
-             $GDIR/sfs.199611 redone \
-             > gfs.cice.${f}.$level.$fhr.results
-      fhr=`expr $fhr + 6`
-      if [ $fhr -le 100 ] ; then
-	fhr=0$fhr
-      fi
-    done
-  fi
+  #if [ -d $modelout/gfs.$tag ] ; then
+  #  #for fhr in 006 012 
+  #  fhr=006
+  #  while [ $fhr -le 240 ]
+  #  do
+  #    time python3 $GDIR/universal2d.py \
+  #           $modelout/gfs.$tag/${cyc}/model/ice/history/gfs.ice.t${cyc}z.6hr_avg.f${fhr}.nc \
+  #           cice.header \
+  #           $GDIR/ctl/sfs.199611 redone \
+  #           > gfs.cice.${f}.$level.$fhr.results
+  #    fhr=`expr $fhr + 6`
+  #    if [ $fhr -le 100 ] ; then
+#	fhr=0$fhr
+#      fi
+#    done
+#  fi
 
   f=`expr $f + 1`
   f=`$HOME/bin/dtgfix3 $f`
