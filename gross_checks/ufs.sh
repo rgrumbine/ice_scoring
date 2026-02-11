@@ -29,9 +29,9 @@ source $HOME/env3.12/bin/activate
 
 #export modelout=$HOME/clim_data/rtofs_gross
 #export modelout=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/
-export modelout=/lfs/h2/emc/global/noscrub/emc.global/RETRO_GFSv17/savefailedtest/retrotestgfs03/enkfgdas.2023041712/enkfgdasefcs015.2023041712/fcst.3647035
+#export modelout=/lfs/h2/emc/global/noscrub/emc.global/RETRO_GFSv17/savefailedtest/retrotestgfs03/enkfgdas.2023041712/enkfgdasefcs015.2023041712/fcst.3647035
+export modelout=$HOME/noscrub/v17/
 export modeltag=ufs
-export MODEL=ufs_atm
 
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
 #hera: export GDIR=/home/Robert.Grumbine/rgdev/ice_scoring/gross_checks/
@@ -55,7 +55,7 @@ cd  $HOME/scratch/gross/$modeltag
 ln -sf $GDIR/curves curves
 
 set -x
-for model in ufs_atm ufs_ice
+for model in ufs_ice
 do
   export MODEL=$model
   time $GDIR/$MODEL/${MODEL}_scan.sh
@@ -66,4 +66,3 @@ do
   python3 $GDIR/graphics/plot_errs.py all all 12.
   mv all all.$MODEL
 done
-

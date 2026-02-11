@@ -1,22 +1,22 @@
-Gulf_Ob               sss_h     0.0  15.0        1.0  12.0         Physical
-Gulf_of_Finland       sss_h     0.0  15.0        1.0  12.0         Physical
 Persian_Gulf          sss_h    35.0  47.0       35.0  40.0         Physical
+Gulf_Ob               sss_h     0.0  15.0        1.0  12.0         Physical
+Amazon_Outflow        sss_h     0.0  15.0        1.0  12.0         Physical
+Red_Sea               sss_h    35.0  42.0       37.0  38.0         Physical
+Rio_de_La_Plata       sss_h     0.0  15.0        1.0  12.0         Physical
+Gulf_of_Finland       sss_h     0.0  15.0        1.0  12.0         Physical
+Ganges_Delta          sss_h     0.0  15.0        1.0  12.0         Physical
 Gulf_of_Suez          sss_h    35.0  43.5       37.0  38.0         Physical
 Spencer_Gulf          sss_h    35.0  43.0       20.0  37.0         Physical
 Shark_Bay             sss_h    40.0  48.0       20.0  37.0         Physical
-Amazon_Outflow        sss_h     0.0  15.0        1.0  12.0         Physical
-Rio_de_La_Plata       sss_h     0.0  15.0        1.0  12.0         Physical
 Sea_of_Azov_fresh     sss_h     0.0  15.0        1.0   4.0         Physical
 Gulf_of_Bothnia       sss_h     0.5  15.0        1.0  12.0         Physical
 Laptev_fresh          sss_h     0.0  15.0        1.0  12.0         Physical
 Yangtze_Outflow       sss_h     0.0  15.0        1.0  12.0         Physical
-Ganges_Delta          sss_h     0.0  15.0        1.0  12.0         Physical
 Mackenzie_Outflow     sss_h     0.0  15.0        1.0  12.0         Physical
 Kara_fresh            sss_h     0.0  15.0        1.0   4.0         Physical
 Tropics               fswdn_h        950.  1110.0     200.0 600.0         Physical (1 hr gdas sum)
 Tropics               scale_factor_h 950.  1110.0     200.0 600.0         Physical (1 hr gdas sum)
 Amur_Outflow          sss_h     0.0  15.0        1.0  12.0         Physical
-Pechora_Sea           sss_h     0.0  15.0        1.0  12.0         Physical
 Baltic_Sea            sss_h     0.0  15.0        1.0  10.0         Physical
 Orinoco_Outflow       sss_h     0.0  15.0        1.0  12.0         Physical
 East_Siberian_fresh   sss_h     0.0  15.0        1.0  12.0         Physical
@@ -25,4 +25,7 @@ YK_Delta              sss_h     0.0  15.0        1.0   4.0         Physical
 Delaware_Bay          sss_h     0.0  15.0        1.0  12.0         Physical
 Gulf_of_Riga          sss_h     0.0  15.0        1.0   4.0         Physical
 White_Sea             sss_h     0.0  15.0        1.0   4.0         Physical
-Red_Sea               sss_h    35.0  42.0       37.0  38.0         Physical
+Congo_fresh           sss_h     0.0  15.0        1.0   4.0         Physical
+Chesapeake_fresh      sss_h     0.0  15.0        1.0   4.0         Physical
+Pechora_Sea           sss_h     0.0  15.0        1.0  12.0         Physical
+Shatt_al_arab         sss_h     0.0  15.0        1.0  12.0         Physical

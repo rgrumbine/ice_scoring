@@ -71,8 +71,9 @@ plt.close()
 
 # lat-lon plot of error points ---------------------------------
 
+proj = ccrs.NorthPolarStereo(central_longitude=-170., true_scale_latitude = 60.)
 #proj = ccrs.LambertConformal(central_longitude=-170., central_latitude = 60., cutoff=25.)
-proj = ccrs.PlateCarree()
+#proj = ccrs.PlateCarree()
 
 ax = plt.axes(projection = proj)
 fig = plt.figure(figsize = (8,6))
@@ -84,8 +85,8 @@ xlocs = list(range(-180,181,30))
 
 if ((latmax - latmin) < 30):
   mean = (latmax + latmin)/2.
-  ax.set_extent((-180, 180, mean + 30, mean - 30), crs=ccrs.PlateCarree() )
-  ylocs = list(range(int(mean-30), int(mean + 30), 5))
+  ax.set_extent((-180, 180, min(90, mean + 30), max(-90, mean - 30)), crs= proj )
+  ylocs = list(range(int(max(-90, mean-30)), int(min(90, mean + 30) ), 5))
 else:
   ylocs = list(range(-90, 91, 15))
 
