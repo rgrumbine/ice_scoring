@@ -18,7 +18,10 @@ try:
 except:
   title_tag = "ref"
 
-markersize = float(sys.argv[3])
+try:
+  markersize = float(sys.argv[3])
+except:
+  markersize = 12
 
 parm = []
 i = []
@@ -54,7 +57,6 @@ lonmin = min(lon)
 # i-j plot of error points ----------------------------------
 matplotlib.use('Agg') #batch mode
 
-
 #Elaborations:
 #  title
 #  axis labels
@@ -67,7 +69,6 @@ ax.grid()
 plt.title(title_tag)
 plt.savefig("ij_errs_"+title_tag+".png")
 plt.close()
-
 
 # lat-lon plot of error points ---------------------------------
 
@@ -93,7 +94,7 @@ else:
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
 ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="c") )
-if markersize < 12:
+if markersize <= 12:
     alpha = 1
 else:
     alpha = 0.2/25
@@ -101,5 +102,3 @@ else:
 plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize, alpha = alpha)
 plt.savefig("ll_errs_"+title_tag+".png")
 plt.close()
-
-#debug: print(markersize)

@@ -3,7 +3,7 @@ divu_h      -400.0        400.0        -1.0       1.0     # known error, shouldn
 fbot_h     -3858.0          0.0     -3473.0    -285.0     # known error, should be order 300
 fhocn_h       -5.0e3       10.0        -1.e-8     2.0     # known error, W/m^2 heat flux to ocean
 fresh_h     -100.0        100.0e0      15.0     221.0     # known error, cm/day
-frzmlt_h      -1.5e6      350.0        -6.5e5    -7.0e4   # issue filed, min should be -300 or so
+frzmlt_h      -1.6e6      350.0        -6.5e5    -7.0e4   # this is divided by concentration. small concentrations -> enormous values
 shear_h        0.0       1000.0        19.0     177.0     # known error, %/day 
 sitempbot_h   -1.0e9      273.2       250.0     270.0     # issue filed, K
 sitempsnic_h  -1.0e9      273.3       250.0     270.0     # issue filed, K
@@ -55,7 +55,7 @@ strairy_h     -1.5          1.5        -0.3       0.2
 Tair_h       -50.0         40.0       -33.4      27.3    
 Tref_h       -50.0         40.0       -33.0      27.4    
 Tsfc_h       -50.0          0.01      -38.4      -4.2    
-uatm_h       -34.0         34.0       -14.1      15.2     # hurricane speed 
-vatm_h       -34.0         34.0       -14.2      14.1     # hurricane speed 
+uatm_h       -40.0         40.0       -14.1      15.2     # above hurricane speed, 33 m/s
+vatm_h       -40.0         40.0       -14.2      14.1     # above hurricane speed 
 uocn_h        -2.0          2.0        -0.8       0.7    
 vocn_h        -2.5          1.5        -2.1       0.5
