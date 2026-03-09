@@ -11,7 +11,7 @@ file ends with a line of '9999'
 '''
 
 import sys
-from math import sqrt, sin, cos, pi 
+from math import sqrt, sin, cos, pi, asin
 
 
 #class bundle (a bunch of segments)
@@ -120,7 +120,7 @@ class bundle:
 
   def print(self, file="stdout"):
     for fk in range (0,len(self.segments)):
-      self.segments[fk].print(file=file)
+      self.segments[fk].print(fout=file)
 
 
 def parse_pt(beta):

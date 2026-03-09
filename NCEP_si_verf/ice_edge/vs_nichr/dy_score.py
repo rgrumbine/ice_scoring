@@ -33,7 +33,9 @@ for i in range(0,4*365+1):
   sname = obsdir+"/cleaned/s."+start.strftime("%Y%j")+".beta"
   fname = obsdir+"/cleaned/s."+fdate.strftime("%Y%j")+".beta"
   oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.s."+start.strftime("%Y%j") 
-  if (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
+  if not os.path.exists(sname) or not os.path.exists(fname):
+    print("missing at least one of ",sname,fname)
+  elif (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
@@ -48,7 +50,9 @@ for i in range(0,4*365+1):
   fname = obsdir+"/cleaned/n."+fdate.strftime("%Y%j")+".beta"
   #oname = "score.n."+start.strftime("%Y%j") 
   oname = "persist/nic_v_nic."+"{:d}".format(lead)+"/score.n."+start.strftime("%Y%j") 
-  if (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
+  if not os.path.exists(sname) or not os.path.exists(fname):
+    print("missing at least one of ",sname,fname)
+  elif (os.path.getsize(sname) > 1024 and os.path.getsize(fname) > 1024 ):
     if (not os.path.exists(oname) ):
       os.system("$EXDIR/cscore_edge $FIXDIR/seaice_alldist.bin "+sname+" "+fname+" 50.0 > "+oname)
   else:
