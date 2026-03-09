@@ -1,4 +1,3 @@
-import os
 import sys
 import datetime
 import matplotlib
@@ -14,10 +13,10 @@ index = []
 
 k = 0
 for line in fin:
-    words = line.split() 
+    words = line.split()
     #debug print(len(words),line,end="", flush=True)
     #n.1.202301010.15:rms  46.59 with  3844 matchups
-    tag = (words[0][-16:-8])
+    tag = words[0][-16:-8]
     #debug print(tag, flush=True)
     x = datetime.datetime.strptime(tag,"%Y%m%d").date()
     #debug: print(k, x, flush=True)
@@ -33,12 +32,9 @@ print(lead," day lead mean, std",np.average(rms), np.std(rms) )
 
 matplotlib.use('Agg')
 fig,ax = plt.subplots()
-ax.set(xlabel="Date", ylabel="rmse km") 
+ax.set(xlabel="Date", ylabel="rmse km")
 ax.set(title = label+" rtofs ice edge vs nichr rmse (km) at "+"{:d}".format(lead)+" day lead")
 ax.plot(index, rms)
 ax.grid()
 fig.savefig("edge_rmse_"+label+"{:d}".format(lead)+".png")
 plt.close()
-
-#nic_v_nic.5/score.n.2019077:rms  50.62 with 14805 matchups
-#nic_v_nic.5/score.n.2019079:rms  46.85 with 14860 matchups

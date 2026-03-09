@@ -1,8 +1,3 @@
-import os
-import sys
-import datetime
-
-#------------------------------------------------------------
 """
 Requires environment to provide:
     variables FIXDIR, EXDIR
@@ -14,6 +9,10 @@ Currently hard codes (dbase) path to rtofs cice output directories
 Robert Grumbine
 27 July 2023
 """
+import os
+import sys
+import datetime
+
 #------------------------------------------------------------
 
 fixdir = os.getenv('FIXDIR')
@@ -21,19 +20,19 @@ if (type(fixdir) == str ):
     print("fixdir = ",fixdir)
 else:
     print("Could not find environment variable FIXDIR")
-    exit(1)
+    sys.exit(1)
 
 exdir  = os.getenv('EXDIR')
 if (type(exdir) == str):
     print("exdir = ",exdir)
 else:
     print("Could not find environment variable EXDIR")
-    exit(1)
+    sys.exit(1)
 
 if (not os.path.exists(fixdir+"/skip_hr") ):
   print("could not find the required skip file")
   print("fixdir = ",fixdir)
-  exit(1)
+  sys.exit(1)
 
 dbase="/u/robert.grumbine/noscrub/model_intercompare/rtofs_cice/rtofs."
 
@@ -61,7 +60,7 @@ while (start <= end):
     yy       = valid.strftime("%Y")
 
     for crit in (0.01, 0.03, 0.05, 0.10, 0.15 ):
-      if (os.path.exists(fname)): 
+      if (os.path.exists(fname)):
         critstring="{:3.2f}".format(crit)
         #debug: print("critstring = ",critstring,lead, flush=True)
         outname = "rtofs_edges/rtofs.edge."+lead+"."+start.strftime("%Y%m%d")+critstring
@@ -73,8 +72,8 @@ while (start <= end):
           retval = os.system(cmd)
           if (retval != 0 ):
               print("Error ",retval,"in trying to run ",cmd)
-              exit(2)
-    
+              sys.exit(2)
+
         #score it:
         snamer = "rtofs_scores/nr."+"{:1d}".format(nlead)+"."+start.strftime("%Y%m%d")+critstring
         sname  = "rtofs_scores/n."+"{:1d}".format(nlead)+"."+start.strftime("%Y%m%d")+critstring
@@ -90,9 +89,8 @@ while (start <= end):
           os.system(cmd)
       else:
         print("could not find model file:",fname, flush=True)
-  
+
     valid += dt
     nlead += 1
-  
-  start += dt
 
+  start += dt
