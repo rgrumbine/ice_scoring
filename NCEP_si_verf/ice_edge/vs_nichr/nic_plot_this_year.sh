@@ -3,7 +3,7 @@
 set -xe
 echo zzz nic_plot_this_year.sh
 
-year=`date +"%Y"`
+year=${year:-`date +"%Y"`}
 cd $HOME/rgdev/edges/
 
 source $HOME/env3.12/bin/activate

@@ -23,30 +23,26 @@
 
 
 set -xe
-#ursa: 
-source /home/Robert.Grumbine/rg/env3.13/bin/activate
+#ursa: source /home/Robert.Grumbine/rg/env3.13/bin/activate
 #wcoss2, gaea
-#source $HOME/env3.12/bin/activate
+source $HOME/env3.12/bin/activate
 
-#ursa:
-export modelout=$HOME/clim_data/sfsbeta
+#export modelout=$HOME/clim_data/rtofs_gross
 #export modelout=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/
-#export modelout=$HOME/scratch6/COMROOT/icein2/sfs.20231101/00/mem000/products/ice/netcdf/native
+export modelout=$HOME/scratch6/COMROOT/icein2/sfs.20231101/00/mem000/products/ice/netcdf/native
 
 export modeltag=ufs
 export MODEL=sfs_ice
 
 #wcoss: export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
-#gaeac6:
-#export GDIR=$HOME/rg6/ice_scoring/gross_checks/
-#ursa: 
-export GDIR=/home/Robert.Grumbine/rgdev/ice_scoring/gross_checks/
+#gaea:
+export GDIR=$HOME/rg6/ice_scoring/gross_checks/
+#hera: export GDIR=/home/Robert.Grumbine/rgdev/ice_scoring/gross_checks/
 
 #wcoss:export SCRATCH=$HOME/scratch/gross
+#ursa:export SCRATCH=$HOME/scratch/gross
 #gaeac6:
-#export SCRATCH=$HOME/scratch6/gross
-#ursa:
-export SCRATCH=$HOME/scratch/gross
+export SCRATCH=$HOME/scratch6/gross
 
 #------------------------ General across platforms --------------
 set -x
