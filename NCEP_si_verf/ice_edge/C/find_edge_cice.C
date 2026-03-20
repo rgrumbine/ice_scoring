@@ -73,18 +73,18 @@ int main(int argc, char *argv[]) {
   enter(lon, x);
 
   // ufs prototype/benchmarks
-   retval = nc_inq_varid(ncid, "hi_h", &varid);
+   //retval = nc_inq_varid(ncid, "hi", &varid);
   //consortium, rtofs:
-  //retval = nc_inq_varid(ncid, "hi", &varid);
+  retval = nc_inq_varid(ncid, "hi", &varid);
   if (retval != 0) ERR2(retval, "hi");
   retval = nc_get_var_float(ncid, varid, x);
   if (retval != 0) ERR2(retval, "hi");fflush(stdout);
   enter(ice_thickness, x);
 
   // ufs prototypes:  
-  retval = nc_inq_varid(ncid, "aice_h", &varid);
+  //retval = nc_inq_varid(ncid, "aice_h", &varid);
   //consortium, rtofs:
-  //retval = nc_inq_varid(ncid, "aice", &varid);
+  retval = nc_inq_varid(ncid, "aice", &varid);
   if (retval != 0) ERR2(retval, "aice");
   retval = nc_get_var_float(ncid, varid, x);
   if (retval != 0) ERR2(retval, "aice");fflush(stdout);

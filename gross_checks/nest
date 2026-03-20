@@ -1,4 +1,0 @@
-export PYTHONPATH=$PYTHONPATH:~/rgdev/ice_scoring/gross_checks/shared
-#hera: 
-source ~/rg/env3.12c/bin/activate
-#wcoss2: source ~/env3.12/bin/activate

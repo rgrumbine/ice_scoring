@@ -5,6 +5,8 @@
 #cice needs the netcdf module as well
 #  module load NetCDF
 
+CXX=CC
+
 #opts = -Wall -O2 -DLINUX -DDEBUG
 ccopts = -Wall -O2 -DLINUX
 mmabopts = -I ../../formats -I ../../../mmablib/include ../../../mmablib/libombf_4.a 

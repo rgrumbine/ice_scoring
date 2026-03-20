@@ -51,8 +51,8 @@ void rms(float *odist, float *odir, float *fdist, float *fdir, int npts,
      deldir = delta_direction(odir[i], fdir[i]);
      meandir += deldir;
      rmsdir  += deldir*deldir;
-     dx = (odist[i] - fdist[i])*cos(deldir*M_PI/180.);
-     dy = (odist[i] - fdist[i])*cos(deldir*M_PI/180.);
+     dx = odist[i]*cos(odir[i]*M_PI/180.) - fdist[i]*cos(fdir[i]*M_PI/180.);
+     dy = odist[i]*sin(odir[i]*M_PI/180.) - fdist[i]*sin(fdir[i]*M_PI/180.);
      errad += sqrt(dx*dx + dy*dy);
      erradrms += (dx*dx + dy*dy);
   }

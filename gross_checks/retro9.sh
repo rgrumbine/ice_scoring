@@ -20,9 +20,7 @@
 #SBATCH --mail-user robert.grumbine@noaa.gov
 # --- Hera
 
-
 set -x
-
 
 # Hera:
 #source /home/Robert.Grumbine/rg/env3.12c/bin/activate
@@ -33,7 +31,7 @@ source $HOME/env3.12/bin/activate
 export modelout=$HOME/noscrub/retros/
 export expttag=ufs_ice
 export MODEL=ufs_ice
-export retro=10
+export retro=11
 
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
 #export GDIR=$HOME/noscrub/retros/gross_checks/

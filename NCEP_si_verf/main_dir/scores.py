@@ -126,3 +126,71 @@ def score_nsidc(fcst, nsidc, fcst_dir, nsidcdir, tag, valid, hr, exdir, fixdir):
   return retcode
 
 
+def score_osisaf(fcst, osisaf, fcst_dir, osisafdir, tag, valid, hr, exdir, fixdir, ptag="nh"):
+  #debug: print("py entered score_osisaf",flush=True)
+  retcode = int(0)
+  vyear = int(valid.strftime("%Y"))
+
+  if (vyear < 2007):
+    print("Invalid verification year in valid, score_osisaf",valid, vyear, tag)
+    exit(1)
+
+  #isolate forecast file name references to fcst_name:
+  #debug: print("score_osisaf calling fcst_name",flush=True)
+  valid_fname = fcst.get_filename(hr, fcst_dir)
+
+  if (not os.path.exists(valid_fname)):
+    print("scores.py cannot find forecast file for "+tag.strftime("%Y%m%d"),valid.strftime("%Y%m%d"), flush=True )
+    retcode = int(1)
+    return retcode
+
+  #exname = 'generic_osisaf'
+  if (ptag == "nh"):
+    exname = 'ufs_osisaf_north'
+  elif (ptag == "sh"):
+    exname = 'ufs_osisaf_south'
+  else:
+    print('unknown ptag in scores:score_osisaf: ',ptag)
+    exit(1)
+
+  if (os.path.exists(exdir + exname)):
+    #debug print("scores:score_osisaf Have the fcst vs. osisaf scoring executable", flush=True)
+    obsname = osisaf.get_filename(valid, osisafdir, ptag)
+    #debug: print(obsname, " = obsname", flush=True)
+
+    try:
+      cmd = exdir+exname+" " + valid_fname+ " "+obsname
+      cmd += " "+fixdir+"skip_hr " 
+      cmd += exdir+"runtime.def"
+      cmd += " > score."+ ptag+"."+valid.strftime("%Y%m%d")+"f"+ tag.strftime("%Y%m%d")+".csv"  
+      #debug: print("cmd = ",cmd)
+    except:
+      print("\nscores:score_osisaf")
+      print(exdir+exname, os.path.exists(exdir+exname))
+      print(valid_fname, os.path.exists(valid_fname))
+      print(obsname , os.path.exists(obsname))
+      print(fixdir, os.path.exists(fixdir))
+      print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
+      print("cmd = ",cmd)
+      return 1
+
+    #debug: print("calling cmd",flush=True)
+    x = os.system(cmd)
+    #debug: print("back from cmd",flush=True)
+
+    if (x != 0):
+      print("\n\n command ",cmd,"\n returned error code ",x, flush=True)
+      print("\n")
+      print(exdir+exname, os.path.exists(exdir+exname))
+      print(valid_fname, os.path.exists(valid_fname))
+      print(obsname , os.path.exists(obsname))
+      print(fixdir, os.path.exists(fixdir))
+      print(exdir+"runtime.def ", os.path.exists(exdir+"runtime.def") )
+      retcode += x
+
+  else:
+    print("scores:No executable to score vs. osisaf", flush=True)
+    retcode += 1
+
+  return retcode
+

@@ -1,6 +1,7 @@
 import os
 import datetime
 
+
 #-----------------------------------------------------------------===
 # utility here to help work with date strings -- int vs. string
 def tostr(valid):
@@ -20,7 +21,7 @@ def tostr(valid):
 #-------------------------------------------
 """
 Tools for working with grids of information --
-get of: ims, cfsv2, nsidc, ncep analysis, model forecast 
+get of: ims, cfsv2, nsidc, osisaf, ncep analysis, model forecast 
 edge for: (likewise)
 
 get_ims
@@ -32,7 +33,7 @@ For these two, it's more involved and less predictable
 Shouldn't be needed by user, but may need updates
 
 """
-# RG: Add osisaf, nsidc_sh
+# RG: Add nsidc_sh
 
 #-----------------------------------------------------------
 '''
@@ -48,7 +49,7 @@ from abc import ABC, abstractmethod
 class gridded(ABC):
 
     @abstractmethod
-    def get_grid(fname, date, basedir):
+    def get_grid(date, basedir):
       pass
       #return 0 if successful
 
@@ -73,27 +74,31 @@ class dummy(ABC):
       return 0
 
 #-------------- osisaf ----------------------------
-class osisaf(ABC):
+class osisaf(gridded):
 
-    def get_grid(fname, date, basedir):
-      return 0
+    def get_grid(date, basedir, ptag="nh"):
+      fname = osisaf.get_filename(date, basedir, ptag)
+      if (os.path.exists(fname)):
+        return 0
+      else:
+        print(fname, "does not exist osisaf:get_grid")
+        return 1
 
     def make_edge(name, date):
       return 0
 
-    def get_filename(date, basedir):
-      return 0
+    def get_filename(date, basedir, ptag="nh"):
+      tmp = basedir + "archive/ice/conc/" + date.strftime("%Y") + "/" + date.strftime("%m") + "/" + "ice_conc_"+ptag+"_polstere-100_multi_"+date.strftime("%Y%m%d")+"1200.nc"
+      return tmp
 
 #---------- NCEP obs -----------------------------------
 class ncep(gridded):
 
     def get_grid(self, tag, ncepdir):
       retcode = int(0)
-      #debug: print("get_grid ncep ",tag,ncepdir, flush=True)
 
       monthfile = ncepdir + "ice5min.grib2." + tag.strftime("%Y%m") 
       index_file = ncepdir + "ice5min.grib2." + tag.strftime("%Y%m") + '.idx'
-      #debug: print("monthfile and index ",monthfile, index_file, flush=True)
       if (not os.path.exists(index_file)):
         cmd = ( 'wgrib2 ' + monthfile + " > "+index_file )
         x = os.system(cmd)
@@ -177,6 +182,72 @@ class cfsv2(gridded):
     return 0
 
 #------------------------------------------------------------------
+class osisaf_nh(gridded):
+  def get_grid(self, initial_date, osisafdir):
+    retcode = int(0)
+    if (not os.path.exists(osisafdir)):
+      print("no such osisaf path as ",osisafdir, flush=True)
+      retcode = 1
+      return retcode
+
+    fname = self.get_filename(initial_date, osisafdir)
+    if (not os.path.exists(fname)):
+      print('do not have ',fname,' ',initial_date.strftime("%Y%m%d"), flush=True )
+      return 1
+    
+    return retcode
+
+  def make_edge(self, initial_date, toler, osisafdir, exdir, fixdir, edgedir):
+    retcode = int(0)
+
+    fin = self.get_filename(initial_date, osisafdir)
+    fout = edgedir+'/osisaf_north_edge.'+initial_date.strftime("%Y%m%d")
+
+    if (not os.path.exists(fout)):
+      cmd = exdir + 'find_edge_osisaf_north ' + fin + ' ' + str(toler) + " " + fixdir+"/G02202-cdr-ancillary-nh.nc" + ' > ' + fout
+      x = os.system(cmd)
+      if (x != 0): retcode += x
+
+    return retcode
+
+  def get_filename(self, date, osisafdir):
+    ptag='nh'
+    pole='north'
+
+    version = "v04r00"
+    if (date <= datetime.datetime(2008,12,31)):
+      instrument = "f13"
+    else:
+      instrument = "f17"
+
+    retcode = int(0)
+    if (not os.path.exists(osisafdir)):
+      print("no such osisaf path as ",osisafdir, flush=True)
+      retcode = 1
+      return retcode
+
+    valid = int(date.strftime("%Y%m%d"))
+
+    fname = osisafdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+str(valid)+'_'+instrument+'_'+version+'.nc'
+
+    if (os.path.exists(fname)):
+      return fname
+    else:
+      fname_old = fname
+      fname = osisafdir + pole + '/daily/'+date.strftime("%Y")+'/seaice_conc_daily_'+ptag+'h_'+instrument+'_'+str(valid)+'_'+version+'.nc'
+      if (os.path.exists(fname)):
+        return fname
+      else:
+        print("osisaf_name: could not open ",fname_old, fname, flush=True)
+        retcode = 1
+        #intolerant:
+        exit(1)
+        return retcode
+
+
+
+
+#------------------------------------------------------------------
 class nsidc_nh(gridded):
 
   def get_grid(self, initial_date, nsidcdir):
@@ -205,7 +276,6 @@ class nsidc_nh(gridded):
       if (x != 0): retcode += x
   
     return retcode
-
 
   def get_filename(self, date, nsidcdir):
     # https://nsidc.org/ancillary-pages/smmr-ssmi-ssmis-sensors
@@ -247,15 +317,13 @@ class nsidc_nh(gridded):
         exit(1)
         return retcode
 
-
-
 #-----------------------------------------------------------------===
 #class nsidc_sh(gridded):
 #-----------------------------------------------------------------===
+
 class ims(gridded):
 
   def get_grid(self, tag, imsdir):
-    #debug: print("get_grid ",tag, imsdir, flush=True)
 
     retcode = int(0)
     initial = int(tag.strftime("%Y%m%d"))

@@ -26,9 +26,9 @@ single       = True
 
 #===============================================================================
 imsverf   = True
-nsidcverf = True
+nsidcverf = False
 ncepverf  = True
-osiverf   = False
+osiverf   = True
 
 #===============================================================================
 if (single):
@@ -54,11 +54,11 @@ if (single):
       nsidcverf = False
 
 #OSI-SAF
-  #if (osiverf):
-    #x = get_osisaf(initial_date, valid_date, dirs['osidir'])
-    #if (x != 0):
-    #  print("could not get file for osi verification, turning off osiverf\n",flush=True)
-    #  osiverf = False
+  if (osiverf):
+    x = get_osisaf(initial_date, valid_date, dirs['osidir'])
+    if (x != 0):
+      print("could not get file for osi verification, turning off osiverf\n",flush=True)
+      osiverf = False
 
   obs = (nsidcverf or ncepverf or imsverf or osiverf)
 
@@ -106,8 +106,9 @@ if (single):
     #debug: print("pymain trying concentration verf",flush=True)
     if (nsidcverf): 
       score_nsidc(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
+    elif (osiverf):
+      score_osisaf(fcst_dir, dirs['nsidcdir'], initial_date, valid_date)
     #elif (ncepverf):
-    #elif (osiverf):
     else:
       print("could not score concentration for ",fcst_dir, 
              dirs['nsidcdir'], initial_date, valid_date, flush=True)

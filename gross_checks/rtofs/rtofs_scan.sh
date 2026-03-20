@@ -16,57 +16,63 @@ export EXDIR=$GBASE/
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions/
 
 export OUTBASE=$HOME/noscrub/model_intercompare/rtofs_cice/
-export OUTBASE=$COMROOT/rtofs/v2.4/
+#export OUTBASE=$COMROOT/rtofs/v2.4/
 
 #RTOFS HYCOM output:
 date
 tag=`date +"%Y%m%d"`
-tag=20250527
-
+tag=20250531
 level=extreme
 
-for parm in ice prog diag
+while [ $tag -ge 20250401 ]
 do
-  n=000
-  #while [ $n -le 2 ]
-  while [ $n -le 24 ]
+  for parm in ice prog diag
   do
-    if [ -f $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc ] ; then 
-      python3 $EXDIR/universal2d.py \
-	      $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc \
-	      rtofs.global.def \
-              ${GBASE}/ctl/rtofs${parm}.${level} a > ${model}.n.${n}.$parm.results
-    fi
-    n=`expr $n + 1`
-    if [ $n -lt 10 ] ; then
-      n=00$n
-    else
-      n=0$n
-    fi
+    n=000
+    #while [ $n -le 2 ]
+    while [ $n -le 24 ]
+    do
+      if [ -f $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc ] ; then 
+        time python3 $EXDIR/universal2d.py \
+  	      $OUTBASE/rtofs.$tag/rtofs_glo_2ds_n${n}_${parm}.nc \
+  	      rtofs.global.def \
+                ${GBASE}/ctl/rtofs${parm}.${level} a > ${model}.n.${n}.$tag.$parm.results
+      fi
+      n=`expr $n + 1`
+      if [ $n -lt 10 ] ; then
+        n=00$n
+      else
+        n=0$n
+      fi
+    done
+  
+    f=000
+    #while [ $f -le 3 ]
+    while [ $f -le 192 ]
+    do
+      if [ -f $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc ] ; then 
+        time python3 $EXDIR/universal2d.py \
+  	      $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc \
+                rtofs.global.def \
+       	      ${GBASE}/ctl/rtofs${parm}.${level} a > ${model}.f.${f}.$tag.$parm.results
+      fi
+      f=`expr $f + 1`
+      if [ $f -lt 10 ] ; then
+        f=00$f
+      elif [ $f -lt 100 ] ; then
+        f=0$f
+      fi
+    done
+  
+    tag=`expr $tag - 1`
+    tag=`$HOME/bin/dtgfix3 $tag`
+    date
   done
-
-  f=000
-  #while [ $f -le 3 ]
-  while [ $f -le 192 ]
-  do
-    if [ -f $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc ] ; then 
-      python3 $EXDIR/universal2d.py \
-	      $OUTBASE/rtofs.${tag}/rtofs_glo_2ds_f${f}_${parm}.nc \
-              rtofs.global.def \
-     	      ${GBASE}/ctl/rtofs${parm}.${level} a > ${model}.f.${f}.$parm.results
-    fi
-    f=`expr $f + 1`
-    if [ $f -lt 10 ] ; then
-      f=00$f
-    elif [ $f -lt 100 ] ; then
-      f=0$f
-    fi
-  done
-
-  date
 done
 
 exit
+
+
 date
 for hh in 024 048 072 096 120 144 168 192
 do

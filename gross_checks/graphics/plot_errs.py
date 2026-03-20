@@ -1,16 +1,27 @@
-import os
+'''
+Plot output from gross error check
+Robert Grumbine
+'''
+
 import sys
 
-import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
-fin = open(sys.argv[1],"r")
+#----------------------------------------------------------
+fin = open(sys.argv[1],"r", encoding='utf-8')
 
 try:
   title_tag = sys.argv[2]
 except:
   title_tag = "ref"
 
-markersize = float(sys.argv[3])
+try:
+  markersize = float(sys.argv[3])
+except:
+  markersize = 12
 
 parm = []
 i = []
@@ -34,7 +45,7 @@ for line in fin:
 
 print("found ",len(i)," error points")
 if (len(i) == 0):
-    exit(0)
+    sys.exit(0)
 
 #debug print(max(lat), min(lat), max(lon), min(lon) )
 latmax = max(lat)
@@ -44,10 +55,7 @@ lonmin = min(lon)
 
 
 # i-j plot of error points ----------------------------------
-import matplotlib
-import matplotlib.pyplot as plt
 matplotlib.use('Agg') #batch mode
-
 
 #Elaborations:
 #  title
@@ -62,13 +70,11 @@ plt.title(title_tag)
 plt.savefig("ij_errs_"+title_tag+".png")
 plt.close()
 
-
 # lat-lon plot of error points ---------------------------------
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 
+proj = ccrs.NorthPolarStereo(central_longitude=-170., true_scale_latitude = 60.)
 #proj = ccrs.LambertConformal(central_longitude=-170., central_latitude = 60., cutoff=25.)
-proj = ccrs.PlateCarree()
+#proj = ccrs.PlateCarree()
 
 ax = plt.axes(projection = proj)
 fig = plt.figure(figsize = (8,6))
@@ -80,15 +86,15 @@ xlocs = list(range(-180,181,30))
 
 if ((latmax - latmin) < 30):
   mean = (latmax + latmin)/2.
-  ax.set_extent((-180, 180, mean + 30, mean - 30), crs=ccrs.PlateCarree() )
-  ylocs = list(range(int(mean-30), int(mean + 30), 5))
+  ax.set_extent((-180, 180, min(90, mean + 30), max(-90, mean - 30)), crs= proj )
+  ylocs = list(range(int(max(-90, mean-30)), int(min(90, mean + 30) ), 5))
 else:
   ylocs = list(range(-90, 91, 15))
 
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
 ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="c") )
-if markersize < 12:
+if markersize <= 12:
     alpha = 1
 else:
     alpha = 0.2/25
@@ -96,5 +102,3 @@ else:
 plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize, alpha = alpha)
 plt.savefig("ll_errs_"+title_tag+".png")
 plt.close()
-
-#debug: print(markersize)

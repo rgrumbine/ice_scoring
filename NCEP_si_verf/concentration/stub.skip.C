@@ -4,7 +4,7 @@
 
   if (fin != (FILE*) NULL) {
     skip.binin(fin);
-    fclose(fin);
+    // opened outside, so close outside  fclose(fin);
   }
   else {
     skip.set(0);

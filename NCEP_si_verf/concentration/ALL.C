@@ -69,7 +69,7 @@ void contingency_derived(double a11, double a12, double a21, double a22, float &
   pct = ((double) a11 + (double) a22) / ( (double) (a11+a12+a21+a22)); //percent correct
   ts  = (double) a11 / ( (double) (a11+a12+a21) ); // threat score, aka
                                                    // csi - critical success index
-  bias = (double) (a11+a12) / ((double)(a11+a21));
+  bias = (double) (a11+a12) / ((double)(a11+a21)); // model / obsd
 
   return;
 }
@@ -162,15 +162,15 @@ void contingency(mvector<float> &obs, mvector<float> &model,
 
 void contingency(mvector<float> &obs, mvector<float> &model, 
                  mvector<unsigned char> &skip, float &level, 
-                 double &a11, double &a12, double &a21, double &a22) ;
+                 double &a11, double &a12, double &a21, double &a22, double &iiee) ;
 void contingency(mvector<float> &obs, mvector<float> &model, 
                  mvector<unsigned char> &skip, mvector<float> &cellareas,
                  float &level, 
-                 double &a11, double &a12, double &a21, double &a22) ;
+                 double &a11, double &a12, double &a21, double &a22, double &iiee) ;
 
 // Pointwise/mvector scoring for contingency table:
 void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned char> &skip, 
-              float &level, double &a11, double &a12, double &a21, double &a22) {
+              float &level, double &a11, double &a12, double &a21, double &a22, double &iiee) {
   double area = 0;
   int count = 0;
   int loc;
@@ -180,6 +180,8 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
   a21 = 0;
   a22 = 0;
   for (loc = 0; loc < obs.xpoints(); loc++) {
+    // Skip if obs is a flag (negative) value:
+    if (obs[loc] < 0) continue;
     // only score if point is water of interest
     if ( skip[loc] == 0 ) {
     
@@ -206,6 +208,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 
   }
 
+  iiee = a12 + a21;
   area = (double) count;
   a11 /= area;
   a12 /= area;
@@ -218,7 +221,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 // Scoring for contingency table:
 void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned char> &skip, 
               mvector<float> &cellarea,
-              float &level, double &a11, double &a12, double &a21, double &a22) {
+              float &level, double &a11, double &a12, double &a21, double &a22, double &iiee) {
   double area = 0;
   int count = 0;
   int loc;
@@ -228,6 +231,8 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
   a21 = 0;
   a22 = 0;
   for (loc = 0; loc < obs.xpoints(); loc++) {
+    // Skip if obs is a flag (negative) value:
+    if (obs[loc] < 0) continue;
     // only score if point is water of interest
     if ( skip[loc] == 0 ) {
     
@@ -255,7 +260,7 @@ void contingency(mvector<float> &obs, mvector<float> &model, mvector<unsigned ch
 
   }
 
-  //area = (double) count;
+  iiee = a12 + a21;
   a11 /= area;
   a12 /= area;
   a21 /= area;

@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-import argparse
-import glob
-import os
+#import argparse
+#import glob
+#import os
 import sys
-import csv
+#import csv
 
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-import netCDF4 as nc
+#import matplotlib.colors as mcolors
+#import netCDF4 as nc
 
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
+#import cartopy.feature as cfeature
 
 matplotlib.use('agg')
 
@@ -34,17 +34,18 @@ def getedge(fin, edgelons, edgelats):
     print("found ",len(edgelats), len(edgelons), "pts in edge file", flush=True)
 
 # working with output of cscore_edge
-def matchedge(fin, distance, edgelon1, edgelat1, edgelon2, edgelat2):
-    for line in fin:
+def matchedge(ffin, fdistance, fedgelon1, fedgelat1, fedgelon2, fedgelat2):
+    for line in ffin:
         words=line.split()
-        if (words[0] == "rms"): break
-        distance.append(float(words[2]))
-        edgelon1.append(float(words[3]))
-        edgelat1.append(float(words[4]))
-        edgelon2.append(float(words[5]))
-        edgelat2.append(float(words[6]))
+        if (words[0] == "rms"): 
+          break
+        fdistance.append(float(words[2]))
+        fedgelon1.append(float(words[3]))
+        fedgelat1.append(float(words[4]))
+        fedgelon2.append(float(words[5]))
+        fedgelat2.append(float(words[6]))
 
-    print("found ",len(edgelat1), "matchup pts in edge file", flush=True)
+    print("found ",len(fedgelat1), "matchup pts in edge file", flush=True)
 
 #-------------------------------------------------------------
 
@@ -53,8 +54,8 @@ def matchedge(fin, distance, edgelon1, edgelat1, edgelon2, edgelat2):
 #LambertCylindrical
 #NorthPolarStereo
 
-def plot_world_map(lons, lats, data, edgelons, edgelats, edgelons2, edgelats2):
-    #for shaded maps of 2d fields: 
+def plot_world_map(flons, flats, fdata, edgelons, edgelats, edgelons2, edgelats2):
+    #for shaded maps of 2d fields:
     #vmin = np.nanmin(data)
     #vmax = np.nanmax(data)
 
@@ -72,14 +73,13 @@ def plot_world_map(lons, lats, data, edgelons, edgelats, edgelons2, edgelats2):
 
     #Bering/okhotsk/some Beaufort/Chukchi
     ax.set_extent((-220,-145, 50, 70), crs=ccrs.PlateCarree())
-    ax.gridlines(crs=ccrs.PlateCarree(), 
-                 xlocs=[140., 150., 160., 170., -180, -170, -160, -150], 
+    ax.gridlines(crs=ccrs.PlateCarree(),
+                 xlocs=[140., 150., 160., 170., -180, -170, -160, -150],
                  ylocs=[45, 50, 55, 60, 66.6, 70, 75] )
-    #debug: 
+    #debug:
     print("specialized to Bering et al",flush=True)
 
-
-    #'natural earth' -- coast only -- 
+    #'natural earth' -- coast only --
     ax.coastlines(resolution='10m')
     #ax.add_feature(cfeature.GSHHSFeature(levels=[1,2,3,4], scale="f") )
     #debug: print("coastlines added ",flush=True)
@@ -94,9 +94,9 @@ def plot_world_map(lons, lats, data, edgelons, edgelats, edgelons2, edgelats2):
     colors=matplotlib.cm.get_cmap('terrain')
     #debug: print("color map added ",flush=True)
 
-#for shaded maps of 2d fields: 
-    #cs = ax.pcolormesh(lons, lats, data,vmin=vmin,vmax=vmax,cmap=colors, transform=ccrs.PlateCarree() )
-    #cs = ax.pcolormesh(lons, lats, data,vmin=30.,vmax=vmax,cmap=colors, transform=ccrs.PlateCarree() )
+#for shaded maps of 2d fields:
+    #cs = ax.pcolormesh(flons, flats, fdata,vmin=vmin,vmax=vmax,cmap=colors, transform=ccrs.PlateCarree() )
+    #cs = ax.pcolormesh(flons, flats, fdata,vmin=30.,vmax=vmax,cmap=colors, transform=ccrs.PlateCarree() )
 
     #cb = plt.colorbar(cs, extend='both', orientation='horizontal', shrink=0.5, pad=.04)
     #cbarlabel = '%s' % ("hello1")

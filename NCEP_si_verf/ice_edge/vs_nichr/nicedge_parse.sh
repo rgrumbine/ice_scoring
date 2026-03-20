@@ -8,15 +8,12 @@ export DCOM=~/rgdev/edges
 cd $DCOM
 
 #Drop back date
-yy=2024
-ddd=300
+yy=2026
+ddd=001
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned
 fi
-#if [ ! -d first ] ; then
-#  mkdir first
-#fi
 
 export tag=${yy}${ddd}
 
@@ -60,5 +57,5 @@ do
   export tag=${yy}${ddd}
 done
 
+rm [ns].20????? 
 mv [ns].*.beta cleaned
-rm [ns].${yy}??? 

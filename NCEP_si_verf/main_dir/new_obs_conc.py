@@ -80,20 +80,20 @@ while (tag <= end):
 #    if (platforms.imsverf):
 #      obs += imsverf.get_grid(tag, x['imsdir'])
 
-    if (platforms.nsidcverf):
-      obs += nsidc.get_grid(tag, x['nsidcdir'])
+#    if (platforms.nsidcverf):
+#      obs += nsidc.get_grid(tag, x['nsidcdir'])
 
-#    if (platforms.osiverf):
-#      obs += osisaf.get_grid(tag, x['osisafdir'])
+    if (platforms.osiverf):
+      obs += osisaf.get_grid(tag, x['osisafdir'])
 
     #debug: print("obs retcode sum", obs)
 
 # Now tailor to concentration verification:
-    if (platforms.nsidcverf):
-      score_nsidc(fcst, nsidc, fcstdir, x['nsidcdir'], tag, valid, hr, exdir, fixdir)
+    if (platforms.osiverf):
+      score_osisaf(fcst, osisaf, fcstdir, x['osisafdir'], tag, valid, hr, exdir, fixdir)
     else:
       print("could not score concentration for ",fcst_dir,
-             x['nsidcdir'], initial_date, valid_date, flush=True)
+             x['osisafdir'], initial_date, valid_date, flush=True)
 
     
 # For edges  RG: tripole cice currently bonkers
