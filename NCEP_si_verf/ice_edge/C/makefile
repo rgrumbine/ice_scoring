@@ -32,7 +32,7 @@ find_edge_nsidc_south : find_edge_nsidc.C
 find_edge_consortium : find_edge_consortium.C
 	$(CXX) -Dbenchmark $< $(opts) $(ncopts) -o $(@)
 
-find_edge_ufs : find_edge_cice.C
+find_edge_ufs : find_edge_ufs.C
 	$(CXX) -Dufs $< $(opts) $(ncopts) -o $(@)
 
 find_edge_cice : find_edge_cice.C
