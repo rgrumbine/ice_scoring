@@ -12,6 +12,10 @@
 // cice on hycom quarter degree tripolar grid
   #define NX 1500
   #define NY 1099
+#elif ufs
+// cice on mom6 quarter degree tripolar grid
+  #define NX 1440
+  #define NY 1080 
 #elif benchmark
 // cice on mom6 quarter degree tripolar grid
   #define NX 1440

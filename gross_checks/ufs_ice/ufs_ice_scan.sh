@@ -12,8 +12,8 @@ export level=extreme
 export cyc=00
 
 #for f in 20241210 20241211 20241212
-f=20251121
-while [ $f -le 20260211 ]
+f=20241201
+while [ $f -le 20250531 ]
 do
   tag=$f
   #yy=`echo $f | cut -c1-4`
@@ -51,7 +51,7 @@ do
   f=`$HOME/bin/dtgfix3 $f`
 done
 
-model=ufs
+model=gfs
 cat ${model}.cice.*.results > all.$model
 for lead in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
 do

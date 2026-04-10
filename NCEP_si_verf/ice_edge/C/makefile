@@ -12,7 +12,7 @@ ccopts = -Wall -O2 -DLINUX
 mmabopts = -I ../../formats -I ../../../mmablib/include ../../../mmablib/libombf_4.a 
 opts = $(ccopts) $(mmabopts)
 
-finds = find_edge_ncep find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south
+finds = find_edge_ncep find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_consortium find_edge_nrl find_edge_nsidc_north find_edge_nsidc_south find_edge_ufs
 
 all: cscore_edge $(finds)
 
@@ -32,11 +32,14 @@ find_edge_nsidc_south : find_edge_nsidc.C
 find_edge_consortium : find_edge_consortium.C
 	$(CXX) -Dbenchmark $< $(opts) $(ncopts) -o $(@)
 
+find_edge_ufs : find_edge_cice.C
+	$(CXX) -Dufs $< $(opts) $(ncopts) -o $(@)
+
 find_edge_cice : find_edge_cice.C
 	#$(CXX) $< $(opts) $(ncopts) -limf -lirc -o $(@)
 	$(CXX) $< $(opts) $(ncopts) -o $(@)
 
-# Don't use netcdf:
+# Doesn't use netcdf:
 cscore_edge : score_edge.C
 	#$(CXX) $< $(opts) -l imf -o $(@)
 	$(CXX) $< $(opts) -o $(@)
