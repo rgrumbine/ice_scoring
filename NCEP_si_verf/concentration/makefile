@@ -10,7 +10,7 @@
 #settings = -I ../../mmablib/include -L ../../mmablib/
 
 #On wcoss:
-opt = 
+opt = -Dprototype 
 settings = -I /u/robert.grumbine/rgops/mmablib/include -L /u/robert.grumbine/rgops/mmablib/
 
 #On Mac:
@@ -19,8 +19,8 @@ settings = -I /u/robert.grumbine/rgops/mmablib/include -L /u/robert.grumbine/rgo
 #settings=-I $(BASE)/include -L $(BASE) 
 #NETCDF=/Users/rmg3/usrlocal/
 
-all : twelfth_osisaf_north twelfth_osisaf_south ufs_osisaf_north ufs_osisaf_south generic_osisaf
-#all : generic score_diag score_nsidc nsidc_nsidc score_cfsv2 persistence score_cice_inst
+all : twelfth_osisaf_north twelfth_osisaf_south ufs_osisaf_north ufs_osisaf_south generic_osisaf \
+ generic score_diag score_nsidc nsidc_nsidc score_cfsv2 persistence score_cice_inst
 
 ufs_osisaf_north : ufs_osisaf.C
 	g++ $(opt) -DOSISAF_POLE=osisaf_north -DLINUX -Wall -O2 $< -I$(NETCDF)/include -L $(NETCDF)/lib \

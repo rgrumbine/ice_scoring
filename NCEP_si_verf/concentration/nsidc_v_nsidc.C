@@ -107,23 +107,23 @@ int main(int argc, char *argv[]) {
 
 // At last, start scoring:
   float level;
-  double a11, a12, a21, a22;
+  double a11, a12, a21, a22, iiee;
   float pod, far, fcr, pct, ts, bias;
 
   for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(cdr, nt, skipped, cellarea, level, a11, a12, a21, a22);
+    contingency(cdr, nt, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("cdrnt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("cdrnt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, iiee, pod, far, fcr, pct, ts, bias);
   }
   for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(cdr, bt, skipped, cellarea, level, a11, a12, a21, a22);
+    contingency(cdr, bt, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("cdrbt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("cdrbt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, iiee, pod, far, fcr, pct, ts, bias);
   }
   for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(nt, bt, skipped, cellarea, level, a11, a12, a21, a22);
+    contingency(nt, bt, skipped, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("nt_bt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("nt_bt,%4.2f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n",level, a11, a12, a21, a22, iiee, pod, far, fcr, pct, ts, bias);
   }
 
   return 0;
