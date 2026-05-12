@@ -8,7 +8,7 @@
 CXX=CC
 
 #opts = -Wall -O2 -DLINUX -DDEBUG
-ccopts = -Wall -O2 -DLINUX
+ccopts = -Wall -O2 -DLINUX -std=c++20
 mmabopts = -I ../../formats -I ../../../mmablib/include ../../../mmablib/libombf_4.a 
 opts = $(ccopts) $(mmabopts)
 
