@@ -24,21 +24,19 @@
 export MODEL=rtofs_cice
 
 #set by calling script -----------------------------------------
-source  $HOME/rgdev/toolbox/misc/python_load.hera
-#source  $HOME/rgdev/toolbox/misc/python_load.wcoss2
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks
-cd $GDIR
 
 set -x
 
 export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
 export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
 
-#export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
-export modelout=${modelout:-$HOME/clim_data/rtofs_gross/}
+export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
+#export modelout=${modelout:-$HOME/clim_data/rtofs_gross/}
 
-export start=${start:-20240321}
-export end=${end:-20240331}
+export start=${start:-20260321}
+export end=${end:-20260331}
+export level=${level:-extreme}
 
 tag=$start
 while [ $tag -le $end ] 
@@ -47,16 +45,16 @@ do
   dd=`echo $tag | cut -c7-8`
   for lead in n00 f24 f48 f72 f96 f120 f144 f168 f192
   do
-    if [ -f $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst ] ; then
+    if [ -f $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc ] ; then
       time python3 $GDIR/$MODEL/$MODEL.py \
-          $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst \
-          $GDIR/$MODEL/$MODEL.extreme fly > beta.$tag.${lead}
+          $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc \
+          $GDIR/ctl/$MODEL.$level fly > beta.$tag.${lead}
       mv fhistogram fhistogram.$tag.$lead
 
-    elif [ -f $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst ] ; then
+    elif [ -f $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc ] ; then
       time python3 $GDIR/$MODEL/$MODEL.py \
-          $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst \
-          $GDIR/$MODEL/$MODEL.extremes fly > beta.$tag.${lead}
+          $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc \
+          $GDIR/ctl/$MODEL.$level fly > beta.$tag.${lead}
       mv fhistogram fhistogram.$tag.$lead
     fi
   done
