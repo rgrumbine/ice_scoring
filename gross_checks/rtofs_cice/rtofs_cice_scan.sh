@@ -63,3 +63,44 @@ do
   tag=`dtgfix3 $tag`
 done
 
+# Now that all results have been scanned, check for errors:---------------------------
+
+# For plots, last number is dot size. Expect fewer pts as go down list,
+#    so make pts larger
+cat beta.*.* > all.$MODEL
+
+for model in $MODEL
+do
+  python3 $GDIR/graphics/plot_errs.py all.$model all.$model 12.
+
+  python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/ice.exceptions all.$model > nonphysical.$model
+  python3 $GDIR/graphics/plot_errs.py nonphysical.$model nonphysical.$model 12.
+
+  python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/known.errors nonphysical.$model > unknown.$model
+  python3 $GDIR/graphics/plot_errs.py unknown.$model unknown.$model 12.
+done
+
+#-------------------------------------------------------------------------
+
+for lead in n00 f024 f048 f072 f096 f120 f144 f168 f192
+do
+  cat beta.$tag.$lead > all.$MODEL.$lead
+done
+
+# ------------------ plot by parameter
+for model in $MODEL
+do
+  $GDIR/$model/${model}_split.sh unknown.$model
+  if [ ! -d $model ] ; then
+    mkdir $model
+  fi
+  for f in *.s
+  do
+    python3 $GDIR/graphics/plot_errs.py $f $f 12
+  done
+  mv *.png *.s $model
+# ------------------ copy to desk for pseudo-web
+#  cd $model
+#  scp -p *.png rmg3@emc-lw-rgrumbi:website/gross/$model
+# qsub $HOME/rgdev/forweb/cp_rtofs_gross
+done

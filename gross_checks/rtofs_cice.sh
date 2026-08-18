@@ -65,6 +65,8 @@ cd  $HOME/scratch/gross/$modeltag
 ln -sf $GDIR/curves curves
 time $GDIR/$MODEL/${MODEL}_scan.sh
 
+
+exit
 # Now that all results have been scanned, check for errors:
 
 # For plots, last number is dot size. Expect fewer pts as go down list, 
