@@ -36,13 +36,13 @@ export modelout=$HOME/noscrub/model_intercompare/$MODEL
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
 #export GDIR=$HOME/noscrub/retros/gross_checks/
 
-export start=20260801
+export start=20260701
 export end=`date +"%Y%m%d"`
 end=`expr $end - 1`
 end=`$HOME/bin/dtgfix3 $end`
 end=`expr $end - 1`
 end=`$HOME/bin/dtgfix3 $end`
-export end=20260802
+#export end=20260802
 echo $start $end
 
 
@@ -65,8 +65,8 @@ cd  $HOME/scratch/gross/$modeltag
 ln -sf $GDIR/curves curves
 time $GDIR/$MODEL/${MODEL}_scan.sh
 
-
 exit
+
 # Now that all results have been scanned, check for errors:
 
 # For plots, last number is dot size. Expect fewer pts as go down list, 

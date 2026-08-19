@@ -84,7 +84,7 @@ done
 
 for lead in n00 f024 f048 f072 f096 f120 f144 f168 f192
 do
-  cat beta.$tag.$lead > all.$MODEL.$lead
+  cat beta.*.$lead > all.$MODEL.$lead
 done
 
 # ------------------ plot by parameter
@@ -96,7 +96,9 @@ do
   fi
   for f in *.s
   do
-    python3 $GDIR/graphics/plot_errs.py $f $f 12
+    if [ -s $f ] ; then
+      python3 $GDIR/graphics/plot_errs.py $f $f 12
+    fi
   done
   mv *.png *.s $model
 # ------------------ copy to desk for pseudo-web
