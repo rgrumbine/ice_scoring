@@ -9,10 +9,10 @@
 ##PBS -l select=1:ncpus=1
 #--- WCOSS2
 
-# --- Hera
-#SBATCH -J hr5
-#SBATCH -e hr5.err
-#SBATCH -o hr5.out
+# --- Ursa
+#SBATCH -J ufs
+#SBATCH -e ufs.err
+#SBATCH -o ufs.out
 #SBATCH -t 5:55:00
 #SBATCH -q batch
 #SBATCH -A marine-cpu
@@ -23,19 +23,18 @@
 
 
 set -xe
-#hera: source /home/Robert.Grumbine/rg/env3.12c/bin/activate
-#wcoss2
-source $HOME/env3.12/bin/activate
+#ursa: 
+source /home/Robert.Grumbine/rg/env3.13/bin/activate
+#wcoss2 source $HOME/env3.12/bin/activate
 
 #export modelout=$HOME/clim_data/rtofs_gross
 #export modelout=/scratch1/NCEPDEV/climate/Lydia.B.Stefanova/Models/ufs_hr1/SeaIce/
 #export modelout=/lfs/h2/emc/global/noscrub/emc.global/RETRO_GFSv17/savefailedtest/retrotestgfs03/enkfgdas.2023041712/enkfgdasefcs015.2023041712/fcst.3647035
-export modelout=$HOME/noscrub/v17/
+#export modelout=$HOME/noscrub/v17/
+export modelout=$HOME/clim_data/stream4/
 export modeltag=ufs
 
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
-#hera: export GDIR=/home/Robert.Grumbine/rgdev/ice_scoring/gross_checks/
-
 
 #------------------------ General across platforms --------------
 set -x

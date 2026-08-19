@@ -5,7 +5,10 @@
 #cice needs the netcdf module as well
 #  module load NetCDF
 
+#Wcoss2
 CXX=CC
+#ursa
+CXX=icpx
 
 #opts = -Wall -O2 -DLINUX -DDEBUG
 ccopts = -Wall -O2 -DLINUX -std=c++20
@@ -16,7 +19,6 @@ finds = find_edge_ncep find_edge_ims find_edge_cfsv2 find_edge_cice find_edge_co
 
 all: cscore_edge $(finds)
 
-#ncopts=-I $(NETCDF)/include -L $(NETCDF)/lib -lnetcdf $(HDF5_LINK_OPTS)
 ncopts=-I $(NETCDF)/include -L $(NETCDF)/lib -lnetcdf -lm
 
 #--------
