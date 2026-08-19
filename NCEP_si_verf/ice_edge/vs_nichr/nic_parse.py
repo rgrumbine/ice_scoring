@@ -118,9 +118,9 @@ class bundle:
   def add(self, fseg):
     self.segments.append(fseg)
 
-  def print(self, file="stdout"):
+  def print(self, fout=sys.stdout):
     for fk in range (0,len(self.segments)):
-      self.segments[fk].print(fout=file)
+      self.segments[fk].print(fout=fout)
 
 
 def parse_pt(beta):
@@ -189,4 +189,4 @@ for k in range(0,len(bund1.segments)):
   npts += len(bund1.segments[k].pts)
   
 print("found ",len(bund1.segments)," line segments, totalling ",npts," points")
-bund1.print()
+bund1.print(fout=sys.stdout)

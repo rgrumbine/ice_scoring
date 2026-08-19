@@ -16,7 +16,6 @@
 // cice on mom6 quarter degree tripolar grid
   #define NX 1440
   #define NY 1080 
-  #define HI "hi_h"
 #elif benchmark
 // cice on mom6 quarter degree tripolar grid
   #define NX 1440
@@ -77,23 +76,21 @@ int main(int argc, char *argv[]) {
   if (retval != 0) ERR2(retval, "TLON");fflush(stdout);
   enter(lon, x);
 
-  //consortium, rtofs:
-  retval = nc_inq_varid(ncid, "hi", &varid);
-  if (retval != 0) ERR2(retval, "hi");
+  // ufs prototype/benchmarks
+  retval = nc_inq_varid(ncid, "hi_h", &varid);
+  if (retval != 0) ERR2(retval, "hi_h");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "hi");fflush(stdout);
+  if (retval != 0) ERR2(retval, "hi_h");fflush(stdout);
   enter(ice_thickness, x);
 
   // ufs prototypes:  
-  //retval = nc_inq_varid(ncid, "aice_h", &varid);
-  //consortium, rtofs:
-  retval = nc_inq_varid(ncid, "aice", &varid);
-  if (retval != 0) ERR2(retval, "aice");
+  retval = nc_inq_varid(ncid, "aice_h", &varid);
+  if (retval != 0) ERR2(retval, "aice_h");
   retval = nc_get_var_float(ncid, varid, x);
-  if (retval != 0) ERR2(retval, "aice");fflush(stdout);
+  if (retval != 0) ERR2(retval, "aice_h");fflush(stdout);
   enter(conc, x);
   #ifdef DEBUG
-    printf("conc stats in find_edge %f %f\n",conc.gridmax(), conc.gridmin() );
+  printf("conc stats in find_edge %f %f\n",conc.gridmax(), conc.gridmin() );
   #endif
 
 /////////////////////////////////////////////////////////////////////////////

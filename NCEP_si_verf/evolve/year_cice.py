@@ -29,16 +29,16 @@ for evo in range(0,nexpt):
   if (not os.path.exists(OUTDIR+EXPT)):
       print("directory doesn't exist ",OUTDIR+EXPT)
       continue
-  
+
   fname = 'fout'+sno
 
   if (not os.path.exists(fname)):
-    fout = open(fname,'w')
+    fout = open(fname,'w', encoding='utf-8')
     while (tag <= end):
       dtag=tag.strftime("%Y-%m-%d")
-      cmd = EXDIR+'/cice_solo '+FIXDIR+'/seaice_gland5min '+OUTDIR+EXPT+ '/history/iceh.'+dtag+'.nc '+"{:.3f}".format(acrit) + ' ' + dtag + " >> "+ fname
+      cmd = EXDIR+'/cice_solo '+FIXDIR+'/seaice_gland5min '+OUTDIR+EXPT+ \
+              '/history/iceh.'+dtag+'.nc '+"{:.3f}".format(acrit) + ' ' + dtag + " >> "+ fname
       os.system(cmd)
       tag += dt
 
     fout.close()
-

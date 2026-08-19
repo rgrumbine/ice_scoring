@@ -8,8 +8,8 @@ export DCOM=~/rgdev/edges
 cd $DCOM
 
 #Drop back date
-yy=2026
-ddd=001
+yy=2024
+ddd=145
 
 if [ ! -d cleaned ] ; then
   mkdir cleaned

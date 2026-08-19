@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
   // for scoring matchups
   float level;
-  double a11, a12, a21, a22;
+  double a11, a12, a21, a22, iiee;
   float pod, far, fcr, pct, ts, bias;
   int npts = NX*NY;
   mvector<float> observed(npts), model(npts), cellarea(npts);
@@ -83,24 +83,12 @@ int main(int argc, char *argv[]) {
   }
 
 // At last, start scoring:
-  //for (level = 0.0; level < 1.; level += 0.05) {
-  //  contingency(observed, model, skipped, level, a11, a12, a21, a22);
-  //  contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //  printf("  level %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f\n",level, timestep,
-  //                 a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //}
   for (level = 0.0; level < 1.; level += 0.05) {
-    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22);
+    contingency(observed, model, north, cellarea, level, a11, a12, a21, a22, iiee);
     contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-    printf("nhlevel %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f\n",level, timestep,
-                   a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
+    printf("nhlevel %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f %f\n",level, timestep,
+                   a11, a12, a21, a22, iiee, pod, far, fcr, pct, ts, bias);
   }
-  //for (level = 0.0; level < 1.; level += 0.05) {
-  //  contingency(observed, model, south, level, a11, a12, a21, a22);
-  //  contingency_derived(a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //  printf("shlevel %4.2f lead %2d  %f %f %f %f  %f %f %f %f %f %f\n",level, timestep,
-  //                 a11, a12, a21, a22, pod, far, fcr, pct, ts, bias);
-  //}
   fflush(stdout);
   } // timesteps
 
