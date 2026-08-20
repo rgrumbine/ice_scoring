@@ -77,7 +77,7 @@ for model in $MODEL
 do
   python3 $GDIR/graphics/plot_errs.py all.$model all.$model 12.
 
-  python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/ice.exceptions all.$model > nonphysical.$model
+  python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/physical.exceptions.$model all.$model > nonphysical.$model
   python3 $GDIR/graphics/plot_errs.py nonphysical.$model nonphysical.$model 12.
 
   python3 $GDIR/exceptions/exceptions.py $GDIR/exceptions/known.errors nonphysical.$model > unknown.$model
@@ -94,7 +94,8 @@ done
 # ------------------ plot by parameter
 for model in $MODEL
 do
-  $GDIR/$model/${model}_split.sh unknown.$model
+  #$GDIR/$model/${model}_split.sh unknown.$model
+  $GDIR/$model/${model}_split.sh nonphysical.$model
   if [ ! -d $model ] ; then
     mkdir $model
   fi
@@ -107,6 +108,6 @@ do
   mv *.png *.s $model
 # ------------------ copy to desk for pseudo-web
   cd $model
-  scp -p *.png rgrumbine@emcrzdm:rgweb/ice/gross/$model
+  # need dtn node: scp -p *.png rgrumbine@emcrzdm:rgweb/ice/gross/$model
 # qsub $HOME/rgdev/forweb/cp_rtofs_gross
 done

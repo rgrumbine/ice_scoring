@@ -70,7 +70,7 @@ plt.title(title_tag)
 plt.savefig("ij_errs_"+title_tag+".png")
 plt.close()
 
-# lat-lon plot of error points ---------------------------------
+# geographic -- NH -- plot of error points ---------------------------------
 
 proj = ccrs.NorthPolarStereo(central_longitude=-170., true_scale_latitude = 60.)
 #proj = ccrs.LambertConformal(central_longitude=-170., central_latitude = 60., cutoff=25.)
@@ -84,21 +84,69 @@ plt.title(title_tag)
 xlocs = list(range(-180,181,30))
 #xlocs = list(range(10*int(lonmin/10), 10*int(lonmax/10), 10))
 
-if ((latmax - latmin) < 30):
-  mean = (latmax + latmin)/2.
-  ax.set_extent((-180, 180, min(90, mean + 30), max(-90, mean - 30)), crs= proj )
-  ylocs = list(range(int(max(-90, mean-30)), int(min(90, mean + 30) ), 5))
-else:
-  ylocs = list(range(-90, 91, 15))
+#if ((latmax - latmin) < 30):
+#  mean = (latmax + latmin)/2.
+#  ax.set_extent((-180, 180, min(90, mean + 30), max(-90, mean - 30)), crs= proj )
+#  ylocs = list(range(int(max(-90, mean-30)), int(min(90, mean + 30) ), 5))
+#else:
+ylocs = list(range(0, 91, 15))
 
+ax.set_extent([-180,180,30,90], crs=ccrs.PlateCarree() )
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
-ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="c") )
+ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="l") )
 if markersize <= 12:
     alpha = 1
 else:
     alpha = 0.2/25
 
 plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize, alpha = alpha)
-plt.savefig("ll_errs_"+title_tag+".png")
+plt.savefig("nh_errs_"+title_tag+".png")
 plt.close()
+
+# ---------- SH plot ----------------------------------------------------------
+proj = ccrs.SouthPolarStereo(central_longitude=-60., true_scale_latitude = -60.)
+
+ax = plt.axes(projection = proj)
+fig = plt.figure(figsize = (8,6))
+ax = fig.add_subplot(1,1,1,projection = proj)
+plt.title(title_tag)
+
+ax.set_extent([-180,180,-90,-30], crs=ccrs.PlateCarree() )
+xlocs = list(range(-180,181,30))
+ylocs = list(range(-90, 1, 15))
+ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
+# not on hera: ax.coastlines()
+ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="l") )
+if markersize <= 12:
+    alpha = 1
+else:
+    alpha = 0.2/25
+
+plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize, alpha = alpha)
+plt.savefig("sh_errs_"+title_tag+".png")
+plt.close()
+
+# ------ Non-polar plot -------------------------------------------------------------
+proj = ccrs.PlateCarree()
+
+ax = plt.axes(projection = proj)
+fig = plt.figure(figsize = (8,6))
+ax = fig.add_subplot(1,1,1,projection = proj)
+plt.title(title_tag)
+
+ax.set_extent([-180,180,-60,60], crs=ccrs.PlateCarree() )
+xlocs = list(range(-180,181,30))
+ylocs = list(range(-60, 61, 15))
+ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
+# not on hera: ax.coastlines()
+ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="l") )
+if markersize <= 12:
+    alpha = 1
+else:
+    alpha = 0.2/25
+
+plt.scatter(lon, lat, transform=ccrs.PlateCarree(), s = markersize, alpha = alpha)
+plt.savefig("nonpolar_errs_"+title_tag+".png")
+plt.close()
+

@@ -4,7 +4,7 @@
 #PBS -o rtofs_ice_eval
 #PBS -j oe
 #PBS -A ICE-DEV
-#PBS -l walltime=2:00:00
+#PBS -l walltime=6:00:00
 #PBS -l select=1:ncpus=1
 #--- WCOSS2
 
