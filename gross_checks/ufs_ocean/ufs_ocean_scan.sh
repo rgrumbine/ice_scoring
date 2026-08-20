@@ -3,7 +3,7 @@
 source $HOME/env3.12/bin/activate
 
 export PYTHONPATH=$HOME/rgops/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/gross
-export MODDEF=$HOME/rgdev/ice_scoring/gross/model_definitions/
+export MODDEF=$HOME/rgdev/ice_scoring/gross_checks/model_definitions/
 
 echo zzz moddef $MODDEF
 echo zzz module list

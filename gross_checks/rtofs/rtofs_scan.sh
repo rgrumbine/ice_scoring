@@ -13,7 +13,7 @@ echo zzz $PYTHONPATH
 
 export GBASE=~/rgdev/ice_scoring/gross_checks
 export EXDIR=$GBASE/
-export MODDEF=$HOME/rgdev/ice_scoring/gross/model_definitions/
+export MODDEF=$HOME/rgdev/ice_scoring/gross_checks/model_definitions/
 
 export OUTBASE=$HOME/noscrub/model_intercompare/rtofs_cice/
 #export OUTBASE=$COMROOT/rtofs/v2.4/
