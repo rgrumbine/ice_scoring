@@ -46,16 +46,20 @@ do
   for lead in n00 f24 f48 f72 f96 f120 f144 f168 f192
   do
     if [ -f $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc ] ; then
+      if [ ! -f beta.$tag.${lead} ] ; then
       time python3 $GDIR/$MODEL/$MODEL.py \
           $modelout/rtofs.${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc \
           $GDIR/ctl/$MODEL.$level fly > beta.$tag.${lead}
       mv fhistogram fhistogram.$tag.$lead
+      fi
 
     elif [ -f $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc ] ; then
+      if [ ! -f beta.$tag.${lead} ] ; then
       time python3 $GDIR/$MODEL/$MODEL.py \
           $modelout/${tag}/rtofs_glo.t00z.${lead}.cice_inst.nc \
           $GDIR/ctl/$MODEL.$level fly > beta.$tag.${lead}
       mv fhistogram fhistogram.$tag.$lead
+      fi
     fi
   done
 
@@ -102,7 +106,7 @@ do
   done
   mv *.png *.s $model
 # ------------------ copy to desk for pseudo-web
-#  cd $model
-#  scp -p *.png rmg3@emc-lw-rgrumbi:website/gross/$model
+  cd $model
+  scp -p *.png rgrumbine@emcrzdm:rgweb/ice/gross/$model
 # qsub $HOME/rgdev/forweb/cp_rtofs_gross
 done
