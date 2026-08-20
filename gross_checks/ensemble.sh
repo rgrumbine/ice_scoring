@@ -5,7 +5,7 @@
 #'beta' is an optional argument, useful when bounds are unknown but variable names are
 
 source ./nest
-export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
+export MODDEF=$HOME/rgdev/ice_scoring/gross/model_definitions
 export level=extreme
 
 

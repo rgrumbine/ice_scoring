@@ -21,7 +21,7 @@
 #Wcoss2
 
 # Run time is about 1 hour per month on rtofs_cice
-export MODEL=rtofs_cice
+export MODEL=${MODEL:-rtofs_cice}
 
 #set by calling script -----------------------------------------
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks
@@ -29,7 +29,7 @@ export GDIR=$HOME/rgdev/ice_scoring/gross_checks
 set -x
 
 export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
-export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
+export MODDEF=$HOME/rgdev/ice_scoring/gross/model_definitions
 
 export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
 #export modelout=${modelout:-$HOME/clim_data/rtofs_gross/}
@@ -86,7 +86,7 @@ done
 
 #-------------------------------------------------------------------------
 
-for lead in n00 f024 f048 f072 f096 f120 f144 f168 f192
+for lead in n00 f24 f48 f72 f96 f120 f144 f168 f192
 do
   cat beta.*.$lead > all.$MODEL.$lead
 done

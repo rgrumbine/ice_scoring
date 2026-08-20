@@ -3,7 +3,7 @@
 #Hera:
 echo zzz HOME = $HOME
 export PYTHONPATH=$HOME/rgdev/mmablib/py:$HOME/rgdev/ice_scoring/gross_checks/
-export MODDEF=$HOME/rgdev/ice_scoring/model_definitions
+export MODDEF=$HOME/rgdev/ice_scoring/gross/model_definitions
 
 echo zzz module list
 module list

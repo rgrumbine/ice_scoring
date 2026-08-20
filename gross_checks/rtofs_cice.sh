@@ -4,7 +4,7 @@
 #PBS -o rtofs_ice_eval
 #PBS -j oe
 #PBS -A ICE-DEV
-#PBS -l walltime=4:00:00
+#PBS -l walltime=2:00:00
 #PBS -l select=1:ncpus=1
 #--- WCOSS2
 
@@ -24,11 +24,10 @@
 set -xe
 
 # Hera:
-#source /home/Robert.Grumbine/rg/env3.12c/bin/activate
+#source /home/Robert.Grumbine/rg/env3.13/bin/activate
 # Wcoss2
 source $HOME/env3.12/bin/activate
 
-export modeltag=rtofs_cice
 export model=rtofs_cice
 export MODEL=rtofs_cice
 export modelout=$HOME/noscrub/model_intercompare/$MODEL
@@ -45,7 +44,6 @@ end=`$HOME/bin/dtgfix3 $end`
 #export end=20260802
 echo $start $end
 
-
 #------------------------ General across platforms --------------
 set -x
 
@@ -53,20 +51,21 @@ export level=extreme
 
 export PYTHONPATH=$PYTHONPATH:$GDIR/gross
 
-if [ ! -d $HOME/scratch/gross/$modeltag ] ; then
-  mkdir -p  $HOME/scratch/gross/$modeltag
+if [ ! -d $HOME/scratch/gross/$model ] ; then
+  mkdir -p  $HOME/scratch/gross/$model
   if [ $? -ne 0 ] ; then
-    echo zzz could not create rundir  $HOME/scratch/gross/$modeltag
+    echo zzz could not create rundir  $HOME/scratch/gross/$model
     exit 1
   fi
 fi 
-cd  $HOME/scratch/gross/$modeltag
+cd  $HOME/scratch/gross/$model
 
 ln -sf $GDIR/curves curves
 time $GDIR/$MODEL/${MODEL}_scan.sh
 
 exit
 
+# below here has been moved to ${model}_scan.sh
 # Now that all results have been scanned, check for errors:
 
 # For plots, last number is dot size. Expect fewer pts as go down list, 
@@ -98,9 +97,9 @@ do
 done
 
 # ------------------ plot by parameter
-for model in rtofs
+for model in $MODEL
 do
-  $GDIR/$modeltag/${modeltag}_split.sh unknown.$model
+  $GDIR/$model/${model}_split.sh unknown.$model
   if [ ! -d $model ] ; then
     mkdir $model
   fi

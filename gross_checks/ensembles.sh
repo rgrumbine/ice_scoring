@@ -3,7 +3,7 @@
 #Model variable names and their bounds are in ctl/icesubset.high (here)
 #'beta' is an optional argument, useful when bounds are unknown but variable names are
 
-export MODDEF=../model_definitions
+export MODDEF=model_definitions
 
 yy=1994
 while [ $yy -le 2023 ] 
