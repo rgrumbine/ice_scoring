@@ -16,4 +16,4 @@ do
   python3 edge_rmse_series_plot.py srms.$lead.$year $lead "${year}_SH"
 done
 
-scp -p *${year}*.png rgrumbine@emcrzdm:rgweb/ice/edge/
+#scp -p *${year}*.png rgrumbine@emcrzdm:rgweb/ice/edge/

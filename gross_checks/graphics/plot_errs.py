@@ -117,7 +117,8 @@ xlocs = list(range(-180,181,30))
 ylocs = list(range(-90, 1, 15))
 ax.gridlines(crs=ccrs.PlateCarree(), xlocs=xlocs, ylocs=ylocs )
 # not on hera: ax.coastlines()
-ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="l") )
+ax.coastlines()
+#ax.add_feature(cfeature.GSHHSFeature(levels=[1,2], scale="l") )
 if markersize <= 12:
     alpha = 1
 else:

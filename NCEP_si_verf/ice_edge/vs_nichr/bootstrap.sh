@@ -3,14 +3,15 @@
 # execute this as . ./bootstrap.sh
 # Robert Grumbine 15 April 2026
 
-##Wcoss
-#module load craype PrgEnv-intel intel
-#module load python
-#module load netcdf
+#Wcoss
+source $HOME/env3.12/bin/activate
+module load craype PrgEnv-intel intel
+module load python
+module load netcdf
 ##ursa
-source ~/rg/env3.13/bin/activate
-module load intel-oneapi-compilers/2025.3.1  intel-oneapi-mpi/2021.17.1
-module load netcdf-c/4.9.2 netcdf-fortran/4.6.1
+#source ~/rg/env3.13/bin/activate
+#module load intel-oneapi-compilers/2025.3.1  intel-oneapi-mpi/2021.17.1
+#module load netcdf-c/4.9.2 netcdf-fortran/4.6.1
 
 # Shouldn't need changes below here
 

@@ -35,7 +35,7 @@ export modelout=$HOME/noscrub/model_intercompare/$MODEL
 export GDIR=$HOME/rgdev/ice_scoring/gross_checks/
 #export GDIR=$HOME/noscrub/retros/gross_checks/
 
-export start=20260601
+export start=20260801
 export end=`date +"%Y%m%d"`
 end=`expr $end - 1`
 end=`$HOME/bin/dtgfix3 $end`
