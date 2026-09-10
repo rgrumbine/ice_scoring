@@ -8,7 +8,7 @@ module load prod_envir
 set -xe
 source $HOME/env3.12/bin/activate
 export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/mmablib/py
-export PYTHONPATH=$PYTHONPATH:~/rgdev/ice_scoring/gross_checks/shared/
+export PYTHONPATH=$PYTHONPATH:~/rgdev/ice_scoring/gross_checks/gross/
 echo zzz $PYTHONPATH
 
 export GBASE=~/rgdev/ice_scoring/gross_checks

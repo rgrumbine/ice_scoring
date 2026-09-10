@@ -28,7 +28,7 @@ export GDIR=$HOME/rgdev/ice_scoring/gross_checks
 
 set -x
 
-export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/shared
+export PYTHONPATH=$PYTHONPATH:$HOME/rgdev/ice_scoring/gross_checks/gross
 export MODDEF=$HOME/rgdev/ice_scoring/gross_checks/model_definitions
 
 export modelout=${modelout:-$HOME/noscrub/model_intercompare/rtofs_cice}
